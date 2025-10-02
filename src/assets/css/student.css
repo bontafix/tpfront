@@ -1,0 +1,428 @@
+.v-student-cabinet__container {
+  position: relative;
+  padding-right: 400px !important;
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 1200px) {
+  .v-student-cabinet__container {
+    padding-right: 20px !important;
+  }
+}
+.v-student-cabinet__row {
+  display: flex;
+  gap: 24px;
+}
+@media (max-width: 1440px) {
+  .v-student-cabinet__row {
+    flex-direction: column;
+  }
+}
+.v-student-cabinet > * {
+  min-width: 0;
+}
+.v-student-cabinet__copy-link {
+  position: relative;
+  cursor: pointer;
+  width: 326px;
+  box-shadow: 0px 1px 2px 0px rgba(10, 13, 18, 0.0509803922);
+  margin-top: 20px;
+}
+.v-student-cabinet__copy-link input {
+  cursor: pointer;
+}
+.v-student-cabinet__copy-link img {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.v-student-cabinet .copy-window {
+  bottom: -50px;
+  top: auto;
+}
+
+.v-teacher-info {
+  max-width: 450px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+@media (max-width: 1440px) {
+  .v-teacher-info {
+    flex-direction: row;
+    max-width: 100%;
+  }
+}
+@media (max-width: 768px) {
+  .v-teacher-info {
+    flex-direction: column;
+  }
+}
+.v-teacher-info__section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 16px 20px !important;
+}
+@media (max-width: 1440px) {
+  .v-teacher-info__section {
+    width: 100%;
+  }
+  .v-teacher-info__section > * {
+    white-space: nowrap;
+  }
+}
+.v-teacher-info__section .custom-tip {
+  top: 20px;
+  right: -100%;
+}
+@media (max-width: 1200px) {
+  .v-teacher-info__section .custom-tip {
+    left: -100%;
+    right: auto;
+    top: 0;
+  }
+}
+@media (max-width: 768px) {
+  .v-teacher-info__section .custom-tip {
+    display: none;
+  }
+}
+.v-teacher-info__section-subtitle {
+  font-weight: 500;
+}
+.v-teacher-info__section-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.v-teacher-info__section-row .caption {
+  font-size: 13px;
+}
+
+.v-student-header {
+  background-image: url(../images/studnetCabinet/bg-blue.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 158px;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  margin-bottom: 42px;
+  margin-top: 62.5px;
+}
+.v-student-header.green {
+  background-image: url(../images/studnetCabinet/bg-green.jpg);
+}
+.v-student-header.orange {
+  background-image: url(../images/studnetCabinet/bg-orange.jpg);
+}
+.v-student-header__title {
+  padding-bottom: 40px;
+  color: #fff !important;
+}
+.v-student-header__subjects {
+  display: flex;
+  gap: 16px;
+}
+.v-student-header__subject {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.v-student-header__subject.active {
+  background-color: #F6F7F9;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+.v-student-header__subject.active.blue .subject__title {
+  color: #1543B7;
+}
+.v-student-header__subject.active.green .subject__title {
+  color: #258D50 !important;
+}
+.v-student-header__subject.active.orange .subject__title {
+  color: #FF924F !important;
+}
+.v-student-header__subject .subject {
+  display: flex;
+  gap: 8px;
+  color: #fff;
+  padding: 8px 20px;
+  cursor: pointer;
+}
+.v-student-header__subject .subject__title {
+  font-weight: 500;
+}
+.v-student-header__subject .subject__count {
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  background-color: rgba(255, 255, 255, 0.1607843137);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.v-student-cabinet-swiper {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.v-student-cabinet-swiper__buttons {
+  position: absolute;
+  z-index: 101;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.v-student-cabinet-swiper__buttons .student-swiper-button-prev,
+.v-student-cabinet-swiper__buttons .student-swiper-button-next {
+  width: 32px;
+  height: 32px;
+}
+.v-student-cabinet-swiper .lesson-swiper__answer {
+  align-items: center;
+  justify-content: space-between;
+}
+.v-student-cabinet-swiper .lesson-swiper__content {
+  background-color: var(--custom-white);
+}
+.v-student-cabinet-swiper .lesson-swiper__info-row {
+  display: flex;
+}
+.v-student-cabinet-swiper .lesson-swiper__date {
+  font-size: 20px;
+  font-weight: 600;
+}
+@media (max-width: 480px) {
+  .v-student-cabinet-swiper .lesson-swiper__date {
+    font-size: 17px;
+  }
+}
+.v-student-cabinet-swiper .lesson-swiper__title {
+  width: 144px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--custom-black-text);
+}
+.v-student-cabinet-swiper .lesson-swiper__button {
+  height: 40px;
+  white-space: nowrap;
+}
+.v-student-cabinet-swiper .lesson-swiper__homework {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+@media (max-width: 600px) {
+  .v-student-cabinet-swiper .lesson-swiper__homework {
+    flex-direction: column;
+    align-items: start;
+  }
+}
+
+.v-student-charts {
+  margin-top: 64px;
+}
+@media (max-width: 1200px) {
+  .v-student-charts {
+    order: 2;
+  }
+}
+.v-student-charts__title {
+  margin-bottom: 16px;
+}
+.v-student-charts__container {
+  display: flex;
+  gap: 20px;
+}
+@media (max-width: 1440px) {
+  .v-student-charts__container {
+    flex-direction: column;
+  }
+}
+
+.v-student-calendar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  top: 60px;
+  right: 0;
+  max-width: 372px;
+  height: 100vh;
+  background-color: var(--custom-white);
+  z-index: 1000;
+  padding: 28px 25px 0;
+}
+@media (max-width: 1200px) {
+  .v-student-calendar {
+    max-width: 100%;
+    width: 100%;
+    position: static;
+    order: 1;
+    align-items: start;
+    height: auto;
+    margin-top: 48px;
+    padding-bottom: 28px;
+  }
+}
+@media (max-width: 480px) {
+  .v-student-calendar {
+    padding: 0 !important;
+  }
+  .v-student-calendar .calendar-navigation {
+    padding: 22px 16px;
+  }
+  .v-student-calendar .v-student-calendar__subjects {
+    padding: 0 16px;
+  }
+}
+.v-student-calendar__table {
+  max-width: 50%;
+}
+.v-student-calendar__wrapper {
+  width: 100%;
+}
+@media (max-width: 1200px) {
+  .v-student-calendar__wrapper {
+    display: flex;
+    gap: 40px;
+    justify-content: start;
+  }
+}
+@media (max-width: 675px) {
+  .v-student-calendar__wrapper {
+    flex-direction: column;
+  }
+}
+@media (max-width: 1200px) {
+  .v-student-calendar__content {
+    max-width: 480px;
+  }
+}
+@media (max-width: 675px) {
+  .v-student-calendar__content {
+    max-width: 100%;
+  }
+}
+.v-student-calendar .calendar-navigation {
+  align-items: center;
+}
+.v-student-calendar .calendar-navigation .mobile-buttons {
+  display: none;
+}
+@media (max-width: 1200px) {
+  .v-student-calendar .calendar-navigation button {
+    display: none;
+  }
+  .v-student-calendar .calendar-navigation .mobile-buttons {
+    display: flex;
+    gap: 12px;
+  }
+}
+@media (max-width: 480px) {
+  .v-student-calendar__lessons {
+    padding: 0 16px !important;
+  }
+}
+.night__mode .v-student-calendar .calendar td, .night__mode .v-student-calendar .calendar-header__item, .night__mode .v-student-calendar .calendar-row__item {
+  background-color: transparent;
+  border-color: transparent !important;
+}
+.night__mode .v-student-calendar .calendar-row__item.active {
+  border-color: rgba(255, 255, 255, 0.0784313725);
+}
+.v-student-calendar .calendar-header__item {
+  padding: 17.5px 15px !important;
+}
+.night__mode .v-student-calendar__lesson {
+  background-color: rgba(255, 255, 255, 0.0784313725) !important;
+}
+.v-student-calendar__subjects {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+}
+@media (max-width: 1200px) {
+  .v-student-calendar__subjects {
+    margin-bottom: 16px;
+    justify-content: start;
+  }
+}
+.v-student-calendar__subject {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--custom-black-text);
+  font-size: 13px;
+  font-weight: 500;
+}
+.v-student-calendar__lessons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+@media (max-width: 675px) {
+  .v-student-calendar__lessons {
+    width: 100%;
+  }
+}
+.v-student-calendar__lessons-date {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--custom-black-text);
+  margin-top: 28px;
+  margin-bottom: 16px;
+}
+.v-student-calendar__lesson {
+  position: relative;
+  width: 100%;
+  height: 88px;
+  padding: 12px 19px;
+  background-color: #F4F7FF;
+  border-left: 3px solid var(--custom-blue);
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.v-student-calendar__lesson.green {
+  background-color: #E7FFEB;
+  border-color: #258D50;
+}
+.v-student-calendar__lesson.orange {
+  background-color: #FFF6EE;
+  border-color: #FF924F;
+}
+.v-student-calendar__lesson-subject {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--custom-black-text);
+  margin-bottom: 8px;
+}
+.v-student-calendar__lesson-time {
+  font-size: 12px;
+  font-weight: 500;
+  color: #717680;
+}
+.v-student-calendar__lesson-delete {
+  position: absolute;
+  top: 12px;
+  right: 10px;
+}
+.night__mode .v-student-calendar__lesson-delete svg path {
+  stroke: rgba(255, 255, 255, 0.4);
+}
+.night__mode .v-student-calendar__lesson-time {
+  color: rgba(255, 255, 255, 0.4);
+}/*# sourceMappingURL=student.css.map */

@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom smooth scrolling for specific elements */
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced smooth scrolling with custom timing */
+@media (prefers-reduced-motion: no-preference) {
+  .smooth-scroll-enhanced {
+    scroll-behavior: smooth;
+    transition: scroll-position 0.3s ease-in-out;
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .smooth-scroll,
+  .smooth-scroll-enhanced {
+    scroll-behavior: auto;
+  }
+}

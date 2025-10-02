@@ -1,0 +1,220 @@
+// Основные стили календаря
+.calendar_default_main {
+  width: 400px;
+  border: none !important;
+
+  > div:nth-child(2) {
+    height: 400px !important;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #b9b9b9;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+  }
+
+  * {
+    background-color: transparent !important;
+  }
+
+  tr:nth-child(2n) {
+    border-top: none !important; // Убираем разделитель между получасовыми слотами
+  }
+}
+
+// Заголовки строк и их элементы
+.calendar_default_rowheader {
+  background-color: #fff;
+
+  &_inner {
+    border: none !important;
+
+    > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      font-size: 12px !important;
+      font-family: 'Inter', sans-serif !important;
+      color: #20202080;
+      border-top: 1px solid #71768033;
+      padding-top: 7px;
+    }
+
+    .night__mode & > div {
+      border-color: #FFFFFF3D;
+    }
+  }
+
+  &_minutes {
+    position: relative;
+    font-size: 12px !important;
+    font-family: 'Inter', sans-serif !important;
+    color: #20202080;
+
+    &::before {
+      content: ':';
+      position: absolute;
+      left: -3px;
+      top: 0;
+    }
+  }
+}
+
+.calendar_default_event_inner {
+  background-color: transparent !important;
+  padding: 0 !important ;
+}
+
+.calendar_default_event_inner > div {
+  max-height: 100%;
+  height: 100vh;
+}
+
+.event {
+  height: 100%;
+}
+
+
+.night__mode .event-header {
+  &:not(.break) {
+    background-color: #FFFFFF14 !important;
+  }
+  .event-text {
+    color: #FFFFFF !important;
+  }
+  &.break {
+    background-color: #202020 !important;
+    .event-text {
+      color: var(--black) !important;
+    }
+  }
+}
+.event-header {
+  background-color: #E4EFFF !important;
+  color: var(--custom-black-text) !important;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .night__mode .event-header {
+    background-color: #FFFFFF14 !important;
+  }
+  &.break {
+    margin-top: 5px;
+    background-color: transparent !important;
+    border: 1px dashed var(--blue) !important;
+    min-height: 16px;
+  }
+}
+
+.event:has(.break) .event-header:not(.break) {
+  height: 55% !important;
+}
+
+.event-header:not(.break) {
+  height: 100%;
+  &.trial {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: #e2ffe7 !important;
+  }
+/*   */
+}
+
+// Темная тема
+.night__mode {
+  .calendar_default_event_inner {
+  }
+  .calendar_default_rowheader_inner > div,
+  .calendar_default_rowheader_minutes {
+    color: #fff;
+  }
+
+  .calendar_default_cell_inner {
+    border-color: rgba(#fff, 0.1);
+  }
+
+  .event-text {
+    color: #000 !important;
+  }
+  .event.break .event-text {
+    color: #fff !important;
+  }
+}
+
+.calendar_default_cell_inner {
+   border: 0 !important;
+}
+
+
+// Стили событий
+.calendar_default_event {
+  background-color: transparent !important;
+  &_bar {
+    display: none !important;
+  }
+
+  &_inner {
+    background: rgba(#1d4ecc, 0.1) !important;
+    border: none !important;
+  }
+}
+
+.event-header.break {
+  background-color: transparent !important;
+}
+// Текст событий
+.event-text {
+  color: var(--blue) !important;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+
+  &.break {
+    color: var(--blue) !important;
+  }
+}
+
+// Тени
+.calendar_default_shadow {
+  &,
+  &_inner {
+    border: 0 !important;
+    box-shadow: 0;
+  }
+}
+
+// Промежуточные строки
+.daypilot-row-header .daypilot-hour {
+  display: none;
+}
+
+.v-calendar-day {
+  .event {
+    &-header {
+      padding: 16px;
+    }
+    &-text {
+      &.trial {
+        color: var(--custom-black-text) !important;
+      }
+      font-size: 15px !important;
+      font-weight: 600 !important;
+      color: var(--custom-black-text) !important;
+    }
+    &-time {
+      font-size: 12px !important;
+      color: #717680 !important;
+    }
+  }
+}
