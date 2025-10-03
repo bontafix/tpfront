@@ -35,8 +35,18 @@
     <div class="footer-row line first">
       <p class="footer-subtext">© 2025 Teacher Planner все права защищены</p>
       <div class="footer-row low-gap">
-        <p class="footer-subtext">Политика конфиденциальности</p>
-        <p class="footer-subtext">Пользовательское соглашение</p>
+        <a
+          class="footer-subtext"
+          href="/src/assets/documentation/Политика обработки ПДН.pdf"
+          target="_blank"
+          >Политика конфиденциальности</a
+        >
+        <a
+          class="footer-subtext"
+          href="/src/assets/documentation/Пользовательское соглашение.pdf"
+          target="_blank"
+          >Пользовательское соглашение</a
+        >
       </div>
     </div>
   </footer>
@@ -80,6 +90,10 @@ footer {
   @media (max-width: 768px) {
     margin-right: 10px;
   }
+}
+
+.low-gap {
+  gap: 32px;
 }
 
 .footer-button {
