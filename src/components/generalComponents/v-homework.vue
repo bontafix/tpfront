@@ -302,7 +302,7 @@ const formatFiles = (files, pathField = 'file_url', nameField = 'file_url') => {
     id: file.id,
     name: file[nameField]?.replace('homework_files/', '') || file.file_name,
     size: file.file_size || 0,
-    file: `${domain}/${file[pathField] || file.file_path}`,
+    file: pathField === 'file_url' ? `${domain}/${file[pathField] || file.file_path}` : `${domain}/homework_answers/${file[pathField] || file.file_path}`,
     description: file.description || file.comment || '',
     homework_id: file.homework_id,
     uploaded_at: file.uploaded_at,

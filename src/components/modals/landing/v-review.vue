@@ -35,7 +35,16 @@
             />
           </div>
 
-          <div class="landing-caption pd">Отправляя свои данные, я подтверждаю, что ознакомился и согласен с <u>Политикой конфиденциальности</u> и <u>пользовательским соглашением</u></div>
+          <div class="landing-caption pd">
+            Отправляя свои данные, я подтверждаю, что ознакомился и согласен с
+            <a href="/src/assets/documentation/Политика обработки ПДН.pdf" target="_blank"
+              ><u>Политикой конфиденциальности</u></a
+            >
+            и
+            <a href="/src/assets/documentation/Пользовательское соглашение.pdf" target="_blank"
+              ><u>пользовательским соглашением</u></a
+            >
+          </div>
 
           <div class="modal-field flex justify-between">
             <div class="flex gap-3 items-center">
@@ -49,7 +58,12 @@
                 />
                 <label for="pd_accepted"></label>
               </div>
-              <label for="pd_accepted" class="landing-caption">Я даю согласие на обработку своих персональных данных согласно <u>политике конфиденциальности</u></label>
+              <label for="pd_accepted" class="landing-caption"
+                >Я даю согласие на обработку своих персональных данных согласно
+                <a href="/src/assets/documentation/Политика обработки ПДН.pdf" target="_blank"
+                  ><u>политике конфиденциальности</u></a
+                ></label
+              >
             </div>
           </div>
 
@@ -65,7 +79,9 @@
                 />
                 <label for="ads_accepted"></label>
               </div>
-              <label for="ads_accepted" class="landing-caption">Я даю согласие на получение рекламно-информационных рассылок</label>
+              <label for="ads_accepted" class="landing-caption"
+                >Я даю согласие на получение рекламно-информационных рассылок</label
+              >
             </div>
           </div>
         </form>
@@ -96,7 +112,7 @@ const props = defineProps({
   },
 })
 
-const studentName = computed(()=>{
+const studentName = computed(() => {
   return currentStudentStore.student?.student_name
 })
 

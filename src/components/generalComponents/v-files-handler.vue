@@ -186,7 +186,7 @@ const processFilesWithSizes = async (files) => {
     }
 
     // Если файл - это URL и размер не указан или равен 0
-    if (isFileUrl(file.file) && (!file.size || file.size === 0)) {
+    if (isFileUrl(file.file)) { //  && (!file.size || file.size === 0)
       processedFile.isLoadingSize = true
       processedFile.size = 0
 

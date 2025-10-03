@@ -181,7 +181,7 @@ import vBase from '../v-base.vue'
 import { useFinanceStore } from '@/stores/financeStore'
 import { isLastDayOfMonth } from 'date-fns'
 import { formatDate, getStatusClass } from '@/utils'
-import { cancelOperation, deleteTeacherOperations } from '@/api/requests'
+import { cancelOperation, deleteExpenditure } from '@/api/requests'
 
 const financeStore = useFinanceStore()
 
@@ -236,7 +236,8 @@ const deleteOperation = async () => {
  /*  if((currentOperation.value.income_id || currentOperation.value.income_id) && !currentOperation.value.payments_id) {
     await cancelOperation(currentOperation.value.id)
   } else if(currentOperation.value.payments_id) */
-  await cancelOperation(currentOperation.value.id)
+  // await cancelOperation(currentOperation.value.id)
+  await deleteExpenditure(currentOperation.value.id)
 }
 
 const getOpeartionStatusClass = (operation) => {

@@ -1,14 +1,15 @@
 <script setup>
-import { computed } from 'vue'
-import { RouterView, useRouter } from 'vue-router'
-import { onMounted } from 'vue';
-import { isUserAuth } from '@/utils';
-import { connectWebSocket } from './ws';
-import { useMyStore } from './stores/myStore';
+import { computed, nextTick } from 'vue'
+import { RouterView, useRoute, useRouter } from 'vue-router'
+import { onMounted } from 'vue'
+import { isUserAuth } from '@/utils'
+import { connectWebSocket } from './ws'
+import { useMyStore } from './stores/myStore'
 
-import vNotification from './components/generalComponents/v-notification.vue';
+import vNotification from './components/generalComponents/v-notification.vue'
 
-const router = useRouter();
+const router = useRouter()
+const route = useRoute()
 
 const store = useMyStore()
 
@@ -19,18 +20,18 @@ const userAuth = async () => {
 const loadData = async () => {
   await store.setUserAuthenticated()
   const authenticated = store.isAuth
-  if (!authenticated) {
-    router.push({ name: 'login' });
+  if (!authenticated && route.path !== '/') {
+    router.push({ name: 'login' })
   }
 }
 
-onMounted(() => {
-  loadData()
+onMounted(async () => {
+  await loadData()
   connectWebSocket()
   /* if(!isUserAuth()) {
     router.push({ name: 'login' });
   } */
-});
+})
 </script>
 
 <template>
