@@ -11,7 +11,7 @@ const apiClient = axios.create({
   withCredentials: true,
   headers: {
     'Cache-Control': 'no-store',
-  }
+  },
 })
 
 // Общая функция для выполнения запросов
@@ -23,13 +23,14 @@ async function makeRequest(endpoint, method = 'GET', body = null, headers = null
       withCredentials: true,
       headers: {
         'Cache-Control': 'no-store',
-        ...headers
-      }
+        ...headers,
+      },
     }
 
     if (body && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
       config.headers['Content-Type'] = 'application/json'
-      config.data = method === 'POST' || method === 'PUT' ? jsonOrder.stringify(body) : JSON.stringify(body)
+      config.data =
+        method === 'POST' || method === 'PUT' ? jsonOrder.stringify(body) : JSON.stringify(body)
     } else if (body && method === 'DELETE') {
       config.data = JSON.stringify(body)
     }
@@ -68,31 +69,36 @@ async function makeGetRequest(endpoint) {
 export async function getUserInfo() {
   try {
     return await makeGetRequest('/api/student/user-info')
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при получении информации о пользователе', error)
   }
 }
 
 export async function getStudentFutureLessons(student_id, page, page_size) {
   try {
-    return await makeGetRequest(`/api/student-future-lessons?student_id=${student_id}&page=${page}&page_size=${page_size}`)
-  } catch(error) {
+    return await makeGetRequest(
+      `/api/student-future-lessons?student_id=${student_id}&page=${page}&page_size=${page_size}`,
+    )
+  } catch (error) {
     console.error('Произошла ошибка при получении будущих уркоов ученика', error)
   }
 }
 
-
 export async function getStudentLastLessons(student_id, page, page_size) {
   try {
-    return await makeGetRequest(`/api/student-last-lessons?student_id=${student_id}&page=${page}&page_size=${page_size}`)
-  } catch(error) {
+    return await makeGetRequest(
+      `/api/student-last-lessons?student_id=${student_id}&page=${page}&page_size=${page_size}`,
+    )
+  } catch (error) {
     console.error('Произошла ошибка при получении предыдущих уроков ученика', error)
   }
 }
 
 export async function getStudentLessons(student_profile_id, page, per_page) {
   try {
-    return await makeGetRequest(`/api/student/lessons?student_profile_id=${student_profile_id}&page=${page}&per_page=${per_page}`)
+    return await makeGetRequest(
+      `/api/student/lessons?student_profile_id=${student_profile_id}&page=${page}&per_page=${per_page}`,
+    )
   } catch (error) {
     console.error('Произошла ошибка при получении уроков ученика', error)
   }
@@ -106,7 +112,7 @@ export async function getStudentAnalytics(student_id) {
   }
 }
 
-export async function getAllGradesStudent(student_id)  {
+export async function getAllGradesStudent(student_id) {
   try {
     return await makeGetRequest(`/api/students-all-grades/${student_id}`)
   } catch (error) {
@@ -125,11 +131,10 @@ export async function getStudentById(student_id) {
 export async function getTimeZones() {
   try {
     return await makeGetRequest(`/api/time_zone`)
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при получении временных зон', error)
   }
 }
-
 
 export async function getArchivedStudents() {
   try {
@@ -142,7 +147,7 @@ export async function getArchivedStudents() {
 export async function getTypesConnect() {
   try {
     return await makeGetRequest('/api/type-connects')
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при получении типов связи', error)
   }
 }
@@ -159,17 +164,24 @@ export async function toggleStudentArchive(student_id) {
 
 export async function setStudentHomework(homework_id, student_profile_id, files) {
   try {
-    return await axios.post(`${domain}/api/student/homework/${homework_id}/submit?student_profile_id=${student_profile_id}`, files, {
-      withCredentials: true,})
-  } catch(error) {
+    return await axios.post(
+      `${domain}/api/student/homework/${homework_id}/submit?student_profile_id=${student_profile_id}`,
+      files,
+      {
+        withCredentials: true,
+      },
+    )
+  } catch (error) {
     console.error('Произошла ошибка при отправки домашнего задания', error)
   }
 }
 
 export async function deleteStudentAnswer(answer_id, studnet_profile_id) {
   try {
-    return await makeRequest(`/api/student/homework-answers/${answer_id}?student_profile_id=${studnet_profile_id}`)
-  } catch(error) {
+    return await makeRequest(
+      `/api/student/homework-answers/${answer_id}?student_profile_id=${studnet_profile_id}`,
+    )
+  } catch (error) {
     console.error('Произошла ошибка при удалении ответа ученика', error)
   }
 }
@@ -184,7 +196,7 @@ export async function updateStudentProfile(student_id, request_body) {
 
 export async function setStudentProfile(student_profile) {
   try {
-    const response =  await makeRequest('/api/student-create', 'POST', student_profile)
+    const response = await makeRequest('/api/student-create', 'POST', student_profile)
     router.go(0)
     return response
   } catch (error) {
@@ -195,15 +207,17 @@ export async function setStudentProfile(student_profile) {
 export async function getStudentBalance(student_profile_id) {
   try {
     return await makeGetRequest(`/api/student/balance?student_profile_id=${student_profile_id}`)
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при получении баланса ученика', error)
   }
 }
 
 export async function getTeacherInfo(student_profile_id) {
   try {
-    return await makeGetRequest(`/api/student/teacher-info?student_profile_id=${student_profile_id}`)
-  } catch(error) {
+    return await makeGetRequest(
+      `/api/student/teacher-info?student_profile_id=${student_profile_id}`,
+    )
+  } catch (error) {
     console.error('Произошла ошибка при получении информации об учителе', error)
   }
 }
@@ -212,19 +226,17 @@ export async function deleteStudentProfile(data) {
   try {
     const response = await axios.delete(`${domain}/api/students/`, {
       data: data,
-      headers: { "Content-Type": "application/json" }
+      headers: { 'Content-Type': 'application/json' },
     })
-    if(response.name && response.name !== 'AxiosError') {
+    if (response.name && response.name !== 'AxiosError') {
       router.go(0)
     } else {
       emitter.emit('notify', {
-          type: 'error',
-          message: 'Произошла ошибка при удалении ученика'
-        })
+        type: 'error',
+        message: 'Произошла ошибка при удалении ученика',
+      })
     }
     return response
-
-
   } catch (error) {
     console.error('Произошла ошибка при удалении ученика', error)
   }
@@ -232,9 +244,11 @@ export async function deleteStudentProfile(data) {
 
 export async function setResult(request_body) {
   try {
-   const response = await axios.post(`${domain}/api/results`, request_body, {withCredentials: true})
-   router.go(0)
-   return response
+    const response = await axios.post(`${domain}/api/results`, request_body, {
+      withCredentials: true,
+    })
+    router.go(0)
+    return response
   } catch (error) {
     console.error('Произошла ошибка при добавлении результата ученика', error)
   }
@@ -242,9 +256,9 @@ export async function setResult(request_body) {
 
 export async function updateResultById(result_id, request_body) {
   try {
-    await axios.put(`${domain}/api/results/${result_id}`, request_body, {withCredentials: true})
+    await axios.put(`${domain}/api/results/${result_id}`, request_body, { withCredentials: true })
     router.go(0)
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при обновлении результата', error)
   }
 }
@@ -253,12 +267,12 @@ export async function deleteResultById(result_id) {
   try {
     await makeRequest(`/api/results/${result_id}`, 'DELETE')
     router.go(0)
-  } catch(error) {
+  } catch (error) {
     console.error('произошл ошибка при удалении результата', error)
   }
 }
 
-export async function getStudentResults(student_id)  {
+export async function getStudentResults(student_id) {
   try {
     return await makeGetRequest(`/api/student-results?student_id=${student_id}`)
   } catch (error) {
@@ -276,20 +290,20 @@ export async function getlastHomework(lesson_id) {
 
 export async function createSubmission(homework_id, request_body) {
   try {
-    await axios.post(`${domain}/api/create-homework-submission/${homework_id}`, request_body, {withCredentials: true});
+    await axios.post(`${domain}/api/create-homework-submission/${homework_id}`, request_body, {
+      withCredentials: true,
+    })
 
     /* router.go(0) */
-
-
-  } catch(error)  {
+  } catch (error) {
     console.error('Произошла ошибка при создании отправки домашнего задания', error)
   }
 }
 
-export async function getStudentSubjects () {
+export async function getStudentSubjects() {
   try {
     return makeGetRequest(`/api/student/profiles`)
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при получении информациио профиле студента', error)
   }
 }
@@ -320,22 +334,21 @@ export async function getMyInfo() {
     return response
   } catch (error) {
     console.error('Произошла ошибка при получении информации об учителе', error)
-
   }
 }
 
 export async function getTeacherOperations() {
   try {
     return await makeGetRequest('/api/operations')
-  }catch (error) {
+  } catch (error) {
     console.error('Произошла ошибка при получении информации об операциях учителя', error)
   }
 }
 
-export async function getTeacherExpenses () {
+export async function getTeacherExpenses() {
   try {
     return await makeGetRequest('/api/expenditures')
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при получении расходов учителя', error)
   }
 }
@@ -343,7 +356,7 @@ export async function getTeacherExpenses () {
 export async function getTeacherIncome() {
   try {
     return await makeGetRequest('/api/incomes')
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при получении доходов учителей', error)
   }
 }
@@ -363,7 +376,7 @@ export async function cancelOperation(operation_id) {
     const response = await makeRequest(`/api/cancel-operation/${operation_id}`, 'DELETE')
     router.go(0)
     return response
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при отмене операции', error)
   }
 }
@@ -383,26 +396,35 @@ export async function setExpense(requestBody) {
     const response = await makeRequest('/api/expenditures', 'POST', requestBody)
     router.go(0)
     return response
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при добавлении расхода учителя', error)
+  }
+}
+
+export async function deleteExpenditure(id) {
+  try {
+    const response = await makeRequest(`/api/expenditures/${id}`, 'DELETE')
+    router.go(0)
+    return response
+  } catch (error) {
+    console.error('Произошла ошибка при удалении расхода', error)
   }
 }
 
 export async function setPayment(requestBody) {
   try {
-      const response = await makeRequest('/api/payments', 'POST', requestBody)
-      router.go(0)
-      return response
-  } catch(error) {
+    const response = await makeRequest('/api/payments', 'POST', requestBody)
+    router.go(0)
+    return response
+  } catch (error) {
     console.error('Произошла ошибка при добавлении оплаты', error)
   }
 }
 
-
-export async function updateTeacherProfile (request_body) {
+export async function updateTeacherProfile(request_body) {
   try {
     return await makeRequest(`/api/update-teacher-profile`, 'PUT', request_body)
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при обновлении информации об учителе', error)
   }
 }
@@ -410,11 +432,11 @@ export async function updateTeacherProfile (request_body) {
 export async function changeEmail(email) {
   try {
     const response = await makeRequest(`/api/user/change_email?new_email=${email}`, 'PUT')
-    if(response !== 422) {
+    if (response !== 422) {
       router.go(0)
     }
     return response
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при обновлении почты', error)
   }
 }
@@ -468,7 +490,7 @@ export async function getMyLessons(date) {
   }
 }
 
-export async function getMyStudents(search_item=null) {
+export async function getMyStudents(search_item = null) {
   try {
     if (search_item) {
       return await makeGetRequest(`/api/all-students-teachers?search=${search_item}`)
@@ -541,7 +563,7 @@ export async function deleteLessonProblem(problem_id) {
 
 export async function cancelLesson(lesson_data) {
   try {
-    const response =  await makeRequest(`/api/cancel-lesson`, 'POST', lesson_data)
+    const response = await makeRequest(`/api/cancel-lesson`, 'POST', lesson_data)
     router.go(0)
     return response
   } catch (error) {
@@ -549,7 +571,7 @@ export async function cancelLesson(lesson_data) {
   }
 }
 
-export async function deleteRuleLessons(query)  {
+export async function deleteRuleLessons(query) {
   try {
     const response = await makeRequest(`/api/delete-student-rule-lessons/?${query}`, 'DELETE')
     router.go(0)
@@ -562,14 +584,13 @@ export async function deleteRuleLessons(query)  {
 export async function importStudents(files) {
   try {
     return fetch(`${domain}/api/students/import-excel/`, {
-    method: 'POST',
-    body: files,
-  })
-  } catch(error) {
+      method: 'POST',
+      body: files,
+    })
+  } catch (error) {
     console.error('Произошла ошибка при импорте учеников из Excel', error)
   }
 }
-
 
 /* Домашние задания */
 
@@ -583,23 +604,17 @@ export async function getLessonHomeWork(lesson_id) {
 
 export async function setLessonHomeWork(lesson_id, data) {
   try {
-    const response = await axios.post(
-      `${domain}/api/create-homework-lesson/${lesson_id}`,
-      data,
-      {
-        withCredentials: true
-      }
-    )
+    const response = await axios.post(`${domain}/api/create-homework-lesson/${lesson_id}`, data, {
+      withCredentials: true,
+    })
 
-   /*  router.go(0) */
+    /*  router.go(0) */
 
     return response
-
   } catch (error) {
     console.error('Произошла ошибка при создании домашнего задания урока', error)
   }
 }
-
 
 export async function deleteLessonHomework(homework_id) {
   try {
@@ -680,7 +695,7 @@ export async function deleteTeacherTask(task_id) {
 export async function transferLesson(lesson_id, data, updateAfterTransfer = false) {
   try {
     const response = await makeRequest(`/api/lessons/${lesson_id}`, 'PUT', data)
-   /*  if (updateAfterTransfer) {
+    /*  if (updateAfterTransfer) {
       router.go(0)
     } */
     console.log('Запрос прошёл успешно')
@@ -700,11 +715,11 @@ export async function setTopic(data) {
   }
 }
 
-export async function setOneTimeLesson(data, updatable=false) {
+export async function setOneTimeLesson(data, updatable = false) {
   try {
     const requestData = data
     const response = await makeRequest('/api/lesson-one-time', 'POST', requestData)
-    if(updatable) {
+    if (updatable) {
       router.go(0)
     }
     return response
@@ -713,11 +728,11 @@ export async function setOneTimeLesson(data, updatable=false) {
   }
 }
 
-export async function setTrialLesson(data, updatable=false) {
+export async function setTrialLesson(data, updatable = false) {
   try {
     const requestData = data.requestBody || data
     const response = await makeRequest('/api/lesson-trial', 'POST', requestData)
-    if(updatable) {
+    if (updatable) {
       router.go(0)
     }
     return response
@@ -726,21 +741,21 @@ export async function setTrialLesson(data, updatable=false) {
   }
 }
 
-export async function setStableGroupLesson(data, updatable=false) {
+export async function setStableGroupLesson(data, updatable = false) {
   try {
     const response = await makeRequest(`/api/lessons-create-group`, 'POST', data)
     router.go(0)
     return response
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при создании постоянного урока для группы', error)
   }
 }
 
-export async function setStableLesson(data, updatable=false) {
+export async function setStableLesson(data, updatable = false) {
   try {
     const response = await makeRequest('/api/lessons', 'POST', data)
-    if(updatable) {
-     /*  router.go(0) */
+    if (updatable) {
+      /*  router.go(0) */
     }
     return response
   } catch (error) {
@@ -758,7 +773,6 @@ export async function editRule(data) {
   }
 }
 
-
 /*=================================================================== Финансы =============================================================== */
 
 export async function getEarningsForDay() {
@@ -769,15 +783,15 @@ export async function getEarningsForDay() {
   }
 }
 
-
 export async function getEarningsForPeriod(startDate, endDate) {
   try {
-    return await makeGetRequest(`/api/earned-for-period?start_date=${startDate}&end_date=${endDate}`)
+    return await makeGetRequest(
+      `/api/earned-for-period?start_date=${startDate}&end_date=${endDate}`,
+    )
   } catch (error) {
     console.error('Произошла ошибка при получении зарабтка учителя за промежуток', error)
   }
 }
-
 
 export async function getMonthlyEarnings(year) {
   try {
@@ -790,7 +804,7 @@ export async function getMonthlyEarnings(year) {
 export async function getWeeklyEarnings(start_date, end_date) {
   try {
     return makeRequest(`/api/weekly-earnings?start_date=${start_date}&end_date=${end_date}`)
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при получении зарабтка учителя за промежуток по неделям', error)
   }
 }
@@ -819,10 +833,11 @@ export async function getStudentsEarnings() {
   }
 }
 
-
-export async function getStudentEarning (student_id, start_date, end_date) {
+export async function getStudentEarning(student_id, start_date, end_date) {
   try {
-    return await makeGetRequest(`/api/student-earnings?student_id=${student_id}&start_date=${start_date}&end_date=${end_date}`)
+    return await makeGetRequest(
+      `/api/student-earnings?student_id=${student_id}&start_date=${start_date}&end_date=${end_date}`,
+    )
   } catch (error) {
     console.error('Произошла ошибка при получении зарабтка учителя поу ученикам', error)
   }
@@ -831,20 +846,21 @@ export async function getStudentEarning (student_id, start_date, end_date) {
 export async function getStudnetSource() {
   try {
     return await makeRequest('/api/earned-source')
-  } catch(error) {
-    console.error('Произошла ошибка при получении информации об анализе учеников по источникам', error)
+  } catch (error) {
+    console.error(
+      'Произошла ошибка при получении информации об анализе учеников по источникам',
+      error,
+    )
   }
 }
 
 export async function getStudnetGoals() {
   try {
     return await makeRequest('/api/earned-goal')
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при получении информации об анализе учеников по целям', error)
   }
 }
-
-
 
 /* ======================================================================== Регистрация / Авторизация ======================================================================== */
 
@@ -852,8 +868,7 @@ export async function registerUser(requestBody) {
   console.log(requestBody)
   try {
     return await makeRequest('/api/register', 'POST', requestBody)
-  }
-  catch (error){
+  } catch (error) {
     console.error('Произошла ошибка при регистрации', error)
   }
 }
@@ -870,7 +885,7 @@ export async function loginUser(requestBody) {
 export async function logoutUser() {
   try {
     return await makeRequest('/api/logout', 'POST')
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при выходе из аккаунта', error)
   }
 }
@@ -878,7 +893,7 @@ export async function logoutUser() {
 export async function deleteAccount() {
   try {
     return await makeGetRequest('/api/delete-account')
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при удалении аккаунта', error)
   }
 }
@@ -894,15 +909,15 @@ export async function checkUserAuth() {
 export async function changePassword(request_body) {
   try {
     return await makeRequest('/api/request-password-reset', 'POST', request_body)
-  } catch(error) {
-    console.error('Произошла ошибка при смене пароля', error   )
+  } catch (error) {
+    console.error('Произошла ошибка при смене пароля', error)
   }
 }
 
 export async function linkProfileForApi(request_body) {
   try {
     return await makeRequest(`/api/student/link-profile`, 'POST', request_body)
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при привязке студента', error)
   }
 }
@@ -910,7 +925,7 @@ export async function linkProfileForApi(request_body) {
 export async function getWSToken() {
   try {
     return await makeGetRequest('ws/token')
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при получении токена для WebSocket', error)
   }
 }
@@ -920,12 +935,12 @@ export async function getWSToken() {
 export async function getTeacherNotifications() {
   try {
     return await makeGetRequest('/api/notifications_teacher')
-  } catch(error) {
+  } catch (error) {
     console.error('При получении уведомлений учителя произошла ошибка', error)
   }
 }
 
-export async function deleteTeacherNotifications(notification_id)  {
+export async function deleteTeacherNotifications(notification_id) {
   try {
     return await makeRequest(`/api/notification_teacher/${notification_id}`, 'DELETE')
   } catch {
@@ -936,7 +951,7 @@ export async function deleteTeacherNotifications(notification_id)  {
 export async function getStudentNotifications() {
   try {
     return await makeGetRequest('/api/notifications_student')
-  } catch(error) {
+  } catch (error) {
     console.error('При получении уведомлений ученика произошла ошибка', error)
   }
 }
@@ -948,7 +963,6 @@ export async function deleteStudentNotifications(notification_id) {
     console.error('Произошла ошибка при удалении уведомления ученика', error)
   }
 }
-
 
 /* ======================================================================== Группы ========================================================================*/
 
@@ -965,16 +979,18 @@ export async function createGroup(data) {
 export async function getGroups() {
   try {
     return await makeGetRequest('/api/groups/by-teacher')
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при получении групп учителя', error)
   }
 }
 
 export async function createHomeworkGroup(group_id, request_body) {
   try {
-    return  await axios.post(`${domain}/api/create-homework-group/${group_id}`, request_body, {withCredentials: true})
+    return await axios.post(`${domain}/api/create-homework-group/${group_id}`, request_body, {
+      withCredentials: true,
+    })
     /* router.go(0) */
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при создании общего домашнего задания для всей группы', error)
     return error
   }
@@ -990,7 +1006,7 @@ export async function updateGroup(request_body) {
   }
 }
 
-export  async function getGroupStudents (group_id) {
+export async function getGroupStudents(group_id) {
   try {
     return makeGetRequest(`/api/groups/${group_id}`)
   } catch (error) {
@@ -1000,7 +1016,10 @@ export  async function getGroupStudents (group_id) {
 
 export async function deleteGroup(data) {
   try {
-    const response = await axios.delete(`${domain}/api/groups`, {data: data, withCredentials: true})
+    const response = await axios.delete(`${domain}/api/groups`, {
+      data: data,
+      withCredentials: true,
+    })
     router.go(0)
     return response
   } catch (error) {
@@ -1008,14 +1027,14 @@ export async function deleteGroup(data) {
   }
 }
 
-export async function createGroupLesson(data, updatable=false) {
+export async function createGroupLesson(data, updatable = false) {
   try {
     const response = await makeRequest(`/api/create_group_lesson`, 'POST', data)
-    if(updatable) {
+    if (updatable) {
       /* router.go(0) */
     }
     return response
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при создании группового урока', error)
   }
 }
@@ -1025,33 +1044,31 @@ export async function createGroupLessons(data) {
     const response = await makeRequest(`/api/create_group_lesson`, 'POST', data)
     router.go(0)
     return response
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при создании групповых уроков')
   }
 }
 
-
-export async function uploadFIleHomework (homework_id, data) {
+export async function uploadFIleHomework(homework_id, data) {
   try {
     return await axios.post(`${domain}/api/homework/${homework_id}/upload-files`, data)
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при отправке файлов домашнего задания', error)
   }
 }
 
-
-export async function getAllStudentHomework (student_id) {
+export async function getAllStudentHomework(student_id) {
   try {
     return await makeGetRequest(`/api/all-homeworks-by-student/${student_id}`)
-  } catch(error) {
+  } catch (error) {
     console.error('Произошла ошибка при получении всего домашнего задания ученика', error)
   }
 }
 
-export async function manualGrade (request_body) {
+export async function manualGrade(request_body) {
   try {
-    return await axios.post(`${domain}/api/manual-grade`, request_body, {withCredentials: true})
-  } catch(error) {
+    return await axios.post(`${domain}/api/manual-grade`, request_body, { withCredentials: true })
+  } catch (error) {
     console.error('Произошла ошибка при добавлении оценки домашнего задания', error)
   }
 }
