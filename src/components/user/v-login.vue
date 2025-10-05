@@ -81,8 +81,8 @@
 
       <div class="v-login__warning">
         Продолжая, вы соглашаетесь с
-        <a class="contact-link" href="">Условиями использования</a> и
-        <a class="contact-link" href="">Политикой конфиденциальности.</a>
+        <a class="contact-link" href="/Пользовательское соглашение.pdf" target="_blank">Условиями использования</a> и
+        <a class="contact-link" href="/Политика обработки ПДН.pdf" target="_blank">Политикой конфиденциальности.</a>
       </div>
     </div>
   </div>
