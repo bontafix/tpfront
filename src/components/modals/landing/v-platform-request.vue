@@ -42,11 +42,11 @@
 
           <div class="landing-caption pd">
             Отправляя свои данные, я подтверждаю, что ознакомился и согласен с
-            <a href="/src/assets/documentation/Политика обработки ПДН.pdf" target="_blank"
+            <a href="/Политика обработки ПДН.pdf" target="_blank"
               ><u>Политикой конфиденциальности</u></a
             >
             и
-            <a href="/src/assets/documentation/Пользовательское соглашение.pdf" target="_blank"
+            <a href="/Пользовательское соглашение.pdf" target="_blank"
               ><u>пользовательским соглашением</u></a
             >
           </div>
@@ -65,7 +65,7 @@
               </div>
               <label for="pd_accepted" class="landing-caption"
                 >Я даю согласие на обработку своих персональных данных согласно
-                <a href="/src/assets/documentation/Политика обработки ПДН.pdf" target="_blank"
+                <a href="/Политика обработки ПДН.pdf" target="_blank"
                   ><u>политике конфиденциальности</u></a
                 ></label
               >

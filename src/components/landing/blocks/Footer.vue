@@ -37,13 +37,13 @@
       <div class="footer-row low-gap">
         <a
           class="footer-subtext"
-          href="/src/assets/documentation/Политика обработки ПДН.pdf"
+          href="/Политика обработки ПДН.pdf"
           target="_blank"
           >Политика конфиденциальности</a
         >
         <a
           class="footer-subtext"
-          href="/src/assets/documentation/Пользовательское соглашение.pdf"
+          href="/Пользовательское соглашение.pdf"
           target="_blank"
           >Пользовательское соглашение</a
         >
