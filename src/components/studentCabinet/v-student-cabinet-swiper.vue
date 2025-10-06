@@ -148,7 +148,7 @@
 <script setup>
 import { ref, nextTick, onMounted, watch, computed } from 'vue'
 import { getStudentFutureLessons, getStudentLastLessons, getLessonProblems, getLessonTopics, getStudentLessons, getStudnetSource } from '@/api/requests'
-import { formatDate } from '@/utils'
+import { formatDate, domain } from '@/utils'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation } from 'swiper/modules'
 import 'swiper/css'
@@ -326,7 +326,7 @@ function transformedFiles(files) {
     id: file.id,
     name: file.file_url.split('/').pop(), // Извлекаем имя файла из URL
     size: 0, // Размер будет получен асинхронно компонентом
-    file: file.file_url // URL файла
+    file: `${domain}/${file.file_url}` // URL файла
   }))
 }
 
@@ -336,7 +336,7 @@ function transformedAnswers(files) {
     id: file.id,
     name: file.file_name,
     size: file.file_size,
-    file: file.file_path
+    file: `${domain}/homework_answers/${file.file_path}`
   }))
 }
 
