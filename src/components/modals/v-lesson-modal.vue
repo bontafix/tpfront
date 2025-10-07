@@ -113,13 +113,9 @@ const submitStableForm = async (stableForm) => {
     }
 }
 const submitSingleForm = async (singleForm) => {
-
   singleForm['cost_lesson_one_time']  =  0
   singleForm['trial'] = false
   singleForm['time_zone_teacher'] = teacherTimeZone.value
-
-    console.log(group.value)
-
 
   if (student.value || group.value) {
     if(student.value) {
@@ -128,9 +124,6 @@ const submitSingleForm = async (singleForm) => {
     } else if(group.value) {
       singleForm['group_id'] = group.value.id
     }
-
-    console.log(singleForm)
-
 
     const isValid = Object.values(singleForm).every(
       (value) => value !== undefined && value !== null,

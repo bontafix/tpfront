@@ -146,7 +146,7 @@ const submitForm = () => {
   let conductedDate;
   if (date.value) {
     if (date.value instanceof Date) {
-      conductedDate = date.value.toISOString().split('T')[0];
+      conductedDate = getTodayDate(date.value);
     } else {
       conductedDate = date.value;
     }
@@ -167,12 +167,13 @@ const submitForm = () => {
 
     startDateTime.setMinutes(startDateTime.getMinutes() - reminderMinutes);
     reminderTime = startDateTime.toISOString();
-
   } catch (error) {
     console.error('Ошибка при создании времени напоминания:', error);
     alert('Ошибка в дате или времени!');
     return;
   }
+
+  const createdDate = getTodayDate(today);
 
   const lessonData = {
     day_of_week_id: date.value ? (date.value instanceof Date ? date.value.getDay() || 7 : new Date(date.value).getDay() || 7) : null,
@@ -183,7 +184,7 @@ const submitForm = () => {
     amount_deducted: false,
     status: 'completed',
     conducted_date: conductedDate,
-    created_date: today ? today.toISOString().split('T')[0] : null,
+    created_date: createdDate,
     reminder_time: reminderTime,
     one_time: true,
     trial: true,
@@ -201,6 +202,13 @@ const submitForm = () => {
     alert('Заполните все поля формы!')
     console.error('Некоторые поля пустые или некорректные!', lessonData)
   }
+}
+
+function getTodayDate(value) {
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, '0');
+  const day = String(value.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 
