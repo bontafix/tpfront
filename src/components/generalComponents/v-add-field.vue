@@ -26,7 +26,7 @@
       </button>
     </div>
   </form>
-  <div class="add-field" ref="addFieldRef" v-click-outside="closeInputVisibility">
+  <!-- <div class="add-field" ref="addFieldRef" v-click-outside="closeInputVisibility">
     <button class="add-field__button custom-btn light-blue" @click="toggleInputVisibility">
       Добавить
     </button>
@@ -67,12 +67,12 @@
           </button>
         </div>
       </form>
-    </div>
-  </div>
+    </div> -->
+  <!-- </div> -->
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick, defineProps, defineEmits } from 'vue'
+import { ref, defineProps, defineEmits } from 'vue'
 
 const props = defineProps({
   placeholder: {
@@ -85,21 +85,21 @@ const emit = defineEmits(['submit'])
 
 const isVisible = ref(false)
 const inputValue = ref('')
-const addFieldRef = ref(null)
+// const addFieldRef = ref(null)
 
-const toggleInputVisibility = () => {
-  isVisible.value = !isVisible.value
-  if (isVisible.value) {
-    nextTick(() => {
-      const input = document.querySelector('.add-field__input')
-      if (input) input.focus()
-    })
-  }
-}
+// const toggleInputVisibility = () => {
+//   isVisible.value = !isVisible.value
+//   if (isVisible.value) {
+//     nextTick(() => {
+//       const input = document.querySelector('.add-field__input')
+//       if (input) input.focus()
+//     })
+//   }
+// }
 
-const closeInputVisibility = (event) => {
-  isVisible.value = false
-}
+// const closeInputVisibility = (event) => {
+//   isVisible.value = false
+// }
 
 const submit = () => {
   if (inputValue.value.trim()) {

@@ -637,7 +637,7 @@ textarea {
 }
 @media (max-width: 480px) {
   .custom-datepicker .dp__outer_menu_wrap {
-    /*  position: fixed; 
+    /*  position: fixed;
      bottom: 0 !important;
      left: 0 !important;
      top: auto !important;
@@ -2534,7 +2534,7 @@ input:checked + .slider::before {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-} /* 
+} /*
 .v-footer {
   min-height: 100px;
   background-color: var(--grey);
@@ -3330,11 +3330,6 @@ input:checked + .slider::before {
   display: flex;
   gap: 5px;
   margin-top: 20px;
-}
-@media (max-width: 768px) {
-  .input-field {
-    display: none;
-  }
 }
 .input-field__input {
   width: 100%;
@@ -5845,7 +5840,7 @@ td:first-child .styled-table__body-item {
        align-items: center;
        justify-content: center;
        padding-right: 0;
-     } 
+     }
 
       &-image {
        position: absolute;
@@ -5910,7 +5905,7 @@ td:first-child .styled-table__body-item {
        @media (max-width: 768px) {
          text-align: center;
          font-size: 20px;
-       } 
+       }
      }
 
      &-subtitle {
@@ -5925,7 +5920,7 @@ td:first-child .styled-table__body-item {
        }
         @media (max-width: 1440px) {
          font-size: 12px;
-       } 
+       }
      } */
   /*   &-button {
       display: inline-flex;
