@@ -273,6 +273,10 @@ textarea {
   .custom-btn.blue:hover {
     background-color: #1543B7 !important;
   }
+
+  .custom-btn.blue:disabled:hover {
+    background-color: var(--custom-blue) !important;
+  }
 }
 .custom-btn.unactive {
   opacity: 0.4;

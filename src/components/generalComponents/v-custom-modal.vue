@@ -15,7 +15,14 @@
           </slot>
 
           <slot name="button">
-            <button class="custom-btn blue" @click="submitForm">Сохранить</button>
+            <button
+              class="custom-btn blue"
+              :class="isSaveButtonDisabled && 'button-disabled-modal'"
+              @click="submitForm"
+              :disabled="isSaveButtonDisabled"
+            >
+              Сохранить
+            </button>
           </slot>
         </div>
       </div>
@@ -35,12 +42,16 @@ let wasVisible = false
 const props = defineProps({
   id: {
     type: String,
-    required: false
+    required: false,
   },
   hideButtons: {
     type: Boolean,
     default: false,
-  }
+  },
+  isSaveButtonDisabled: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits(['close', 'submit'])
@@ -63,7 +74,7 @@ defineExpose({
 })
 
 const observeVisibility = (entries) => {
-  entries.forEach(entry => {
+  entries.forEach((entry) => {
     const isVisible = entry.isIntersecting
 
     if (isVisible && !wasVisible) {
@@ -110,5 +121,10 @@ onUnmounted(() => {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+.button-disabled-modal {
+  opacity: 0.4;
+  cursor: auto;
 }
 </style>

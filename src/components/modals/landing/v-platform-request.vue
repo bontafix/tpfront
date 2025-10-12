@@ -1,5 +1,5 @@
 <template>
-  <v-custom-modal @submit="submitForm">
+  <v-custom-modal ref="modalRef" @submit="submitForm" :isSaveButtonDisabled="isButtonDisabled">
     <template #modal>
       <div class="v-add-result-modal">
         <h2 class="landing-modal-title">Отправьте запрос на обзор платформы</h2>
@@ -94,15 +94,14 @@
     </template>
   </v-custom-modal>
 </template>
-<script setup>
-import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
 
+<script setup>
+import { ref, computed, onMounted } from 'vue'
 import { useCurrentStudentStore } from '@/stores/currentStudentStore'
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
 import vStyledSelect from '@/components/generalComponents/v-styled-select.vue'
-
 import '@vuepic/vue-datepicker/dist/main.css'
+import { createDemoRequest, getTypesConnect } from '@/api/requests'
 
 const currentStudentStore = useCurrentStudentStore()
 
@@ -116,43 +115,54 @@ const props = defineProps({
 const studentName = computed(() => {
   return currentStudentStore.student?.student_name
 })
-const contactTypes = ref([
-  {
-    id: 'telegram',
-    name: '',
-    icon: '/src/assets/images/telegram.svg',
-  },
-  {
-    id: 'whatsapp',
-    name: '',
-    icon: '/src/assets/images/whatsapp.svg',
-  },
-])
+const isButtonDisabled = computed(() => {
+  if (
+    formData.value.name &&
+    formData.value.contact_method &&
+    formData.value.contact_type &&
+    pd_accepted.value
+  ) {
+    return false
+  }
+  return true
+})
 
-const route = useRoute()
-
+const modalRef = ref()
+const contactTypes = ref()
 const isReadonly = props.readonly
 
 const pd_accepted = ref(false)
 const ads_accepted = ref(false)
 const formData = ref({
-  pd_accepted: pd_accepted.value,
-  ads_accepted: ads_accepted.value,
   name: studentName.value || '',
   contact_method: '',
-  contact_type: contactTypes.value[0],
+  contact_type: null,
+  pd_accepted: pd_accepted.value,
+  ads_accepted: ads_accepted.value,
 })
 
-const submitForm = () => {
-  const studentId = route.params.id
+const submitForm = async () => {
   const requestBody = {
-    student_id: studentId || null,
     name: formData.value.name,
-    contact_method: formData.value.contact_method,
-    pd_accepted: pd_accepted.value,
-    ads_accepted: ads_accepted.value,
-    contact_type: formData.value.contact_type.id,
+    contact_value: formData.value.contact_method,
+    type_connect_id: formData.value.contact_type.id,
+    agree_personal_data: pd_accepted.value,
+    marketing_opt_in: ads_accepted.value,
   }
-  console.log('Form submitted with data:', requestBody)
+
+  const response = await createDemoRequest(requestBody)
+  if (response.status === 201) {
+    modalRef.value?.close()
+  }
 }
+
+onMounted(async () => {
+  const types = await getTypesConnect()
+  const changedTypes = types.map((item) => ({
+    id: item.id,
+    name: '',
+    icon: item.icon,
+  }))
+  contactTypes.value = [...changedTypes]
+})
 </script>

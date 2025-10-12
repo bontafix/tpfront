@@ -66,6 +66,20 @@ async function makeGetRequest(endpoint) {
 
 /*=================================================================== Ученики =============================================================== */
 
+export async function createDemoRequest(data) {
+  try {
+    return await axios.post(
+      `${domain}/api/public/demo-request`,
+      data,
+      {
+        withCredentials: true,
+      },
+    )
+  } catch (error) {
+    console.error('Произошла ошибка при создании заявки на демонстрацию', error)
+  }
+}
+
 export async function getUserInfo() {
   try {
     return await makeGetRequest('/api/student/user-info')
