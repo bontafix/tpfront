@@ -1,5 +1,5 @@
 const domain_prod = 'https://api.teacherplanner.ru'
-const domain_test = 'https://test-api.teacherplanner.ru'
+const domain_test = 'https://api.teacherplanner.ru'
 const domain = domain_test
 import router from '@/router'
 import jsonOrder from 'json-order'
