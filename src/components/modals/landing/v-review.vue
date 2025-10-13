@@ -1,5 +1,5 @@
 <template>
-  <v-custom-modal @submit="submitForm">
+  <v-custom-modal ref="modalRef" @submit="submitForm">
     <template #modal>
       <div class="v-add-result-modal">
         <h2 class="modal-title">Отзыв о платформе</h2>
@@ -89,17 +89,25 @@
     </template>
 
     <template #button>
-      <button class="custom-btn blue" @click="submitForm">Отправить</button>
+      <button
+        class="custom-btn blue"
+        :class="isButtonDisabled && 'button-disabled-modal'"
+        @click="submitForm"
+        :disabled="isButtonDisabled"
+      >
+        Отправить
+      </button>
     </template>
   </v-custom-modal>
 </template>
+
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, computed } from 'vue'
 
 import { useCurrentStudentStore } from '@/stores/currentStudentStore'
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
 import vCustomTextarea from '@/components/generalComponents/v-custom-textarea.vue'
+import { setNewReviews } from '@/api/requests'
 
 import '@vuepic/vue-datepicker/dist/main.css'
 
@@ -115,8 +123,14 @@ const props = defineProps({
 const studentName = computed(() => {
   return currentStudentStore.student?.student_name
 })
+const isButtonDisabled = computed(() => {
+  if (formData.value.name && formData.value.subject && formData.value.text && pd_accepted.value) {
+    return false
+  }
+  return true
+})
 
-const route = useRoute()
+const modalRef = ref()
 
 const isReadonly = props.readonly
 
@@ -130,16 +144,25 @@ const formData = ref({
   text: '',
 })
 
-const submitForm = () => {
-  const studentId = route.params.id
+const submitForm = async () => {
   const requestBody = {
-    student_id: studentId || null,
     name: formData.value.name,
     subject: formData.value.subject,
     text: formData.value.text,
-    pd_accepted: pd_accepted.value,
-    ads_accepted: ads_accepted.value,
+    agree_personal_data: pd_accepted.value,
+    marketing_opt_in: ads_accepted.value,
   }
-  console.log('Form submitted with data:', requestBody)
+
+  const response = await setNewReviews(requestBody)
+  if (response.status === 201) {
+    modalRef.value?.close()
+  }
 }
 </script>
+
+<style scoped>
+.button-disabled-modal {
+  opacity: 0.4;
+  cursor: auto;
+}
+</style>

@@ -190,6 +190,20 @@ export async function setStudentHomework(homework_id, student_profile_id, files)
   }
 }
 
+export async function setNewReviews(review) {
+  try {
+    return await axios.post(
+      `${domain}/api/public/reviews`,
+      review,
+      {
+        withCredentials: true,
+      },
+    )
+  } catch(error) {
+    console.error('Произошла ошибка при создании отзыва', error)
+  }
+}
+
 export async function deleteStudentAnswer(answer_id, studnet_profile_id) {
   try {
     return await makeRequest(
