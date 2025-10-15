@@ -190,6 +190,14 @@ export async function setStudentHomework(homework_id, student_profile_id, files)
   }
 }
 
+export async function getReviews() {
+  try {
+    return await makeRequest('/api/admin/reviews')
+  } catch (error) {
+    console.error('Произошла ошибка при получении отзывов', error)
+  }
+}
+
 export async function setNewReviews(review) {
   try {
     return await axios.post(
