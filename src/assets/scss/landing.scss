@@ -17,13 +17,13 @@ html {
 html.modal-open {
   overflow: hidden;
   touch-action: none;
-  
+
   header {
     filter: brightness(0.5);
     pointer-events: none;
     user-select: none;
   }
-  
+
   body {
     overflow: hidden;
     touch-action: none;
@@ -801,9 +801,6 @@ main {
     }
     @media (max-width: 570px) {
       grid-template-columns: 1fr;
-      .blog-section__lead-post {
-        display: none;
-      }
     }
   }
 

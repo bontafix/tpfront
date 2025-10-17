@@ -777,7 +777,6 @@ const   saveHomework = async (homework_data) => {
       throw new Error('Не выбран урок для сохранения домашнего задания')
     }
     let response;
-    console.log(studentId, groupId)
     if(studentId && !groupId) {
         response = await setLessonHomeWork(lessonId, hwFormData)
         let message = response?.data?.message

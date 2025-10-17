@@ -486,6 +486,14 @@ export async function getWeeks() {
   }
 }
 
+export async function getNews() {
+  try {
+    return await makeGetRequest('/api/public/news')
+  } catch (error) {
+    console.error('Произошла ошибка при получении новостей', error)
+  }
+}
+
 export async function getLessonsOnMonth(year, month) {
   try {
     return await makeGetRequest(`/api/lessons/${year}/${month}`)

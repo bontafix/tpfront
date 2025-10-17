@@ -822,9 +822,6 @@ main {
   .blog-section__posts {
     grid-template-columns: 1fr;
   }
-  .blog-section__posts .blog-section__lead-post {
-    display: none;
-  }
 }
 .blog-section__lead-post {
   position: relative;
