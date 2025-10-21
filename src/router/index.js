@@ -54,6 +54,7 @@ const vNotifications = () => import('@/components/notificationsPage/v-notificati
 
 const vConditionalRoute = () => import('@/components/conditionalRoute/v-conditional-route.vue')
 
+const blogPage = () => import('@/components/blogPage/blogPage.vue')
 
 
 /* ================================================================== Маршруты ================================================================== */
@@ -234,6 +235,11 @@ const router = createRouter({
       path: '/link-profile',
       name: 'link_profile',
       component: vConditionalRoute
+    },
+    {
+      path: '/blog',
+      name: 'blog',
+      component: blogPage
     }
   ],
 })

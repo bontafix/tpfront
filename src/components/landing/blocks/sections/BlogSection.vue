@@ -10,7 +10,7 @@
         </a>
       </div>
 
-      <button class="primary-button blog-section__header-button" @click="openModal">
+      <button class="primary-button blog-section__header-button" @click="openBlogPage">
         Перейти в блог
       </button>
     </div>
@@ -77,7 +77,7 @@
         <div class="blog-section__button">Хотите написать статью?</div>
       </a>
 
-      <button class="primary-button blog-section__footer-button-mobile" @click="openModal">
+      <button class="primary-button blog-section__footer-button-mobile" @click="openBlogPage">
         Перейти в блог
       </button>
     </div>
@@ -87,8 +87,16 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { getNews } from '@/api/requests'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const news = ref()
+
+function openBlogPage() {
+  console.log('blog')
+  router.push({ name: 'blog' })
+}
 
 onMounted(async () => {
   const response = await getNews()
