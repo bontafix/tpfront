@@ -131,7 +131,7 @@ onMounted(async () => {
   }
 
   .blog-section__featured-image_mobile {
-    border-radius: 16px 16px 0 0;
+    border-radius: 16px;
   }
 
   .blog-section__mobile-container {

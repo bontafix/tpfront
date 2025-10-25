@@ -14,11 +14,15 @@
     </div>
 
     <div class="blogs__items-container">
-      <Blog v-for="blog in blogs[currentPage]" :key="blog.id" :blog="blog" />
+      <Blog v-for="blog in currentBlogs" :key="blog.id" :blog="blog" />
     </div>
 
     <div class="blogs__pagination">
-      <button class="blogs__pagination-button" v-if="currentPage !== 1">
+      <button
+        class="blogs__pagination-button"
+        v-if="currentPage !== 1"
+        @click="goToPage(currentPage - 1)"
+      >
         <img
           src="/src/assets/icons/strelka.svg"
           alt="Стрелка"
@@ -31,10 +35,16 @@
         :key="page"
         class="blogs__pagination-page"
         :class="[currentPage === page && 'blogs__pagination-page_active']"
-        >{{ page }}</span
+        @click="goToPage(page)"
       >
+        {{ page }}
+      </span>
 
-      <button class="blogs__pagination-button" v-if="currentPage !== pages" @click="handleNextPage">
+      <button
+        class="blogs__pagination-button"
+        v-if="currentPage !== pages && pages > 0"
+        @click="goToPage(currentPage + 1)"
+      >
         <img
           src="/src/assets/icons/strelka.svg"
           alt="Стрелка"
@@ -46,30 +56,45 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import Blog from './blog.vue'
 import { getNews } from '@/api/requests'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 
 const blogs = ref([])
 const pages = ref(1)
 const currentPage = ref(1)
 
-function handleNextPage() {
-  // TODO: остановился на переключении на следующую страницу
+const currentBlogs = computed(() => {
+  return blogs.value[currentPage.value - 1] || []
+})
+
+function goToPage(page) {
+  if (page < 1 || page > pages.value) return
+
+  currentPage.value = page
+  router.push(`/blog?page=${page.toString()}`)
+  window.scrollTo(0, 0)
 }
 
 async function getBlogs() {
   const result = await getNews()
   chunkBlogs(result)
   pages.value = blogs.value.length
-  console.log('pages', pages.value)
-  if (route.params.page) {
-    currentPage.value = +route.params.page
+  if (route.query.page) {
+    const pageFromUrl = Number(route.query.page)
+    if (pageFromUrl >= 1 && pageFromUrl <= pages.value) {
+      currentPage.value = pageFromUrl
+    } else {
+      currentPage.value = 1
+      router.replace(`/blog?page=1`)
+    }
   } else {
     currentPage.value = 1
+    router.replace(`/blog?page=1`)
   }
 }
 
@@ -77,7 +102,6 @@ function chunkBlogs(array) {
   for (let i = 0; i < array.length; i += 12) {
     blogs.value.push(array.slice(i, i + 12))
   }
-  console.log('blogs', blogs.value)
 }
 
 onMounted(async () => {
@@ -150,6 +174,7 @@ onMounted(async () => {
 
 .blogs__pagination {
   display: flex;
+  gap: 4px;
   margin-top: 32px;
 }
 
@@ -253,6 +278,20 @@ onMounted(async () => {
   .blogs__items-container {
     gap: 40px 20px;
   }
+
+  .blogs__pagination {
+    margin-top: 16px;
+  }
+
+  .blogs__pagination-button {
+    width: 36px;
+    height: 40px;
+  }
+
+  .blogs__pagination-page {
+    width: 44px;
+    height: 40px;
+   }
 }
 
 @media screen and (max-width: 767px) {
