@@ -1,6 +1,4 @@
-const domain_prod = 'https://api.teacherplanner.ru'
-const domain_test = 'https://api.dev-teacherplanner.ru'
-const domain = domain_test
+const domain = import.meta.env.VITE_API_URL
 import router from '@/router'
 import jsonOrder from 'json-order'
 import axios from 'axios'

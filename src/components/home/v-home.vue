@@ -222,7 +222,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue'
 
 import emitter from '@/eventBus'
 import { getWeek } from 'date-fns'
-import { formatDateToBase } from '@/utils'
+import { formatDateToBase, wsDomain } from '@/utils'
 
 const lessonStore = useLessonStore()
 const modules = [Navigation]
@@ -871,7 +871,7 @@ const loadData = async () => {
 let ws = null
 const connectWebSocket = () => {
   try {
-    ws = new WebSocket('wss://test-api.teacherplanner.ru/ws/lesson_notifications/')
+    ws = new WebSocket(`${wsDomain}lesson_notifications/`)
 
     ws.onmessage = (event) => {
       if (event.data !== 'ping') {

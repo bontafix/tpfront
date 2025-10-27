@@ -8,7 +8,8 @@ import { checkUserAuth } from '@/api/requests';
 import { useGeneralStore } from '@/stores/generalStore'
 
 
-export const domain = `https://test-api.teacherplanner.ru`
+export const domain = import.meta.env.VITE_API_URL
+export const wsDomain = import.meta.env.VITE_API_WS_URL
 
 export const stableOrder = [
   'student_id',

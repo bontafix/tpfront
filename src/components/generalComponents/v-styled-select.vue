@@ -139,7 +139,7 @@ const props = defineProps({
   },
 })
 
-const domain = ref('https://test-api.teacherplanner.ru/')
+const domain = import.meta.env.VITE_API_URL
 const emit = defineEmits(['update:modelValue'])
 const isDropdownMenu = ref(false)
 const selectContainer = ref(null)
@@ -168,7 +168,7 @@ const containsHtml = (str) => {
 }
 
 const getImageIcon = (icon) => {
-  return `${domain.value}${icon}`
+  return `${domain}${icon}`
 }
 
 const hasImage = computed(() => {
@@ -183,7 +183,7 @@ const imageContent = computed(() => {
     return props.items?.length > 0 && props.items[0].icon ? props.items[0].icon : ''
   }
   const imageItem = selectedValues.value.find((item) => item && item.icon)
-  if (imageItem) return `${domain.value}${imageItem.icon}`
+  if (imageItem) return `${domain}${imageItem.icon}`
   return ''
 })
 

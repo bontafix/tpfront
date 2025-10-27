@@ -26,7 +26,7 @@
         <template v-if="key === 0">
           <img
             loading="lazy"
-            :src="`https://api.teacherplanner.ru${item.file}`"
+            :src="`${domain}${item.file}`"
             alt="Lead Post"
             class="blog-section__featured-image blog-section__featured-image_mobile"
           />
@@ -51,7 +51,7 @@
         <template v-else>
           <img
             loading="lazy"
-            :src="`https://api.teacherplanner.ru${item.file}`"
+            :src="`${domain}${item.file}`"
             alt="First Post Mobile"
             class="blog-section__classic-image"
           />
@@ -88,6 +88,7 @@
 import { onMounted, ref } from 'vue'
 import { getNews } from '@/api/requests'
 import { useRouter } from 'vue-router'
+import { domain } from '@/utils'
 
 const router = useRouter()
 
