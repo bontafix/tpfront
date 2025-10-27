@@ -4,6 +4,7 @@ This template should help get you started developing with Vue 3 in Vite.
 
 ## Project Overview
 
+
 This project represents an interactive calendar with the following key features:
 - View schedule by month or week.
 - Add, delete, and edit events.
