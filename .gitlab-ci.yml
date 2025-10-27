@@ -21,7 +21,7 @@ deploy_dev:
     - echo "🔨 Сборка проекта..."
     - npm run build
     - echo "✅ Сборка завершена успешно"
-    - echo "🚀 Деплой на DEV сервер..."
+    - echo "🚀 Деплой на DEV сервер ..."
     - echo "📂 Копирование файлов в /var/www/dev-teacherplanner ..."
     - mkdir -p /var/www/dev-teacherplanner/
     - rsync -rlDv --delete dist/ /var/www/dev-teacherplanner/
