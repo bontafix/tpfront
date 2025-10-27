@@ -1,6 +1,7 @@
 // ws.js
 import { ref } from 'vue'
 import { getWSToken } from '@/api/requests'
+import { wsDomain } from '@/utils'
 
 let ws = null
 let reconnectAttempts = 0
@@ -33,14 +34,14 @@ export async function connectWebSocket() {
     const token = response.ws_token
 
     if (!token) {
-      console.error("Не удалось получить токен для WebSocket")
+      console.error('Не удалось получить токен для WebSocket')
       return
     }
 
-    ws = new WebSocket("wss://test-api.teacherplanner.ru/ws/")
+    ws = new WebSocket(wsDomain)
 
     ws.onopen = () => {
-      console.log("✅ WebSocket подключен, отправляю токен...")
+      console.log('✅ WebSocket подключен, отправляю токен...')
       ws.send(JSON.stringify({ token }))
     }
 
@@ -54,7 +55,7 @@ export async function connectWebSocket() {
           console.log('Аутентификация успешна')
         } else {
           // Рассылаем сообщение всем подписчикам
-          listeners.forEach(fn => fn(data))
+          listeners.forEach((fn) => fn(data))
         }
       } catch (error) {
         if (event.data !== 'ping') {

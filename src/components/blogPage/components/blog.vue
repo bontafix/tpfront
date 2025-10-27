@@ -1,6 +1,6 @@
 <template>
   <div class="blog">
-    <img :src="`https://api.teacherplanner.ru${blog.file}`" alt="Новость" class="blog__image" />
+    <img :src="`${domain}${blog.file}`" alt="Новость" class="blog__image" />
 
     <div class="blog__container">
       <div class="blog__text-container">
@@ -22,6 +22,8 @@
 </template>
 
 <script setup lang="ts">
+import { domain } from '@/utils'
+
 const props = defineProps({
   blog: {
     type: Object,

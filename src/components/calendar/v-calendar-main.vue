@@ -70,7 +70,7 @@
 </template>
 <script setup>
 import { onMounted, ref } from 'vue'
-
+import { wsDomain } from '@/utils'
 import vTrialModal from '../modals/v-trial-modal.vue'
 import vLessonModal from '../modals/v-lesson-modal.vue'
 
@@ -96,7 +96,7 @@ let ws = null
 const connectWebSocket = () => {
   try {
     console.log('Зашли в функцию')
-    ws = new WebSocket('wss://test-api.teacherplanner.ru/ws/lesson_notifications/')
+    ws = new WebSocket(`${wsDomain}lesson_notifications/`)
 
     ws.onmessage = (event) => {
       if (event.data !== 'ping') {

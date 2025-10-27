@@ -18,8 +18,12 @@ deploy_dev:
   script:
     - echo "📦 Установка зависимостей..."
     - npm ci
-    - echo "🔨 Сборка проекта..."
-    - npm run build
+    - echo "⚙️ Создание .env.development..."
+    - echo "VITE_API_URL=${DEV_API_URL}" > .env.development
+    - echo "VITE_API_WS_URL=${DEV_WS_URL}" >> .env.development
+    - cat .env.development
+    - echo "🔨 Сборка проекта (DEVELOPMENT режим)..."
+    - npm run build:dev
     - echo "✅ Сборка завершена успешно"
     - echo "🚀 Деплой на DEV сервер..."
     - echo "📂 Копирование файлов в /var/www/dev-teacherplanner"
@@ -50,8 +54,12 @@ deploy_prod:
   script:
     - echo "📦 Установка зависимостей..."
     - npm ci
-    - echo "🔨 Сборка проекта..."
-    - npm run build
+    - echo "⚙️ Создание .env.production..."
+    - echo "VITE_API_URL=${PROD_API_URL}" > .env.production
+    - echo "VITE_API_WS_URL=${PROD_WS_URL}" >> .env.production
+    - cat .env.production
+    - echo "🔨 Сборка проекта (PRODUCTION режим)..."
+    - npm run build:prod
     - echo "✅ Сборка завершена успешно"
     - echo "Содержимое dist/:"
     - ls -la dist/

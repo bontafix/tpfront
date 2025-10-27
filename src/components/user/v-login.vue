@@ -94,6 +94,7 @@ import { loginUser } from '@/api/requests'
 import { useRouter } from 'vue-router'
 import { useMyStore } from '@/stores/myStore'
 import emitter from '@/eventBus'
+import { domain } from '@/utils'
 
 
 const router = useRouter()
@@ -164,7 +165,7 @@ function signInWithProvider(provider) {
   const top = (screen.height - height) / 2
 
   const popup = window.open(
-    `https://test-api.teacherplanner.ru/api/auth/${provider}?origin=${window.location.origin}`,
+    `${domain}/api/auth/${provider}?origin=${window.location.origin}`,
     'OAuthLogin',
     `width=${width},height=${height},top=${top},left=${left}`
   )
@@ -177,7 +178,8 @@ function signInWithProvider(provider) {
   const allowedOrigins = [
     'http://localhost:5173',
     'https://dev.teacherplanner.ru',
-    'https://test-api.teacherplanner.ru'
+    'https://api.dev-teacherplanner.ru',
+    'https://api.teacherplanner.ru'
   ]
 
   const messageListener = (event) => {

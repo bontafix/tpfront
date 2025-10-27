@@ -142,7 +142,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { getHomeworkClass } from '@/utils'
-import { formatTimeRate } from '@/utils'
+import { formatTimeRate, domain } from '@/utils'
+
 const props = defineProps({
   item: {
     type: Object,
@@ -213,7 +214,7 @@ const deleteStudent = (item) => {
 
 const getIconPath = (type_connect) => {
   if(type_connect && type_connect.icon)
-    return `https://test-api.teacherplanner.ru/${type_connect.icon}`
+    return `${domain}${type_connect.icon}`
   return null
 }
 
