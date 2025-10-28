@@ -214,7 +214,7 @@ const deleteStudent = (item) => {
 
 const getIconPath = (type_connect) => {
   if(type_connect && type_connect.icon)
-    return `${domain}${type_connect.icon}`
+    return `${domain}/${type_connect.icon}`
   return null
 }
 
