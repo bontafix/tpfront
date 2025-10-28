@@ -65,11 +65,11 @@ deploy_prod:
     - ls -la dist/
     - echo "🚀 Деплой на PROD сервер..."
     - echo "Проверка SSH подключения..."
-    - ssh teacherplanner-prod "whoami && ls -la /var/www/teacher-planner/"
+    - ssh teacherplanner-prod "whoami && ls -la /var/www/teacherplanner/"
     - echo "Копирование файлов..."
-    - rsync -rlDv --delete dist/ teacherplanner-prod:/var/www/teacher-planner/
+    - rsync -rlDv --delete dist/ teacherplanner-prod:/var/www/teacherplanner/
     - echo "Проверка результата на сервере..."
-    - ssh teacherplanner-prod "ls -la /var/www/teacher-planner/"
+    - ssh teacherplanner-prod "ls -la /var/www/teacherplanner/"
     - echo "✅ Деплой на PROD завершен успешно"
   cache:
     key: ${CI_COMMIT_REF_SLUG}
