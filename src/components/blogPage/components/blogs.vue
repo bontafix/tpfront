@@ -226,7 +226,7 @@ onMounted(async () => {
   color: #344055;
 }
 
-@media screen and (max-width: 1515px) {
+@media screen and (max-width: 1439px) {
   .blogs {
     max-width: 1024px;
     padding: 0 40px;
