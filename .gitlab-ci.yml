@@ -61,10 +61,10 @@ deploy_prod:
     - echo "🔨 Сборка проекта (PRODUCTION режим)..."
     - npm run build:prod
     - echo "✅ Сборка завершена успешно"
-    - echo "Содержимое dist/:"
+    - echo "Содержимое dist/:"git status
     - ls -la dist/
     - echo "🚀 Деплой на PROD сервер..."
-    - echo "Проверка SSH подключения..."
+    - echo "Проверка SSH подключениgit я..."
     - ssh teacherplanner-prod "whoami && ls -la /var/www/teacherplanner/"
     - echo "Копирование файлов..."
     - rsync -rlDv --delete dist/ teacherplanner-prod:/var/www/teacherplanner/
