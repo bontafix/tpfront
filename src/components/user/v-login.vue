@@ -179,7 +179,8 @@ function signInWithProvider(provider) {
     'http://localhost:5173',
     'https://dev.teacherplanner.ru',
     'https://api.dev-teacherplanner.ru',
-    'https://api.teacherplanner.ru'
+    'https://api.teacherplanner.ru',
+    'http://localhost:8000'
   ]
 
   const messageListener = (event) => {
