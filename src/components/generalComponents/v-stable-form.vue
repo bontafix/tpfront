@@ -107,6 +107,8 @@ const periodicityDays = ref([
   { id: 7, text: 'ВС', full_name: 'Воскресенье', active: false, day_of_week: 7 },
 ])
 
+const stableForm = ref({}) // Данные формы для отправки
+
 const props = defineProps({
   ruleData: {
     type: Object,
@@ -181,23 +183,36 @@ const handleTimeEnd = (modelValue, id) => {
 
 /* Обработчик отправки формы */
 const submitForm = () => {
-  const result = {
-    repeat_until: new Date(repeatUntill.value).toISOString().split('T')[0]
-  };
+  const upd = props.ruleData ? 'updated_' : ''
+  stableForm.value[upd + 'days_of_week'] = []
+  stableForm.value[upd + 'start_times'] = []
+  stableForm.value[upd + 'end_times'] = []
+  stableForm.value['reminder_minutes'] = reminder.value || 0
+  stableForm.value['break_minutes'] = break_group.value || 0
 
-  result.days_of_week = periodicityStack.value.reduce((acc, el) => {
-    return {
-      ...acc,
-      [el.id]: [
-        {
-          start_time: timeInputs.value[el.id].start,
-          end_time: timeInputs.value[el.id].end
-        }
-      ]
-    }
-  }, {});
+  periodicityStack.value.forEach((el) => {
+    stableForm.value[upd + 'days_of_week'].push(el.id)
 
-  emit('formSubmited', result)
+    const startTime = timeInputs.value[el.id].start
+    const endTime = timeInputs.value[el.id].end
+
+    // Добавление ведущего нуля для времени
+    const formattedStartTime = startTime.split(':')
+    const formattedEndTime = endTime.split(':')
+
+    const formattedStart = `${String(formattedStartTime[0]).padStart(2, '0')}:${String(formattedStartTime[1]).padStart(2, '0')}`
+    const formattedEnd = `${String(formattedEndTime[0]).padStart(2, '0')}:${String(formattedEndTime[1]).padStart(2, '0')}`
+
+    // Создание даты с правильным временем
+    const TimeStringStart = `${formattedStart}:00.000Z`
+    const TimeStringEnd = `${formattedEnd}:00.000Z`
+
+    stableForm.value[upd + 'start_times'].push(TimeStringStart)
+    stableForm.value[upd + 'end_times'].push(TimeStringEnd)
+    stableForm.value['repeat_until'] = new Date(repeatUntill.value).toISOString().split('T')[0]
+  })
+
+  emit('formSubmited', stableForm.value)
 }
 
 /* Обработчик изменения времени */
