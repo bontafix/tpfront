@@ -1,0 +1,79 @@
+.month-picker {
+  &__container {
+    color: var(--black) !important;
+    background-color: var(--white) !important;
+    width: 290px !important;
+  }
+  &__month {
+    background-color: var(--white) !important;
+    border-color: var(--grey) !important;
+  }
+  .night__mode &__month {
+    border-color: transparent !important;
+  }
+  &__year {
+    background-color: var(--white) !important;
+    p {
+      color: var(--black) !important;
+    }
+    button {
+      height: 2rem !important;
+      font-size: 24px !important;
+    }
+  }
+  &__month {
+    color: var(--black) !important;
+  }
+  &-input-container {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  &-input {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 20px 0 0 20px !important;
+    border: none !important;
+    background-color: var(--white);
+    padding-left: 20px !important;
+    cursor: pointer;
+  }
+}
+
+.month-picker__month.selected {
+  background-color: var(--blue) !important;
+  color: var(--white) !important;
+}
+
+.month-picker__year button {
+  background-color: var(--blue) !important;
+  color: var(--white) !important;
+}
+
+.dp__overlay_col .dp__overlay_cell_active {
+  background-color: #F4F7FF !important;
+  color: var(--custom-blue) !important;
+}
+
+.night__mode .dp__overlay_col .dp__overlay_cell_active  {
+  background-color: #FFFFFF14 !important;
+  color: #fff !important;
+}
+.dp__overlay_container {
+  background-color: var(--custom-black) !important;
+}
+
+.dp__overlay_cell:hover {
+  background-color: var(--grey-dark) !important;
+}
+
+.dp__menu {
+  border-radius: 8px !important;
+}
+
+.night__mode .dp__menu {
+  border: 0px solid transparent !important;
+
+  box-shadow: 0px 4px 6px -2px #0A0D1208;
+  box-shadow: 0px 12px 16px -4px #0A0D1214;
+
+}

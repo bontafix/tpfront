@@ -1,0 +1,566 @@
+.v-student-cabinet {
+  &__container {
+    position: relative;
+    padding-right: 400px !important;
+
+    display: flex;
+    flex-direction: column;
+
+    @media(max-width: 1200px) {
+      padding-right: 20px !important;
+    }
+  }
+    &__row {
+        display: flex;
+        gap: 24px;
+
+        @media(max-width: 1440px) {
+          flex-direction: column;
+        }
+    }
+     > * {
+      min-width: 0;
+    }
+    &__copy-link {
+      position: relative;
+      cursor: pointer;
+      width: 326px;
+
+      box-shadow: 0px 1px 2px 0px #0A0D120D;
+
+      margin-top: 20px;
+      input {
+        cursor: pointer;
+      }
+      img {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+
+    .copy-window {
+      bottom: -50px;
+      top: auto;
+    }
+}
+
+.v-teacher-info {
+  max-width: 450px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @media(max-width: 1440px) {
+    flex-direction: row;
+    max-width: 100%;
+  }
+
+  @media(max-width: 768px) {
+    flex-direction: column;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 16px 20px !important;
+    @media(max-width: 1440px) {
+      width: 100%;
+      & > *{
+        white-space: nowrap;
+      }
+    }
+
+    .custom-tip {
+      top: 20px;
+      right: -100%;
+
+      width: 500px;
+
+      @media(max-width: 1440px) {
+        z-index: 10000;
+        left: -10px;
+        top: -20px;
+      }
+
+      @media(max-width: 1200px) {
+        left: -50%;
+        right: auto;
+        top: 0;
+      }
+
+      @media(max-width: 768px) {
+        display: none;
+      }
+    }
+
+    &-subtitle {
+      font-weight: 500;
+    }
+    &-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+
+      .caption {
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+.v-student-header {
+  background-image: url(../images/studnetCabinet/bg-blue.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  height: 158px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  
+  margin-bottom: 42px;
+  margin-top: 62.5px;
+
+  .container {
+    margin-bottom: 0 !important;
+  }
+
+  &.green {
+    background-image: url(../images/studnetCabinet/bg-green.jpg);
+  }
+  
+  &.orange {
+    background-image: url(../images/studnetCabinet/bg-orange.jpg);
+  }
+
+  &__title {
+    padding-bottom: 40px;
+    color: #fff !important;
+  }
+
+  &__subjects {
+    display: flex;
+    gap: 16px;
+  }
+
+  &__subject {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &.active {
+      background-color: #F6F7F9;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+
+      &.blue .subject__title{
+        color: #1543B7;
+
+      }
+      &.green .subject__title{
+        color: #258D50 !important;
+      }
+
+      &.orange .subject__title{
+        color: #FF924F !important;
+      }
+    }
+    .subject {
+      display: flex;
+      gap: 8px;
+
+      color: #fff;
+
+
+      padding: 8px 20px;
+      cursor: pointer;
+      &__title {
+        font-weight: 500;
+      }
+      &__count {
+        border-radius: 50%;
+
+        width: 22px;
+        height: 22px;
+
+        background-color: #FFFFFF29;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+.v-student-cabinet-swiper {
+    position: relative;
+    flex: 1;
+    min-width: 0; 
+
+
+    &__buttons {
+        position: absolute;
+        z-index: 101;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        .student-swiper-button-prev,
+        .student-swiper-button-next {
+            width: 32px;
+            height: 32px;
+        }
+    }
+
+
+    .lesson-swiper {
+      &__answer {
+        align-items: center;
+        justify-content: space-between;
+      }
+        &__content {
+          background-color: var(--custom-white);
+        }
+        &__info-row {
+            display: flex;
+        }
+        &__date {
+            font-size: 20px;
+            font-weight: 600;
+
+            @media(max-width: 480px) {
+              font-size: 17px;
+            }
+        }
+        &__title {
+            width: 144px;
+
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--custom-black-text);
+        }
+
+        &__button {
+          height: 40px;
+          white-space: nowrap;
+        }
+
+        &__homework {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          @media(max-width: 600px) {
+            flex-direction: column;
+            align-items: start;
+          }
+        }
+
+        &__block {
+          width: 70%;
+          align-items: start;
+          justify-content: start;
+        }
+    }
+}
+
+.v-student-charts {
+  margin-top: 64px;
+
+  @media(max-width: 1200px) {
+    order: 2;
+  }
+
+  &__title {
+    margin-bottom: 16px;
+  }
+
+  &__container {
+    display: flex;
+    gap: 20px;
+
+    @media(max-width: 1440px) {
+      flex-direction: column;
+    }
+  }
+}
+
+
+.v-student-calendar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+
+  position: fixed;
+  top: 60px;
+  right: 0;
+  max-width: 372px;
+  height: calc(100% - 50px);
+  background-color: var(--custom-white);
+  z-index: 1000;
+  padding: 28px 25px 0;
+
+  border-radius: 0 !important;
+
+  @media(max-width: 1200px) {
+      max-width: 100%;
+      width: 100%;
+      position: static;
+      order: 1;
+
+      align-items: start;
+
+      height: auto;
+
+      margin-top: 48px;
+      padding-bottom: 28px;
+  }
+
+  @media(max-width: 480px) {
+    padding: 0 !important;
+
+    .calendar-navigation {
+      padding: 22px 16px;
+    }
+
+    .v-student-calendar__subjects {
+      padding: 0 16px;
+    }
+  }
+
+  &__table {
+    max-width: 50%;
+  }
+
+  &__wrapper {
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(120, 120, 120, 0.4) transparent;
+    &__wrapper {
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      // Для Firefox
+      scrollbar-width: thin;
+      scrollbar-color: rgba(120, 120, 120, 0.4) transparent;
+
+      // Для WebKit браузеров (Chrome, Safari, Edge)
+      &::-webkit-scrollbar {
+        width: 3px;
+        height: 3px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 3px;
+        margin: 2px 0;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: rgba(120, 120, 120, 0.4);
+        border-radius: 3px;
+        border: 1px solid transparent;
+        background-clip: content-box;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background: rgba(100, 100, 100, 0.6);
+        }
+
+        &:active {
+          background: rgba(80, 80, 80, 0.7);
+        }
+      }
+
+      &::-webkit-scrollbar-corner {
+        background: transparent;
+      }
+
+      // Для Internet Explorer
+      -ms-overflow-style: -ms-autohiding-scrollbar;
+
+  @media(max-width: 1200px) {
+    display: flex;
+    gap: 40px;
+    justify-content: start;
+  }
+  
+  @media(max-width: 675px) {
+    flex-direction: column;
+  }
+}
+    @media(max-width: 1200px) {
+      display: flex;
+      gap: 40px;
+      justify-content: start;
+    }
+    @media(max-width: 675px) {
+      flex-direction: column;
+    }
+
+    
+  }
+
+  &__content {
+    @media(max-width: 1200px) {
+      max-width: 480px;
+    }
+
+    @media(max-width: 675px) {
+      max-width: 100%;
+    }
+  }
+
+  .calendar-navigation {
+    align-items: center;
+    .mobile-buttons {
+      display: none;
+    }
+    @media(max-width: 1200px) {
+      & button {
+        display: none;
+      }
+
+      & .mobile-buttons {
+        display: flex;
+        gap: 12px;
+      }
+    }
+
+  }
+
+   &__lessons {
+      @media(max-width: 480px) {
+        padding: 0 16px !important;
+      }
+    }
+
+
+  .night__mode & .calendar td , 
+  .night__mode & .calendar-header__item,
+  .night__mode & .calendar-row__item {
+    background-color: transparent;
+    border-color: transparent !important;
+  }
+
+  .night__mode & .calendar-row__item.active {
+    border-color: #FFFFFF14;
+  }
+
+  .calendar-header__item {
+    padding: 17.5px 15px !important;
+  }
+
+  .night__mode &__lesson  {
+    background-color: #FFFFFF14 !important;
+  }
+
+  &__subjects {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+
+    @media(max-width: 1200px) {
+      margin-bottom: 16px;
+      justify-content: start;
+    }
+  }
+
+  &__subject {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: var(--custom-black-text);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  &__lessons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    @media(max-width: 675px) {
+      width: 100%;
+    }
+
+    &-date {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--custom-black-text);
+
+      margin-top: 28px;
+      margin-bottom: 16px;
+    }
+  }
+
+  &__lesson {
+    position: relative;
+    
+    width: 100%;
+    height: 88px;
+    padding: 12px 19px;
+    background-color: #F4F7FF;
+
+    border-left: 3px solid var(--custom-blue);
+
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+
+    &.green {
+      background-color: #E7FFEB;
+      border-color: #258D50;
+    }
+
+    &.orange {
+      background-color: #FFF6EE;
+      border-color: #FF924F;
+    }
+
+    &-subject {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--custom-black-text);
+
+      margin-bottom: 8px;
+    }
+
+    &-time {
+      font-size: 12px;
+      font-weight: 500;
+      color: #717680;
+    }
+
+    &-delete {
+      position: absolute;
+
+      top: 12px;
+      right: 10px;
+      
+      .night__mode & svg path {
+        stroke: #FFFFFF66;
+      }
+    }
+
+    .night__mode &-time {
+      color: #FFFFFF66;
+    }
+  }
+}

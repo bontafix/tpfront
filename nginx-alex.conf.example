@@ -1,0 +1,46 @@
+# Пример конфигурации nginx для размещения приложения в поддиректории /alex
+# Скопируйте этот блок в конфигурацию вашего сайта dev-teacherplanner.ru
+
+server {
+    listen 80;
+    server_name dev-teacherplanner.ru;
+
+    # Основной фронтенд (корневой путь)
+    location / {
+        root /var/www/dev-teacherplanner;
+        try_files $uri $uri/ /index.html;
+        index index.html;
+    }
+
+    # Фронтенд в поддиректории /alex
+    location /alex/ {
+        alias /var/www/dev-tp-alex/;
+        
+        # Критически важно для SPA: все запросы должны возвращать index.html если файл не найден
+        try_files $uri $uri/ /alex/index.html;
+        
+        index index.html;
+        
+        # Устанавливаем правильные заголовки для статических файлов
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+            expires 1y;
+            add_header Cache-Control "public, immutable";
+            access_log off;
+        }
+    }
+    
+    # Обработка запроса без завершающего слэша
+    location = /alex {
+        return 301 /alex/;
+    }
+
+    # Проксирование API запросов к FastAPI (если нужно)
+    location /api/ {
+        proxy_pass http://127.0.0.1:8000;  # Или ваш адрес FastAPI
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+

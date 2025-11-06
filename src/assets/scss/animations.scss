@@ -1,0 +1,54 @@
+.collapse-content {
+  transform-origin: top; // Указываем, откуда начинается анимация
+}
+
+.collapse-enter-active,
+.collapse-leave-active {
+  transition: transform 0.3s ease-in-out;
+}
+
+.collapse-enter-from,
+.collapse-leave-to {
+  transform: scaleY(0); // Сворачиваем контент
+  opacity: 0; // Добавляем fade-эффект
+}
+
+.collapse-enter-to,
+.collapse-leave-from {
+  transform: scaleY(1); // Разворачиваем контент
+  opacity: 1;
+}
+
+// Анимация slide-fade
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(
+    -20px
+  ); // Движение вверх (можно изменить на translateX для горизонтального эффекта)
+}
+
+.slide-fade-enter-to,
+.slide-fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-to, .fade-leave-from {
+  opacity: 1;
+}

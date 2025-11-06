@@ -1,0 +1,264 @@
+.onboardingSwiper {
+  max-width: 764px;
+  margin: 0 !important;
+
+  .swiper-slide img {
+    aspect-ratio: 460 / 330;
+    @media (max-width: 768px) {
+      aspect-ratio: auto 409 / 749;
+    }
+  }
+}
+
+.onboarding-button {
+  background-color: #1d4ecc;
+  color: #fff;
+  padding: 15px 30px;
+  text-align: center;
+  border-radius: 16px;
+  display: inline-block;
+  @media (max-width: 1024px) {
+    padding: 12px 24px;
+  }
+}
+
+.onboarding {
+  &-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  &__container {
+    display: flex;
+    justify-content: center;
+    padding: 92px 46px !important;
+    gap: 38px;
+    @media (max-width: 1024px) {
+      padding: 56px 24px;
+      gap: 24px;
+    }
+    @media (max-width: 768px) {
+      flex-direction: column;
+      padding: 0 24px 15px !important;
+    }
+  }
+  &__holder {
+    width: clamp(43.75rem, -10.795rem + 113.64vw, 68.75rem);
+    max-height: 530px;
+
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    background-color: #fff;
+    border: 1px solid;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border: 1px solid #d0d2d6;
+  }
+  &__block {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  &__title {
+    font-weight: 600;
+    font-size: 18px;
+    @media (max-width: 1024px) {
+      font-size: 14px;
+    }
+    span {
+      color: #aaaaaa;
+    }
+  }
+  &__pages {
+    font-size: 16px;
+    @media (max-width: 1024px) {
+      font-size: 13px;
+    }
+  }
+  &__pagination {
+    width: 100%;
+    display: flex;
+    gap: 2px;
+    &-bullet.active {
+      background-color: #1d4ecc;
+    }
+    &-bullet {
+      max-width: 42px;
+      width: 100%;
+      height: 5px;
+      background-color: #eaedf5;
+      border-radius: 60px;
+      @media (max-width: 768px) {
+        max-width: 100%;
+      }
+    }
+  }
+  &__content {
+    min-width: 350px;
+    max-width: 350px;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    @media (max-width: 1024px) {
+      min-width: 281px;
+    }
+    @media (max-width: 768px) {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  &__page-button {
+    background-color: #e6ebf8;
+    color: #1d4ecc;
+    &.unactive {
+      color: rgba($color: #1d4ecc, $alpha: 0.5);
+    }
+  }
+  &__button-prev {
+    background-color: #e6ebf8;
+    color: #1d4ecc;
+
+    position: absolute;
+    z-index: 100000;
+    bottom: 5px;
+    left: 5px;
+    padding: 15px 20px;
+    font-weight: 600;
+    font-size: 13px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    border-radius: 12px;
+
+    @media (max-width: 1024px) {
+      padding: 12px 24px;
+    }
+  }
+  &__buttons {
+    display: flex;
+    gap: 8px;
+    @media (max-width: 1024px) {
+      gap: 4px;
+    }
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+    &:has(.onboarding__finish) {
+      justify-content: end;
+    }
+    * {
+      padding: 15px 35px;
+      border-radius: 12px;
+      white-space: nowrap;
+      cursor: pointer;
+      @media (max-width: 1024px) {
+        padding: 12px 25px;
+      }
+    }
+  }
+  &.mob {
+    .swiper::before {
+      content: '';
+      position: absolute;
+      width: 100vw;
+      height: 100%;
+      background: linear-gradient(360deg, rgba(29, 78, 204, 0.1) 0%, rgba(29, 78, 204, 0) 73.55%);
+    }
+    .swiper-slide {
+      height: 530px;
+      display: flex;
+      justify-content: center;
+      @media (max-width: 480px) {
+        height: 330px !important;
+      }
+      img {
+        object-fit: cover;
+        height: 150%;
+      }
+    }
+    .onboarding__buttons * {
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .onboardingSwiper {
+    position: relative;
+    width: 100vw; // Полная ширина экрана
+    left: 50%;
+    transform: translateX(-50%); // Центрируем, если контейнер имеет ограничения
+    background: linear-gradient(360deg, rgba(29, 78, 204, 0.1) 0%, rgba(29, 78, 204, 0) 73.55%);
+  }
+
+  .onboardingSwiper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    background: linear-gradient(360deg, rgba(29, 78, 204, 0.1) 0%, rgba(29, 78, 204, 0) 73.55%);
+    z-index: 1;
+  }
+
+  .onboardingSwiper .swiper-slide {
+    position: relative;
+    z-index: 2; /* Чтобы контент был поверх градиента */
+  }
+}
+
+.v-onboarding-start {
+  display: flex;
+  gap: 40px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+  &__image {
+    padding-top: 56px;
+  }
+  &__container {
+    padding-top: clamp(7.5rem, 1.071rem + 10.04vw, 13.125rem) !important;
+    max-width: 400px !important;
+    @media (max-width: 768px) {
+      padding: 40px 40px 60px 30px !important;
+      max-width: 100% !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+  }
+  &__title {
+    font-size: clamp(1.25rem, 0.962rem + 1.28vw, 2.5rem) !important;
+    font-family: 'inter', sans-serif;
+    line-height: 48.41px !important;
+
+    margin-bottom: 16px;
+    @media (max-width: 800px) {
+      line-height: 30px !important;
+    }
+    @media (max-width: 768px) {
+      text-align: center;
+    }
+  }
+  &__subtitle {
+    font-size: clamp(0.875rem, 0.732rem + 0.22vw, 1rem);
+    margin-bottom: clamp(2.5rem, 2.212rem + 1.28vw, 3.75rem);
+    @media (max-width: 768px) {
+      text-align: center;
+    }
+  }
+  &__button {
+    @media (max-width: 768px) {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+}

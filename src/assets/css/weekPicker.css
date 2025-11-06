@@ -1,0 +1,96 @@
+.dp--tp-wrap,
+.dp__selection_preview {
+  display: none !important;
+}
+
+.dp__action__button {
+  font-family: "Arvo", sans-serif !important;
+  font-size: 12px !important;
+}
+.dp__action_row {
+  justify-content: center !important;
+  background-color: var(--white);
+}
+.dp__action_buttons {
+  margin-inline-start: 0 !important;
+  color: var(--black) !important;
+}
+.dp__action_cancel {
+  color: var(--black) !important;
+}
+.dp__action_select {
+  background-color: var(--blue) !important;
+  color: var(--white) !important;
+}
+
+.dp__instance_calendar {
+  background-color: var(--custom-white);
+}
+.dp__instance_calendar * {
+  color: var(--black) !important;
+}
+
+.dp__input_readonly.dp__input {
+  background-color: var(--custom-white) !important;
+  color: var(--black);
+  border-radius: 20px 0 0 20px;
+  border: none;
+  padding-left: 0;
+}
+
+.dp__range_between_week,
+.dp__range_end,
+.dp__range_start,
+.dp__active_date {
+  color: var(--custom-blue) !important;
+  background-color: #F4F7FF !important;
+}
+.night__mode .dp__range_between_week,
+.night__mode .dp__range_end,
+.night__mode .dp__range_start,
+.night__mode .dp__active_date {
+  background-color: rgba(255, 255, 255, 0.0784313725) !important;
+  color: #fff !important;
+}
+
+.dp__input_icon {
+  display: none !important;
+}
+
+.dp__today {
+  border-color: var(--custom-dark-white) !important;
+}
+
+.dp__range_between_week,
+.dp__calendar_row {
+  border: 0 !important;
+}
+
+.dp__date_hover_end:hover,
+.dp__date_hover_start:hover,
+.dp__date_hover:hover,
+.dp__inner_nav:hover,
+.dp--year-select:hover,
+.dp__month_year_select:hover {
+  background-color: var(--grey-dark) !important;
+}
+
+.dp__arrow_top {
+  height: auto !important;
+}
+
+.dp__arrow_top {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  body:has(.modal-transfer) .dp--menu-wrapper {
+    top: -270px !important;
+  }
+}
+@media (max-width: 450px) {
+  body:has(.modal-transfer) .dp--menu-wrapper {
+    left: 50% !important;
+    transform: translateX(-50%);
+  }
+}/*# sourceMappingURL=weekPicker.css.map */

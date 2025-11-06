@@ -1,0 +1,39 @@
+:root {
+  --black: #202020;
+  --white: #ffffff;
+  --grey: #eaedf5;
+  --blue: #1d4ecc;
+  --green: #b5f5bf;
+  --light-green: #d2ffd1;
+  --red: #fab4b4;
+  --yellow: #fdf2b9;
+  --dark-white: #202020;
+  --grey-dark: #eaedf5;
+  --custom-white: #fff;
+  --custom-dark-gray: #545f72;
+  --custom-black: #fff;
+  --custom-background: #F6F7F9;
+  --custom-blue: #1d4ecc;
+  --custom-black-text: #344055;
+  --custom-red: #ff3a3a;
+  --custom-light-gray-color: #e9eaeb;
+  --custom-stroke-color: #e9eaeb;
+}
+
+.night__mode {
+  --black: #fff;
+  --blue: #b5f5bf;
+  --grey: #4c4c4c;
+  --white: #4c4c4c;
+  --dark-white: #ffff;
+  --grey-dark: #202020;
+  --custom-blue: #1f5eff;
+  --custom-red: #FF7F7F;
+  --custom-black: #2d313b;
+  --custom-white: #3b414a;
+  --custom-black-text: #fff;
+  --custom-dark-gray: #717680;
+  --custom-light-gray: #ffffff14;
+  --custom-light-gray-color: #ffffff14;
+  --custom-stroke-color: transperent;
+}/*# sourceMappingURL=variables.css.map */
