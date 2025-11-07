@@ -31,7 +31,7 @@ import { ref } from 'vue'
 import { deleteLessonById, cancelLesson } from '@/api/requests'
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
 
-import { defineProps, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()

@@ -1131,7 +1131,9 @@ export async function uploadFIleHomework(homework_id, data) {
 
 export async function getAllStudentHomework(student_id) {
   try {
-    return await makeGetRequest(`/api/all-homeworks-by-student/${student_id}`)
+    const result = await makeGetRequest(`/api/all-homeworks-by-student/${student_id}`)
+    console.log(result)
+    return (result)
   } catch (error) {
     console.error('Произошла ошибка при получении всего домашнего задания ученика', error)
   }

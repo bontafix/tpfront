@@ -10,6 +10,7 @@ import { useGeneralStore } from '@/stores/generalStore'
 
 export const domain = import.meta.env.VITE_API_URL
 export const wsDomain = import.meta.env.VITE_API_WS_URL
+export const domainDownload = import.meta.env.VITE_URL_DOWNLOAD
 
 export const stableOrder = [
   'student_id',

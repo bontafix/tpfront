@@ -25,7 +25,7 @@
 import vStableForm from '../generalComponents/v-stable-form.vue'
 import vCustomModal from '../generalComponents/v-custom-modal.vue'
 
-import { defineProps, computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import { editRule, getRule } from '@/api/requests'
 import { sortObject, updatedStableOrder } from '@/utils'

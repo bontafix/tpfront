@@ -4,6 +4,14 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
+// Вывод версии приложения в консоль
+const appVersion = __APP_VERSION__
+console.log(
+  `%cTeacher Planner client v${appVersion}`,
+  'color:rgb(0, 90, 173); font-size: 14px; padding: 4px 8px; background:rgb(255, 255, 255); border-radius: 2px;'
+)
+
+
 const app = createApp(App)
 
 app.use(createPinia())
@@ -36,7 +44,6 @@ app.use(router)
     clickmap: true,
     trackLinks: true,
     accurateTrackBounce: true,
-    webvisor: true,
   })
 })()
 

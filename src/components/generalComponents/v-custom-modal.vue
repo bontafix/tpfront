@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { ref, computed, defineProps, defineEmits, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useModalsStore } from '@/stores/modalsStore'
 
 const store = useModalsStore()

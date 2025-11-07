@@ -31,7 +31,7 @@
 <script setup>
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
 
-import { defineEmits, onMounted, computed } from 'vue'
+import { onMounted, computed } from 'vue'
 
 const emit = defineEmits(['toggleLessonModals'])
 const props = defineProps({

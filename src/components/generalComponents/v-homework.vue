@@ -157,7 +157,7 @@
 </template>
 
 <script setup>
-import { formatDate, formatDateToBase, domain } from '@/utils'
+import { formatDate, formatDateToBase, domain, domainDownload } from '@/utils'
 import { nextTick, onMounted, ref, computed, watch } from 'vue'
 import { format } from 'date-fns'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -297,17 +297,24 @@ const getHomeworkData = () => {
 // Вспомогательная функция для форматирования файлов
 const formatFiles = (files, pathField = 'file_url', nameField = 'file_url') => {
   if (!files || !files.length) return []
-
-  return files.map(file => ({
-    id: file.id,
-    name: file[nameField]?.replace('homework_files/', '') || file.file_name,
-    size: file.file_size || 0,
-    file: pathField === 'file_url' ? `${domain}/${file[pathField] || file.file_path}` : `${domain}/homework_answers/${file[pathField] || file.file_path}`,
-    description: file.description || file.comment || '',
-    homework_id: file.homework_id,
-    uploaded_at: file.uploaded_at,
-    file_type: file.file_type
-  }))
+  console.log(files)
+  return files.map(file => {
+    const filePath = file[pathField] || file.file_path
+    const pathSeparator = filePath?.startsWith('/') ? '' : '/'
+    
+    return {
+      id: file.id,
+      name: file[nameField]?.replace('homework_files/', '') || file.file_name,
+      size: file.file_size || 0,
+      file: pathField === 'file_url' 
+        ? `${domainDownload}${pathSeparator}${filePath}` 
+        : `${domainDownload}/homework_answers${pathSeparator}${filePath}`,
+      description: file.description || file.comment || '',
+      homework_id: file.homework_id,
+      uploaded_at: file.uploaded_at,
+      file_type: file.file_type
+    }
+  })
 }
 
 const deleteHomework = () => {

@@ -33,7 +33,6 @@
         <a
         class="flex gap-2"
           :href="getDownloadUrl(file)"
-          :download="file.file"
           target="_blank"
         >
           <div class="file__block">
@@ -120,12 +119,16 @@ const isFileUrl = (file) => {
 }
 
 const getDownloadUrl = (fileItem) => {
+  console.log(fileItem)
+  console.log(`fileItem ^^^^^^^^^^^^^^^^^^^^^^`)
   if (fileItem.downloadUrl) {
     return fileItem.downloadUrl
   }
   if (fileItem.file instanceof File) {
     if (!fileItem.blobUrl) {
       const blobUrl = URL.createObjectURL(fileItem.file)
+      console.log(blobUrl)
+      console.log(`blobUrl ++++++++++++++++++`)
       fileItem.blobUrl = blobUrl
       createdUrls.add(blobUrl)
     }
@@ -152,6 +155,7 @@ const downloadFile = async (fileItem) => {
     }
     // Если это внешний URL, скачиваем через fetch
     if (typeof fileItem.file === 'string') {
+      
       const response = await fetch(fileItem.file)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)

@@ -171,6 +171,25 @@ const connectWebSocket = async () => {
 
     ws.value.onmessage = (event) => {
       try {
+        // Игнорируем ping сообщения
+        if (event.data === 'ping' || event.data === 'pong') {
+          return
+        }
+
+        // Проверяем, является ли сообщение валидным JSON
+        const dataStr = typeof event.data === 'string' ? event.data : String(event.data)
+        const trimmed = dataStr.trim()
+        
+        // Игнорируем сообщения от Яндекс.Метрики и других расширений
+        if (trimmed.startsWith('__ym__') || trimmed.startsWith('__')) {
+          return
+        }
+        
+        // Проверяем, что строка начинается с { или [
+        if (!trimmed.startsWith('{') && !trimmed.startsWith('[')) {
+          return
+        }
+
         const data = JSON.parse(event.data)
 
         if (data.type === 'auth_required') {
@@ -193,9 +212,10 @@ const connectWebSocket = async () => {
           }
         }
       } catch (error) {
-        // Если это не JSON (например, ping), просто логируем
-        if (event.data !== 'ping') {
-          console.log('Получено текстовое сообщение:', event.data)
+        // Логируем только если это не известные не-JSON сообщения
+        const dataStr = typeof event.data === 'string' ? event.data : String(event.data)
+        if (event.data !== 'ping' && event.data !== 'pong' && !dataStr.startsWith('__')) {
+          console.warn('Ошибка парсинга сообщения WebSocket:', error, 'Данные:', event.data)
         }
       }
     }

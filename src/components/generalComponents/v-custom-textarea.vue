@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick, defineProps, defineEmits, onMounted } from 'vue'
+import { ref, watch, nextTick, onMounted } from 'vue'
 
 const props = defineProps({
   modelValue: String,

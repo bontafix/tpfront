@@ -188,9 +188,29 @@ function signInWithProvider(provider) {
       return
     }
 
-    console.log('✅ Авторизация успешна:', event.data)
+    // Игнорируем сообщения от расширений браузера (Яндекс.Метрика и т.д.)
+    if (typeof event.data === 'string') {
+      const trimmed = event.data.trim()
+      if (trimmed.startsWith('__ym__') || trimmed.startsWith('__')) {
+        return
+      }
+    }
 
-    router.push({ name: 'home_teacher' })
+    // Проверяем, что данные являются объектом (ожидаем JSON от OAuth)
+    if (typeof event.data === 'object' && event.data !== null) {
+      console.log('✅ Авторизация успешна:', event.data)
+      router.push({ name: 'home_teacher' })
+    } else if (typeof event.data === 'string') {
+      // Пытаемся распарсить JSON, если это строка
+      try {
+        const data = JSON.parse(event.data)
+        console.log('✅ Авторизация успешна:', data)
+        router.push({ name: 'home_teacher' })
+      } catch (error) {
+        // Игнорируем ошибки парсинга для не-JSON сообщений
+        console.warn('Не удалось распарсить данные сообщения:', event.data)
+      }
+    }
   }
 
   window.addEventListener('message', messageListener, { once: true })

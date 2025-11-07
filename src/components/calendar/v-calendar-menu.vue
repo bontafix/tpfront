@@ -242,7 +242,7 @@ import VueDatePicker from '@vuepic/vue-datepicker'
 
 import { ru } from 'date-fns/locale';
 import { useRoute, useRouter } from 'vue-router'
-import { ref, defineEmits, onMounted, computed, nextTick, watch } from 'vue'
+import { ref, onMounted, computed, nextTick, watch } from 'vue'
 
 import { useIsMobile } from '@/composables/useIsMobile'
 
