@@ -221,7 +221,7 @@ const prevFilesList = computed(() => {
   console.log(`homeworkData |||||||||||||||||||||||||||`)
   if (!homeworkData) return []
 
-  return formatFiles(homeworkData.files)
+  return formatFilesToken(homeworkData.files)
 })
 
 // Обновленный computed для studentAnswer
@@ -229,7 +229,7 @@ const studentAnswer = computed(() => {
   const homeworkData = getHomeworkData()
   if (!homeworkData) return []
 
-  return formatFilesToken(homeworkData.student_answers, 'file_path', 'file_name')
+  return formatFiles(homeworkData.student_answers, 'file_path', 'file_name')
 })
 
 const homeWork = computed(() => {
@@ -334,7 +334,7 @@ const formatFilesToken = (files, pathField = 'file_url', nameField = 'file_url')
       file: pathField === 'file_url' 
         ? `${domainDownload}${pathSeparator}${filePath}` 
         : `${domainDownload}/homework_answers${pathSeparator}${filePath}`,
-      file_all: file,  
+      file_all: { ...file, domainDownload},  
       description: file.description || file.comment || '',
       homework_id: file.homework_id,
       uploaded_at: file.uploaded_at,

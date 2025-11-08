@@ -222,7 +222,6 @@ const processFilesWithSizes = async (files) => {
         }
       })
     }
-    conso
     return processedFile
   })
 
