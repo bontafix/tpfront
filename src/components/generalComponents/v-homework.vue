@@ -217,6 +217,8 @@ const sectionTitle = computed(() => {
 
 const prevFilesList = computed(() => {
   const homeworkData = getHomeworkData()
+  console.log(homeworkData)
+  console.log(`homeworkData |||||||||||||||||||||||||||`)
   if (!homeworkData) return []
 
   return formatFiles(homeworkData.files)
@@ -227,7 +229,7 @@ const studentAnswer = computed(() => {
   const homeworkData = getHomeworkData()
   if (!homeworkData) return []
 
-  return formatFiles(homeworkData.student_answers, 'file_path', 'file_name')
+  return formatFilesToken(homeworkData.student_answers, 'file_path', 'file_name')
 })
 
 const homeWork = computed(() => {
@@ -316,6 +318,31 @@ const formatFiles = (files, pathField = 'file_url', nameField = 'file_url') => {
     }
   })
 }
+
+
+const formatFilesToken = (files, pathField = 'file_url', nameField = 'file_url') => {
+  if (!files || !files.length) return []
+  console.log(files)
+  return files.map(file => {
+    const filePath = file[pathField] || file.file_path
+    const pathSeparator = filePath?.startsWith('/') ? '' : '/'
+    
+    return {
+      id: file.id,
+      name: file[nameField]?.replace('homework_files/', '') || file.file_name,
+      size: file.file_size || 0,
+      file: pathField === 'file_url' 
+        ? `${domainDownload}${pathSeparator}${filePath}` 
+        : `${domainDownload}/homework_answers${pathSeparator}${filePath}`,
+      file_all: file,  
+      description: file.description || file.comment || '',
+      homework_id: file.homework_id,
+      uploaded_at: file.uploaded_at,
+      file_type: file.file_type
+    }
+  })
+}
+
 
 const deleteHomework = () => {
   emit('delete-homework')

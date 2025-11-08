@@ -183,17 +183,24 @@ function signInWithProvider(provider) {
   ]
 
   const messageListener = (event) => {
-    if (!allowedOrigins.includes(event.origin)) {
-      console.warn('Недопустимый origin:', event.origin)
-      return
-    }
-
-    // Игнорируем сообщения от расширений браузера (Яндекс.Метрика и т.д.)
+    // Сначала проверяем и игнорируем сообщения от расширений браузера (Яндекс.Метрика и т.д.)
+    // Это нужно делать ДО проверки origin, чтобы не парсить невалидные сообщения
     if (typeof event.data === 'string') {
       const trimmed = event.data.trim()
+      // Игнорируем сообщения от Яндекс.Метрики и других расширений
       if (trimmed.startsWith('__ym__') || trimmed.startsWith('__')) {
         return
       }
+      // Проверяем, что строка начинается с { или [, иначе это не JSON
+      if (!trimmed.startsWith('{') && !trimmed.startsWith('[')) {
+        return
+      }
+    }
+
+    // Проверяем origin только для валидных сообщений
+    if (!allowedOrigins.includes(event.origin)) {
+      console.warn('Недопустимый origin:', event.origin)
+      return
     }
 
     // Проверяем, что данные являются объектом (ожидаем JSON от OAuth)
@@ -208,7 +215,11 @@ function signInWithProvider(provider) {
         router.push({ name: 'home_teacher' })
       } catch (error) {
         // Игнорируем ошибки парсинга для не-JSON сообщений
-        console.warn('Не удалось распарсить данные сообщения:', event.data)
+        // Не логируем ошибки для сообщений от расширений
+        const trimmed = event.data.trim()
+        if (!trimmed.startsWith('__ym__') && !trimmed.startsWith('__')) {
+          console.warn('Не удалось распарсить данные сообщения:', event.data)
+        }
       }
     }
   }

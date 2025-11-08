@@ -1133,6 +1133,7 @@ export async function getAllStudentHomework(student_id) {
   try {
     const result = await makeGetRequest(`/api/all-homeworks-by-student/${student_id}`)
     console.log(result)
+    console.log('all-homeworks-by-student >>>>>>>>>>>>>>>>>>>>')
     return (result)
   } catch (error) {
     console.error('Произошла ошибка при получении всего домашнего задания ученика', error)
