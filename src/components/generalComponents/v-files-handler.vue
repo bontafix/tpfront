@@ -1,22 +1,10 @@
 <template>
   <div class="v-files-handler" :data-instance-id="instanceId">
     <!-- File upload input -->
-    <input
-      :id="`file-handler-input-${instanceId}`"
-      ref="fileInput"
-      type="file"
-      @input="handleFileChange"
-      multiple
-      class="hidden-input"
-    />
-    <div
-      v-if="showDropArea"
-      class="v-files-handler__drop-area"
-      @dragover.prevent="isDragging = true"
-      @dragleave.prevent="isDragging = false"
-      @drop.prevent="handleFileDrop"
-      :class="{ dragging: isDragging }"
-    >
+    <input :id="`file-handler-input-${instanceId}`" ref="fileInput" type="file" @input="handleFileChange" multiple
+      class="hidden-input" />
+    <div v-if="showDropArea" class="v-files-handler__drop-area" @dragover.prevent="isDragging = true"
+      @dragleave.prevent="isDragging = false" @drop.prevent="handleFileDrop" :class="{ dragging: isDragging }">
       <img src="/src/assets/images/file-upload.svg" alt="" />
       <div class="v-files-handler__drop-area-subtitle">
         <label :for="`file-handler-input-${instanceId}`">Загрузите файл </label>или перетащите в это
@@ -25,28 +13,15 @@
     </div>
     <!-- File list -->
     <ul class="v-files-handler__list">
-      <li
-        class="v-files-handler__list-item file"
-        v-for="file in internalFiles"
-        :key="file.uniqueId"
-      >
-        <a
-        class="flex gap-2"
-          :href="getDownloadUrl(file)"
-          target="_blank"
-        >
+      <li class="v-files-handler__list-item file" v-for="file in internalFiles" :key="file.uniqueId">
+        <a class="flex gap-2" :href="getDownloadUrl(file)" target="_blank">
           <div class="file__block">
             <img class="file__image" src="/src/assets/images/file-day.svg" alt="" />
             <p class="file__title">{{ file.name }} ({{ formatFileSize(file.size, file.isLoadingSize) }})</p>
           </div>
-          <img
-            v-if="deletable"
-            src="/src/assets/images/cross-day.svg"
-            alt=""
-            @click="removeFile(file.uniqueId)"
-            style="cursor: pointer"
-          />
-          <img v-else src="/src/assets/images/upload-file-blue.svg" alt="" >
+          <img v-if="deletable" src="/src/assets/images/cross-day.svg" alt="" @click="removeFile(file.uniqueId)"
+            style="cursor: pointer" />
+          <img v-else src="/src/assets/images/upload-file-blue.svg" alt="">
         </a>
       </li>
     </ul>
@@ -120,7 +95,8 @@ const isFileUrl = (file) => {
 
 const getDownloadUrl = (fileItem) => {
   console.log(fileItem)
-  console.log(`fileItem ^^^^^^^^^^^^^^^^^^^^^^`)
+  console.log(`fileItem ----------------->>>>`)
+
   if (fileItem.downloadUrl) {
     return fileItem.downloadUrl
   }
@@ -135,7 +111,11 @@ const getDownloadUrl = (fileItem) => {
     return fileItem.blobUrl
   }
   if (typeof fileItem.file === 'string') {
-    return /* 'https://test-api.teacherplanner.ru/' +  */fileItem.file
+    if (fileItem.token_file_url) {
+      return (fileItem.domainDownload + fileItem.token_file_url)
+    } else {
+      return /* 'https://test-api.teacherplanner.ru/' +  */fileItem.file
+    }
   }
   return '#'
 }
@@ -155,7 +135,7 @@ const downloadFile = async (fileItem) => {
     }
     // Если это внешний URL, скачиваем через fetch
     if (typeof fileItem.file === 'string') {
-      
+
       const response = await fetch(fileItem.file)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -270,8 +250,8 @@ watch(
 
         // Сравниваем основные свойства файлов
         return file.name !== oldFile.name ||
-               file.size !== oldFile.size ||
-               file.file !== oldFile.file
+          file.size !== oldFile.size ||
+          file.file !== oldFile.file
       })
 
     if (!filesChanged) {
@@ -289,15 +269,15 @@ watch(
   (newInternalFiles, oldInternalFiles) => {
     // Проверяем, действительно ли изменились внутренние файлы
     if (oldInternalFiles &&
-        newInternalFiles.length === oldInternalFiles.length &&
-        newInternalFiles.every((file, index) => {
-          const oldFile = oldInternalFiles[index]
-          return oldFile &&
-                 file.uniqueId === oldFile.uniqueId &&
-                 file.name === oldFile.name &&
-                 file.size === oldFile.size &&
-                 file.isLoadingSize === oldFile.isLoadingSize
-        })) {
+      newInternalFiles.length === oldInternalFiles.length &&
+      newInternalFiles.every((file, index) => {
+        const oldFile = oldInternalFiles[index]
+        return oldFile &&
+          file.uniqueId === oldFile.uniqueId &&
+          file.name === oldFile.name &&
+          file.size === oldFile.size &&
+          file.isLoadingSize === oldFile.isLoadingSize
+      })) {
       return
     }
 

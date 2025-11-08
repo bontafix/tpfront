@@ -334,7 +334,7 @@ const formatFilesToken = (files, pathField = 'file_url', nameField = 'file_url')
       file: pathField === 'file_url' 
         ? `${domainDownload}${pathSeparator}${filePath}` 
         : `${domainDownload}/homework_answers${pathSeparator}${filePath}`,
-      file_all: { ...file, domainDownload},  
+      file_token: { ...file, domainDownload},  
       description: file.description || file.comment || '',
       homework_id: file.homework_id,
       uploaded_at: file.uploaded_at,
