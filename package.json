@@ -1,6 +1,6 @@
 {
   "name": "teacherplanner",
-  "version": "0.1.45",
+  "version": "0.1.49",
   "private": true,
   "type": "module",
   "scripts": {

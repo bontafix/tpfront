@@ -57,6 +57,8 @@ const props = defineProps({
   }
 })
 
+const domain = import.meta.env.VITE_API_URL
+
 const emit = defineEmits(['update:modelValue', 'file-added', 'file-removed'])
 
 const internalFiles = ref([])
@@ -111,10 +113,11 @@ const getDownloadUrl = (fileItem) => {
     return fileItem.blobUrl
   }
   if (typeof fileItem.file === 'string') {
-    if (fileItem.token_file_url) {
-      return (fileItem.domainDownload + fileItem.token_file_url)
+    if (fileItem?.file_token && fileItem?.file_token?.token_file_url) {
+      // return (fileItem.file_token.domainDownload + fileItem.file_token.token_file_url)
+      return (domain + fileItem.file_token.token_file_url)
     } else {
-      return /* 'https://test-api.teacherplanner.ru/' +  */fileItem.file
+      return fileItem.file
     }
   }
   return '#'
