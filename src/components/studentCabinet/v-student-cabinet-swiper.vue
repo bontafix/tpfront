@@ -438,9 +438,9 @@ function transformedFiles(files) {
   if (!files) return []
   return files.map((file) => ({
     id: file.id,
-    name: file.file_url.split('/').pop(), // Извлекаем имя файла из URL
+    name: file.file_url.split('/').pop(), // Извлекаем имя файла из URL TODO - имя фала надо хранить при загрузке в БД
     size: 0, // Размер будет получен асинхронно компонентом
-    file: `${domainDownload}/${file.file_url}`, // URL файла
+    file: `${domain}${file.token_file_url}`, // URL файла
   }))
 }
 
@@ -448,9 +448,9 @@ function transformedAnswers(files) {
   if (!files) return []
   return files.map((file) => ({
     id: file.id,
-    name: file.file_name,
+    name: file.file_name, //TODO - имя фала надо хранить при загрузке в БД
     size: file.file_size,
-    file: `${domainDownload}/homework_answers/${file.file_path}`,
+    file: `${domain}${file.token_file_url}`,
   }))
 }
 
