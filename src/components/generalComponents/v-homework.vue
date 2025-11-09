@@ -217,8 +217,8 @@ const sectionTitle = computed(() => {
 
 const prevFilesList = computed(() => {
   const homeworkData = getHomeworkData()
-  console.log(homeworkData)
-  console.log(`homeworkData |||||||||||||||||||||||||||`)
+  // console.log(homeworkData)
+  // console.log(`homeworkData |||||||||||||||||||||||||||`)
   if (!homeworkData) return []
 
   return formatFilesToken(homeworkData.files)
@@ -227,9 +227,12 @@ const prevFilesList = computed(() => {
 // Обновленный computed для studentAnswer
 const studentAnswer = computed(() => {
   const homeworkData = getHomeworkData()
+  console.log(homeworkData)
+  console.log(`homeworkData studentAnswer --------------------->`)
   if (!homeworkData) return []
 
-  return formatFiles(homeworkData.student_answers, 'file_path', 'file_name')
+  // return formatFiles(homeworkData.student_answers, 'file_path', 'file_name')
+  return formatFilesToken(homeworkData.student_answers)
 })
 
 const homeWork = computed(() => {

@@ -96,8 +96,8 @@ const isFileUrl = (file) => {
 }
 
 const getDownloadUrl = (fileItem) => {
-  console.log(fileItem)
-  console.log(`fileItem ----------------->>>>`)
+  // console.log(fileItem)
+  // console.log(`fileItem ----------------->>>>`)
 
   if (fileItem.downloadUrl) {
     return fileItem.downloadUrl
@@ -105,8 +105,8 @@ const getDownloadUrl = (fileItem) => {
   if (fileItem.file instanceof File) {
     if (!fileItem.blobUrl) {
       const blobUrl = URL.createObjectURL(fileItem.file)
-      console.log(blobUrl)
-      console.log(`blobUrl ++++++++++++++++++`)
+      // console.log(blobUrl)
+      // console.log(`blobUrl ++++++++++++++++++`)
       fileItem.blobUrl = blobUrl
       createdUrls.add(blobUrl)
     }
