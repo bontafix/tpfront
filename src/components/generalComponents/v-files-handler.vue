@@ -14,15 +14,15 @@
     <!-- File list -->
     <ul class="v-files-handler__list">
       <li class="v-files-handler__list-item file" v-for="file in internalFiles" :key="file.uniqueId">
-        <a class="flex gap-2" :href="getDownloadUrl(file)" target="_blank">
-          <div class="file__block">
+        <div class="flex gap-2">
+          <a class="file__block" :href="getDownloadUrl(file)" target="_blank">
             <img class="file__image" src="/src/assets/images/file-day.svg" alt="" />
             <p class="file__title">{{ file.name }} ({{ formatFileSize(file.size, file.isLoadingSize) }})</p>
-          </div>
+          </a>
           <img v-if="deletable" src="/src/assets/images/cross-day.svg" alt="" @click="removeFile(file.uniqueId)"
             style="cursor: pointer" />
           <img v-else src="/src/assets/images/upload-file-blue.svg" alt="">
-        </a>
+        </div>
       </li>
     </ul>
     <!-- Button to open file selector -->
@@ -378,17 +378,26 @@ const formatFileSize = (size, isLoading = false) => {
 }
 
 const removeFile = (uniqueId) => {
-  const fileToRemove = internalFiles.value.find((file) => file.uniqueId === uniqueId)
-  if (fileToRemove) {
+  const fileIndex = internalFiles.value.findIndex((file) => file.uniqueId === uniqueId)
+  if (fileIndex !== -1) {
+    const fileToRemove = internalFiles.value[fileIndex]
+    
     // Очищаем blob URL если он был создан
     if (fileToRemove.blobUrl) {
       URL.revokeObjectURL(fileToRemove.blobUrl)
       createdUrls.delete(fileToRemove.blobUrl)
     }
-    // Удаляем уникальный идентификатор перед отправкой события
-    const { uniqueId: _, isLoadingSize, blobUrl, ...cleanFileToRemove } = fileToRemove
+    
+    // Удаляем файл из списка
     internalFiles.value = internalFiles.value.filter((file) => file.uniqueId !== uniqueId)
-    emit('file-removed', cleanFileToRemove)
+    
+    // Отправляем событие с полной информацией о файле (без технических полей)
+    const { uniqueId: _, isLoadingSize, blobUrl, ...cleanFileToRemove } = fileToRemove
+    emit('file-removed', {
+      ...cleanFileToRemove,
+      _isNewFile: fileToRemove.file instanceof File,
+      _index: fileIndex
+    })
   }
 }
 

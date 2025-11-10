@@ -43,7 +43,7 @@ export default defineConfig({
       },
     },
   },
-  base: '/',
+  base: '/alex/',
   server: {
     port: 5173,
   },

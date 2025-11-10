@@ -437,7 +437,19 @@ const handleSaveFiles = (files) => {
 
 const homeworkFileRemoved = (file) => {
   console.log('Удален файл:', file)
-  filesList.value = filesList.value.filter((item) => item.id !== file.id)
+  
+  // v-model автоматически синхронизирует filesList через watch на internalFiles,
+  // поэтому ручная фильтрация не нужна.
+  // Этот обработчик используется для дополнительной логики, например:
+  
+  // Если это файл с сервера (не новый), можно добавить API-запрос на удаление
+  if (!file._isNewFile && file.id) {
+    console.log('Файл с сервера удален из локального списка. ID:', file.id)
+    // Здесь можно добавить API-запрос на удаление файла с сервера при необходимости
+    // Например: api.deleteFile(file.id)
+  } else {
+    console.log('Новый файл удален из локального списка')
+  }
 }
 
 // Отслеживаем изменения в списке файлов для отладки

@@ -523,10 +523,57 @@ async function refreshData() {
   }
 }
 
+// Метод для обновления данных урока после редактирования файлов
+async function updateLessonHomeworkAnswers(homeworkId, updatedFiles) {
+  // Проверяем, есть ли новые файлы (File объекты)
+  const hasNewFiles = updatedFiles.some(f => f.file instanceof File)
+  
+  // Если есть новые файлы, перезагружаем данные урока для получения актуальных данных с сервера
+  if (hasNewFiles) {
+    log('New files detected, refreshing lesson data...')
+    const currentIndex = currentLessonIndex.value
+    await refreshData()
+    // Восстанавливаем позицию слайдера
+    if (swiperInstance && currentIndex < lessons.value.length) {
+      await nextTick()
+      swiperInstance.slideTo(currentIndex)
+      currentLessonIndex.value = currentIndex
+    }
+    return
+  }
+  
+  // Если нет новых файлов, обновляем локально только существующие файлы
+  const lesson = lessons.value.find(l => 
+    l.homeworks?.some(hw => hw.id == homeworkId)
+  )
+  
+  if (lesson && lesson.homeworks) {
+    const homework = lesson.homeworks.find(hw => hw.id == homeworkId)
+    if (homework) {
+      // Преобразуем updatedFiles в формат student_answers
+      // Для существующих файлов (строки URL) находим их в текущих student_answers
+      const existingAnswers = updatedFiles
+        .filter(f => typeof f.file === 'string' && f.id)
+        .map(f => {
+          // Находим существующий ответ по id
+          const existing = homework.student_answers?.find(a => a.id === f.id)
+          return existing
+        })
+        .filter(Boolean)
+      
+      // Обновляем student_answers
+      homework.student_answers = existingAnswers
+      
+      log('Updated homework answers locally for homework:', homeworkId, homework.student_answers)
+    }
+  }
+}
+
 defineExpose({
   loadInitialData,
   refreshData,
   clearCache,
+  updateLessonHomeworkAnswers,
   lessons: lessons.value,
 })
 

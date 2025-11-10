@@ -14,6 +14,7 @@
       <div class="v-student-cabinet__row">
         <v-teacher-info :info="currentSubject"/>
         <v-student-cabinet-swiper
+          ref="studentCabinetSwiper"
           :student-id="studentId"
           :profile="currentSubject"
           @toggleModal="toggleModal"
@@ -97,6 +98,7 @@ const copyWindowOpen = ref(false);
 const link = ref('https://www.primeradress.ru');
 const homeworkId = ref(null);
 const filesAnswer = ref([]);
+const studentCabinetSwiper = ref(null);
 
 const debugMode = ref(true);
 
@@ -134,6 +136,7 @@ const onCurrentHomeworkChanged = (newHomeworkId, lessonData = null) => {
 
 // Функция для преобразования ответов API в формат filesAnswer
 const transformAnswersForFilesAnswer = (studentAnswers) => {
+  console.log(studentAnswers)
   if (!studentAnswers) return [];
   return studentAnswers.map(file => ({
     id: file.id,
@@ -145,15 +148,39 @@ const transformAnswersForFilesAnswer = (studentAnswers) => {
 
 // Обработчик обновления файлов из модального окна редактирования
 const updateFilesAnswer =  async (updatedFiles) => {
-  filesAnswer.value = updatedFiles;
-  const formData = new FormData();
-  if(!updatedFiles.length) {
-    formData.append('files', '')
+  try {
+    filesAnswer.value = updatedFiles;
+    const formData = new FormData();
+    
+    // Фильтруем только новые файлы (объекты File), исключая существующие (строки URL)
+    const newFiles = updatedFiles.filter(f => f.file instanceof File);
+    
+    if(updatedFiles.length === 0) {
+      // Если пользователь удалил все файлы, отправляем пустую строку
+      formData.append('files', '');
+    } else if(newFiles.length > 0) {
+      // Отправляем только новые файлы (объекты File)
+      newFiles.forEach(f => {
+        formData.append('files', f.file);
+      });
+    }
+    // Если newFiles.length === 0, но updatedFiles.length > 0,
+    // значит остались только существующие файлы (строки URL),
+    // и мы не отправляем ничего, так как они уже на сервере
+    
+    await setStudentHomework(homeworkId.value, currentSubject.value.id, formData);
+    console.log('Файлы успешно обновлены для ДЗ:', homeworkId.value);
+    
+    // Обновляем данные урока в swiper после успешного сохранения
+    if (studentCabinetSwiper.value && studentCabinetSwiper.value.updateLessonHomeworkAnswers) {
+      await studentCabinetSwiper.value.updateLessonHomeworkAnswers(homeworkId.value, updatedFiles);
+    }
+  } catch (error) {
+    console.error('Ошибка обновления файлов:', error);
+    // Показываем пользователю понятное сообщение об ошибке
+    alert('Произошла ошибка при обновлении файлов. Попробуйте еще раз.');
+    throw error; // Пробрасываем ошибку дальше
   }
-  updatedFiles.forEach(f => {
-      formData.append('files', f.file);
-    });
-  await setStudentHomework(homeworkId.value, currentSubject.value.id, formData)
 };
 
 const showResult = (resultData) => {
