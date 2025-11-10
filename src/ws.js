@@ -48,31 +48,31 @@ function isValidJSON(str) {
 
 // Подключение к WebSocket
 export async function connectWebSocket() {
+  // Если уже подключаемся, не создаем новое соединение
+  if (isConnecting) {
+    return ws
+  }
+
+  // Если соединение уже открыто, возвращаем его
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    return ws
+  }
+
+  // Закрываем старое соединение, если оно существует
+  if (ws) {
+    ws.onclose = null // Убираем обработчик, чтобы не вызвать переподключение
+    ws.onerror = null
+    ws.onmessage = null
+    ws.onopen = null
+    if (ws.readyState !== WebSocket.CLOSED) {
+      ws.close()
+    }
+    ws = null
+  }
+
+  isConnecting = true
+
   try {
-    // Если уже подключаемся, не создаем новое соединение
-    if (isConnecting) {
-      return ws
-    }
-
-    // Если соединение уже открыто, возвращаем его
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      return ws
-    }
-
-    // Закрываем старое соединение, если оно существует
-    if (ws) {
-      ws.onclose = null // Убираем обработчик, чтобы не вызвать переподключение
-      ws.onerror = null
-      ws.onmessage = null
-      ws.onopen = null
-      if (ws.readyState !== WebSocket.CLOSED) {
-        ws.close()
-      }
-      ws = null
-    }
-
-    isConnecting = true
-
     const response = await getWSToken()
     if (!response || !response.ws_token) {
       console.error('Не удалось получить токен для WebSocket')
@@ -176,7 +176,17 @@ export async function connectWebSocket() {
   } catch (error) {
     console.error('Ошибка подключения к WebSocket:', error)
     isConnecting = false
+    
+    // Если ошибка 401 (Unauthorized), не пытаемся переподключаться
+    if (error.response?.status === 401) {
+      console.error('Ошибка авторизации при получении токена WebSocket. Переподключение не будет выполнено.')
+      reconnectAttempts = 0
+      return null
+    }
+    
+    // Для других ошибок сбрасываем счетчик, но не переподключаемся автоматически
     reconnectAttempts = 0
+    return null
   }
 }
 

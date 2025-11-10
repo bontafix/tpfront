@@ -469,7 +469,7 @@ function getStudentFilesAnswer(lesson) {
         id: item.id,
         name: item.name,
         size: item.size,
-        file: `${domain}${item.token_file_url}`,
+        file: `${domain}${item.file}`,
       }))
     }
     if (homework.student_answers && homework.student_answers.length > 0) {

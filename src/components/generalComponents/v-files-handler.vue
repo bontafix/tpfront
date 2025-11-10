@@ -59,6 +59,10 @@ const props = defineProps({
 
 const domain = import.meta.env.VITE_API_URL
 
+// Параметр для управления запросом размера файла (можно настроить через переменную окружения VITE_FETCH_FILE_SIZE)
+// По умолчанию true для обратной совместимости
+const shouldFetchFileSize = import.meta.env.VITE_FETCH_FILE_SIZE !== 'false'
+
 const emit = defineEmits(['update:modelValue', 'file-added', 'file-removed'])
 
 const internalFiles = ref([])
@@ -173,7 +177,8 @@ const processFilesWithSizes = async (files) => {
     }
 
     // Если файл - это URL и размер не указан или равен 0
-    if (isFileUrl(file.file)) { //  && (!file.size || file.size === 0)
+    // И если включен запрос размера файла через переменную окружения
+    if (isFileUrl(file.file) && shouldFetchFileSize) { //  && (!file.size || file.size === 0)
       processedFile.isLoadingSize = true
       processedFile.size = 0
 
@@ -204,6 +209,10 @@ const processFilesWithSizes = async (files) => {
           internalFiles.value.splice(fileIndex, 1, updatedFile)
         }
       })
+    } else if (isFileUrl(file.file) && !shouldFetchFileSize) {
+      // Если запрос размера отключен, просто используем существующий размер или 0
+      processedFile.isLoadingSize = false
+      processedFile.size = file.size || 0
     }
     return processedFile
   })

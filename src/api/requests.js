@@ -20,8 +20,10 @@ apiClient.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     } else {
-      // Логируем только если токена нет (для отладки)
-      console.debug('Токен авторизации не найден в cookies для запроса:', config.url)
+      // Логируем предупреждение, если токена нет
+      // Это может быть нормально, если токен в HttpOnly cookies и отправляется автоматически
+      console.warn('Токен авторизации не найден в cookies для запроса:', config.url)
+      console.warn('Доступные cookies:', document.cookie)
     }
     return config
   },
@@ -35,7 +37,9 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      console.warn('401 Unauthorized - возможно проблема с токеном авторизации')
+      console.error('401 Unauthorized - проблема с токеном авторизации')
+      console.error('URL запроса:', error.config?.url)
+      console.error('Доступные cookies:', document.cookie)
       // Можно добавить логику редиректа на логин или обновления токена
     }
     return Promise.reject(error)
@@ -996,9 +1000,28 @@ export async function linkProfileForApi(request_body) {
 
 export async function getWSToken() {
   try {
-    return await makeGetRequest('ws/token')
+    // Проверяем наличие токена перед запросом
+    const token = getAccessToken()
+    if (!token) {
+      console.warn('Токен авторизации не найден перед запросом ws/token')
+      console.warn('Доступные cookies:', document.cookie)
+    }
+    
+    const response = await makeGetRequest('ws/token')
+    
+    if (!response || !response.ws_token) {
+      console.error('Не удалось получить ws_token из ответа:', response)
+      throw new Error('ws_token не найден в ответе сервера')
+    }
+    
+    return response
   } catch (error) {
     console.error('Произошла ошибка при получении токена для WebSocket', error)
+    if (error.response) {
+      console.error('Статус ответа:', error.response.status)
+      console.error('Данные ответа:', error.response.data)
+    }
+    throw error
   }
 }
 
