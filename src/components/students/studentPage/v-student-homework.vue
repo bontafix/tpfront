@@ -32,8 +32,19 @@
       <div class="v-student-homework__archive">
         <h2 class="text-section-title">Архив домашнего задания ({{ allHomework.length }})</h2>
         <ul class="v-student-homework__list">
-          <li class="v-student-homework__list-item" v-for="homework in allHomework" :key="homework.id">
-            <v-homework :mode="getHwMode(homework)" :title="`Домашнее задание`" :hwData="homework" :submission-data="homework.submissions" @save-submission="saveSubmission" @delete-homework="() => deleteHomeworkById(homework.id)"/>
+          <li
+            class="v-student-homework__list-item"
+            v-for="homework in allHomework"
+            :key="homework.id"
+          >
+            <v-homework
+              :mode="getHwMode(homework)"
+              :title="`Домашнее задание`"
+              :hwData="homework"
+              :submission-data="homework.submissions"
+              @save-submission="saveSubmission"
+              @delete-homework="() => deleteHomeworkById(homework.id)"
+            />
           </li>
         </ul>
       </div>
@@ -41,8 +52,8 @@
     <v-homework-stat />
   </div>
   <div class="loader-container" v-show="isLoading">
-          <div class="loader"></div>
-    </div>
+    <div class="loader"></div>
+  </div>
 </template>
 <script setup>
 import { ref, computed, onMounted } from 'vue'
@@ -57,7 +68,7 @@ const emit = defineEmits(['toggle-modal'])
 
 const route = useRoute()
 
-const studentId = computed(()=>{
+const studentId = computed(() => {
   return route.params.id
 })
 
@@ -71,16 +82,15 @@ const allHomework = computed(() => {
 
 const isLoading = ref(false)
 
-
 const toggleModal = () => {
   console.log(lastHomework)
- emit('toggle-tasks-modal', lastHomework.value.lesson_id)
+  emit('toggle-tasks-modal', lastHomework.value.lesson_id)
 }
 
 const loadData = async () => {
   isLoading.value = true
   const resopnse = await getAllStudentHomework(studentId.value)
-  studentHomework.value = resopnse.filter((hw)=> hw.lesson_id)
+  studentHomework.value = resopnse.filter((hw) => hw.lesson_id)
   isLoading.value = false
 }
 
@@ -92,11 +102,10 @@ const saveSubmission = async (hw_data) => {
     formData.append(key, value)
   }
   await createSubmission(hw_data.homework_id, formData)
-
 }
 
-const getHwMode = (homework)  => {
-  if(homework && homework.submissions?.length) {
+const getHwMode = (homework) => {
+  if (homework && homework.submissions?.length) {
     return 'completed'
   }
   return 'previous'
@@ -107,7 +116,7 @@ const deleteHomeworkById = async (homework_id) => {
   studentHomework.value = studentHomework.value.filter((homework) => homework.id !== homework_id)
 }
 
-onMounted(()=>{
+onMounted(() => {
   loadData()
 })
 </script>

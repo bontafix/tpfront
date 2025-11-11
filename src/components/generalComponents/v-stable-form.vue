@@ -48,15 +48,15 @@
         </VueDatePicker>
       </div>
     </div>
-  <div class="modal-field col" v-if="!props.ruleData">
+    <div class="modal-field col" v-if="!props.ruleData">
       <div class="flex items-center gap-3 my-6">
         <div class="styled-checkbox">
-          <input id="remind" v-model="remind" type="checkbox"/>
+          <input id="remind" v-model="remind" type="checkbox" />
           <label for="remind"></label>
         </div>
         <label for="remind"> Напоминать о занятии </label>
       </div>
-        <div class="custom-radio-container" v-if="remind">
+      <div class="custom-radio-container" v-if="remind">
         <div class="custom-radio" v-for="value in [5, 10, 15]" :key="value">
           <input
             :id="'reminder-' + value"
@@ -70,7 +70,6 @@
           <label :for="'reminder-' + value">за {{ value }} минут </label>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -84,6 +83,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import VueDatePicker from '@vuepic/vue-datepicker'
 
 import { formatDay } from '@/utils'
+import { el } from 'date-fns/locale'
 
 /* -------------------- Переменные -------------------- */
 const emit = defineEmits(['formSubmited'])
@@ -117,7 +117,15 @@ const props = defineProps({
 })
 
 const daysOfWeek = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс']
-const fullDaysOfWeek = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
+const fullDaysOfWeek = [
+  'Понедельник',
+  'Вторник',
+  'Среда',
+  'Четверг',
+  'Пятница',
+  'Суббота',
+  'Воскресенье',
+]
 
 /* -------------------- Методы -------------------- */
 const saveRuleData = () => {
@@ -181,24 +189,15 @@ const handleTimeEnd = (modelValue, id) => {
   timeInputs.value[id].end = modelValue
 }
 
-/* Обработчик отправки формы */
 const submitForm = () => {
-  const upd = props.ruleData ? 'updated_' : ''
-  stableForm.value[upd + 'days_of_week'] = []
-  stableForm.value[upd + 'start_times'] = []
-  stableForm.value[upd + 'end_times'] = []
-  stableForm.value['reminder_minutes'] = reminder.value || 0
-  stableForm.value['break_minutes'] = break_group.value || 0
+  const result = {
+    repeat_until: new Date(repeatUntill.value).toISOString().split('T')[0],
+  }
 
-  periodicityStack.value.forEach((el) => {
-    stableForm.value[upd + 'days_of_week'].push(el.id)
-
-    const startTime = timeInputs.value[el.id].start
-    const endTime = timeInputs.value[el.id].end
-
+  result.days_of_week = periodicityStack.value.reduce((acc, el) => {
     // Добавление ведущего нуля для времени
-    const formattedStartTime = startTime.split(':')
-    const formattedEndTime = endTime.split(':')
+    const formattedStartTime = timeInputs.value[el.id].start.split(':')
+    const formattedEndTime = timeInputs.value[el.id].end.split(':')
 
     const formattedStart = `${String(formattedStartTime[0]).padStart(2, '0')}:${String(formattedStartTime[1]).padStart(2, '0')}`
     const formattedEnd = `${String(formattedEndTime[0]).padStart(2, '0')}:${String(formattedEndTime[1]).padStart(2, '0')}`
@@ -207,12 +206,18 @@ const submitForm = () => {
     const TimeStringStart = `${formattedStart}:00.000Z`
     const TimeStringEnd = `${formattedEnd}:00.000Z`
 
-    stableForm.value[upd + 'start_times'].push(TimeStringStart)
-    stableForm.value[upd + 'end_times'].push(TimeStringEnd)
-    stableForm.value['repeat_until'] = new Date(repeatUntill.value).toISOString().split('T')[0]
-  })
+    return {
+      ...acc,
+      [el.id]: [
+        {
+          start_time: TimeStringStart,
+          end_time: TimeStringEnd
+        },
+      ],
+    }
+  }, {})
 
-  emit('formSubmited', stableForm.value)
+  emit('formSubmited', result)
 }
 
 /* Обработчик изменения времени */
@@ -264,7 +269,7 @@ const handleTime = (modelValue, id) => {
 }
 
 defineExpose({
-  submitForm
+  submitForm,
 })
 
 onMounted(() => {

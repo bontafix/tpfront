@@ -103,9 +103,9 @@ const submitStableForm = async (stableForm) => {
 
     if (isValid) {
       if(group.value) {
-        await setStableGroupLesson(stableForm, true)
+        await setStableGroupLesson(stableForm)
       } else if(student.value) {
-        await setStableLesson(stableForm, true)
+        await setStableLesson(stableForm)
       }
 
     } else {

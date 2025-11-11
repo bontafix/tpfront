@@ -143,7 +143,7 @@ const userRoutes = [
     component: vLogin,
   },
   {
-    path: 'register/',
+    path: 'register',
     name: 'register',
     component: VRegister,
   }

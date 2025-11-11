@@ -152,6 +152,6 @@ const submitForm = async () => {
 }
 
 onMounted(() => {
-  form.value.teacher_ref_cod = route.query.ref || ''
+  form.value.teacher_ref_cod = route.query.ref_code || ''
 })
 </script>

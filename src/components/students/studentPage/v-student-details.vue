@@ -109,7 +109,7 @@ const props = defineProps({
 
 const link = computed(()=>{
   const refCode = props.student?.teacher_ref_cod
-  return `${window.origin}/link-profile/?ref_code=${refCode}` || 'У этого ученика нет реферального кода'
+  return `${window.origin}/link-profile?ref_code=${refCode}` || 'У этого ученика нет реферального кода'
 })
 const copyWindowOpen = ref(false)
 const currentStudent = ref({ ...props.student, comment: '' })

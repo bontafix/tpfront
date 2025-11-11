@@ -237,7 +237,9 @@ const deleteOperation = async () => {
     await cancelOperation(currentOperation.value.id)
   } else if(currentOperation.value.payments_id) */
   // await cancelOperation(currentOperation.value.id)
-  await deleteExpenditure(currentOperation.value.id)
+  // await deleteExpenditure(currentOperation.value.id)
+
+  await cancelOperation(currentOperation.value.id)
 }
 
 const getOpeartionStatusClass = (operation) => {

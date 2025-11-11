@@ -355,7 +355,7 @@ export async function createSubmission(homework_id, request_body) {
       withCredentials: true,
     })
 
-    /* router.go(0) */
+    router.go(0)
   } catch (error) {
     console.error('Произошла ошибка при создании отправки домашнего задания', error)
   }
@@ -810,21 +810,33 @@ export async function setTrialLesson(data, updatable = false) {
   }
 }
 
-export async function setStableGroupLesson(data, updatable = false) {
+export async function setStableGroupLesson(data) {
   try {
     const response = await makeRequest(`/api/lessons-create-group`, 'POST', data)
-    router.go(0)
+    if (response.status === 200) {
+      router.go(0)
+    } else {
+      emitter.emit('notify', {
+        type: 'error',
+        message: 'Произошла ошибка при создании постоянного урока для группы',
+      })
+    }
     return response
   } catch (error) {
     console.error('Произошла ошибка при создании постоянного урока для группы', error)
   }
 }
 
-export async function setStableLesson(data, updatable = false) {
+export async function setStableLesson(data) {
   try {
     const response = await makeRequest('/api/lessons', 'POST', data)
-    if (updatable) {
-      /*  router.go(0) */
+    if (response.status === 200) {
+      router.go(0)
+    } else {
+      emitter.emit('notify', {
+        type: 'error',
+        message: 'Произошла ошибки при создании постоянного урока',
+      })
     }
     return response
   } catch (error) {
