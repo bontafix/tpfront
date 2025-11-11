@@ -29,7 +29,7 @@ apiClient.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error)
-  }
+  },
 )
 
 // Interceptor для обработки ошибок авторизации
@@ -43,7 +43,7 @@ apiClient.interceptors.response.use(
       // Можно добавить логику редиректа на логин или обновления токена
     }
     return Promise.reject(error)
-  }
+  },
 )
 
 // Общая функция для выполнения запросов
@@ -100,13 +100,9 @@ async function makeGetRequest(endpoint) {
 
 export async function createDemoRequest(data) {
   try {
-    return await axios.post(
-      `${domain}/api/public/demo-request`,
-      data,
-      {
-        withCredentials: true,
-      },
-    )
+    return await axios.post(`${domain}/api/public/demo-request`, data, {
+      withCredentials: true,
+    })
   } catch (error) {
     console.error('Произошла ошибка при создании заявки на демонстрацию', error)
   }
@@ -232,22 +228,19 @@ export async function getReviews() {
 
 export async function setNewReviews(review) {
   try {
-    return await axios.post(
-      `${domain}/api/public/reviews`,
-      review,
-      {
-        withCredentials: true,
-      },
-    )
-  } catch(error) {
+    return await axios.post(`${domain}/api/public/reviews`, review, {
+      withCredentials: true,
+    })
+  } catch (error) {
     console.error('Произошла ошибка при создании отзыва', error)
   }
 }
 
-export async function deleteStudentAnswer(answer_id, studnet_profile_id) {
+export async function deleteStudentAnswer(answer_id, student_profile_id) {
   try {
     return await makeRequest(
-      `/api/student/homework-answers/${answer_id}?student_profile_id=${studnet_profile_id}`,
+      `/api/student/homework-answers/${answer_id}?student_profile_id=${student_profile_id}`,
+      'DELETE',
     )
   } catch (error) {
     console.error('Произошла ошибка при удалении ответа ученика', error)
@@ -1006,14 +999,14 @@ export async function getWSToken() {
       console.warn('Токен авторизации не найден перед запросом ws/token')
       console.warn('Доступные cookies:', document.cookie)
     }
-    
+
     const response = await makeGetRequest('ws/token')
-    
+
     if (!response || !response.ws_token) {
       console.error('Не удалось получить ws_token из ответа:', response)
       throw new Error('ws_token не найден в ответе сервера')
     }
-    
+
     return response
   } catch (error) {
     console.error('Произошла ошибка при получении токена для WebSocket', error)
@@ -1157,7 +1150,7 @@ export async function getAllStudentHomework(student_id) {
     const result = await makeGetRequest(`/api/all-homeworks-by-student/${student_id}`)
     console.log(result)
     console.log('all-homeworks-by-student >>>>>>>>>>>>>>>>>>>>')
-    return (result)
+    return result
   } catch (error) {
     console.error('Произошла ошибка при получении всего домашнего задания ученика', error)
   }

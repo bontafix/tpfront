@@ -62,6 +62,7 @@
       @close="toggleModal('editHomework')"
       :files="filesAnswer"
       @edit-files="updateFilesAnswer"
+      :currentSubject="currentSubject"
     />
   </transition>
 </template>
@@ -151,10 +152,10 @@ const updateFilesAnswer =  async (updatedFiles) => {
   try {
     filesAnswer.value = updatedFiles;
     const formData = new FormData();
-    
+
     // Фильтруем только новые файлы (объекты File), исключая существующие (строки URL)
     const newFiles = updatedFiles.filter(f => f.file instanceof File);
-    
+
     if(updatedFiles.length === 0) {
       // Если пользователь удалил все файлы, отправляем пустую строку
       formData.append('files', '');
@@ -167,10 +168,10 @@ const updateFilesAnswer =  async (updatedFiles) => {
     // Если newFiles.length === 0, но updatedFiles.length > 0,
     // значит остались только существующие файлы (строки URL),
     // и мы не отправляем ничего, так как они уже на сервере
-    
+
     await setStudentHomework(homeworkId.value, currentSubject.value.id, formData);
     console.log('Файлы успешно обновлены для ДЗ:', homeworkId.value);
-    
+
     // Обновляем данные урока в swiper после успешного сохранения
     if (studentCabinetSwiper.value && studentCabinetSwiper.value.updateLessonHomeworkAnswers) {
       await studentCabinetSwiper.value.updateLessonHomeworkAnswers(homeworkId.value, updatedFiles);
