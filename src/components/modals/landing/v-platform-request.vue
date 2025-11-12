@@ -161,7 +161,7 @@ onMounted(async () => {
   const changedTypes = types.map((item) => ({
     id: item.id,
     name: '',
-    icon: item.icon,
+    type_connect: item.type_connect
   }))
   contactTypes.value = [...changedTypes]
 })

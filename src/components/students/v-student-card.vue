@@ -62,7 +62,8 @@
                     </template>
                </p>
                 <p class="student-card__info-title" v-else>
-                  <img v-if="item.icon" :src="getIconPath(item.icon)" :alt="item.title" />
+                  <img v-if="item.icon.type_connect === 'Telegram'" src="/src/assets/images/telegram.svg" :alt="item.title" />
+                  <img v-if="item.icon.type_connect === 'WhatsApp'" src="/src/assets/images/whatsapp.svg" :alt="item.title" />
                   <a
                     :href="getConnectLink(item)"
                     class="contact-link"
@@ -210,17 +211,6 @@ const deleteStudent = (item) => {
   if(!isSelected.value) {
     emit('delete', item)
   }
-}
-
-const getIconPath = (type_connect) => {
-  if (type_connect.type_connect === 'Telegram') {
-    return '/src/assets/images/telegram.svg'
-  } else if (type_connect.type_connect === 'WhatsApp') {
-    return '/src/assets/images/whatsapp.svg'
-  } else if(type_connect && type_connect.icon) {
-    return `${domain}/${type_connect.icon}`
-  }
-  return null
 }
 
 const getConnectLink = (item) =>{

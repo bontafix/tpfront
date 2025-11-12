@@ -79,6 +79,10 @@
               <div v-if="item.icon" class="flex items-center gap-2">
                 <img :src="getImageIcon(item.icon)" alt="" class="select-item-icon">
               </div>
+              <div v-else-if="item.type_connect && item.type_connect !== 'Phone'" class="flex items-center gap-2">
+                <img v-if="item.type_connect === 'Telegram'" src="/src/assets/images/telegram.svg" :alt="item.title" />
+                <img v-if="item.type_connect === 'WhatsApp'" src="/src/assets/images/whatsapp.svg" :alt="item.title" />
+              </div>
               <span v-else-if="containsHtml(getItemDisplayText(item))" v-html="getItemDisplayText(item)"></span>
               <span v-else>
                 {{ getItemDisplayText(item) }}
@@ -90,6 +94,10 @@
               <img :src="getImageIcon(item.icon)" alt="" class="select-item-icon">
               <span v-html="getItemDisplayText(item)"></span>
             </div>
+            <div v-else-if="item.type_connect && item.type_connect !== 'Phone'" class="flex items-center gap-2">
+                <img v-if="item.type_connect === 'Telegram'" src="/src/assets/images/telegram.svg" :alt="item.title" />
+                <img v-if="item.type_connect === 'WhatsApp'" src="/src/assets/images/whatsapp.svg" :alt="item.title" />
+              </div>
             <span v-else-if="containsHtml(getItemDisplayText(item))" v-html="getItemDisplayText(item)"></span>
             <span v-else-if="getItemDisplayText(item)">
               {{ getItemDisplayText(item) }}
