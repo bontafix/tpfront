@@ -107,8 +107,6 @@ const periodicityDays = ref([
   { id: 7, text: 'ВС', full_name: 'Воскресенье', active: false, day_of_week: 7 },
 ])
 
-const stableForm = ref({}) // Данные формы для отправки
-
 const props = defineProps({
   ruleData: {
     type: Object,

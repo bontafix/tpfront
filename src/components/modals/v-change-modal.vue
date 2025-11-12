@@ -56,12 +56,16 @@ const toggleDeleteScheduleModal = () => {
   emit('toggleLessonModals', 'delete_schedule')
 }
 
-const formSubmitted = (requestBody) => {
+const formSubmitted = (data) => {
   console.log(props.lesson)
+  const requestBody = {};
   requestBody['student_id'] = props.lesson.student_id
   requestBody['group_id'] = props.lesson.group_id
   requestBody['lesson_id'] = props.lesson.id || props.lesson.lesson_id
+  requestBody['repeat_until'] = data['repeat_until']
   requestBody['time_zone_teacher'] = teacherTimeZone.value
+  requestBody['rule'] = ruleData.value;
+  requestBody['updated_rule'] = data;
   editRule(requestBody, updatedStableOrder).then(() => {
     console.log('Выполнили запрос')
   })

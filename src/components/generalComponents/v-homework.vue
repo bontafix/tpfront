@@ -115,7 +115,7 @@
       <h3 class="v-home__lesson-homework-prev-title">Ответ ученика</h3>
       <v-files-handler v-model="studentAnswer" />
       <textarea
-        v-if="!noHomework && !isHwCompleted && !submissionAnswer"
+        v-if="!noHomework && !isHwCompleted && !submissionAnswer && canSave"
         class="v-home__lesson-homework-text mt-2"
         v-model="homeworkText"
         @paste="handleTextPasteEvent"
@@ -306,13 +306,13 @@ const formatFiles = (files, pathField = 'file_url', nameField = 'file_url') => {
   return files.map(file => {
     const filePath = file[pathField] || file.file_path
     const pathSeparator = filePath?.startsWith('/') ? '' : '/'
-    
+
     return {
       id: file.id,
       name: file[nameField]?.replace('homework_files/', '') || file.file_name,
       size: file.file_size || 0,
-      file: pathField === 'file_url' 
-        ? `${domainDownload}${pathSeparator}${filePath}` 
+      file: pathField === 'file_url'
+        ? `${domainDownload}${pathSeparator}${filePath}`
         : `${domainDownload}/homework_answers${pathSeparator}${filePath}`,
       description: file.description || file.comment || '',
       homework_id: file.homework_id,
@@ -329,15 +329,15 @@ const formatFilesToken = (files, pathField = 'file_url', nameField = 'file_url')
   return files.map(file => {
     const filePath = file[pathField] || file.file_path
     const pathSeparator = filePath?.startsWith('/') ? '' : '/'
-    
+
     return {
       id: file.id,
       name: file[nameField]?.replace('homework_files/', '') || file.file_name,
       size: file.file_size || 0,
-      file: pathField === 'file_url' 
-        ? `${domainDownload}${pathSeparator}${filePath}` 
+      file: pathField === 'file_url'
+        ? `${domainDownload}${pathSeparator}${filePath}`
         : `${domainDownload}/homework_answers${pathSeparator}${filePath}`,
-      file_token: { ...file, domainDownload},  
+      file_token: { ...file, domainDownload},
       description: file.description || file.comment || '',
       homework_id: file.homework_id,
       uploaded_at: file.uploaded_at,
@@ -373,6 +373,9 @@ const homeworkFileAdded = (newFiles) => {
 }
 
 const saveHomework = () => {
+  if (!canSave.value) {
+    return
+  }
   console.log('Сохранение домашнего задания...')
   console.log('Список файлов при сохранении:', filesList.value)
   console.log('Новая дата --- ', formatDateToBase(deadline.value))
@@ -437,11 +440,11 @@ const handleSaveFiles = (files) => {
 
 const homeworkFileRemoved = (file) => {
   console.log('Удален файл:', file)
-  
+
   // v-model автоматически синхронизирует filesList через watch на internalFiles,
   // поэтому ручная фильтрация не нужна.
   // Этот обработчик используется для дополнительной логики, например:
-  
+
   // Если это файл с сервера (не новый), можно добавить API-запрос на удаление
   if (!file._isNewFile && file.id) {
     console.log('Файл с сервера удален из локального списка. ID:', file.id)

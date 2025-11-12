@@ -213,8 +213,13 @@ const deleteStudent = (item) => {
 }
 
 const getIconPath = (type_connect) => {
-  if(type_connect && type_connect.icon)
+  if (type_connect.type_connect === 'Telegram') {
+    return '/src/assets/images/telegram.svg'
+  } else if (type_connect.type_connect === 'WhatsApp') {
+    return '/src/assets/images/whatsapp.svg'
+  } else if(type_connect && type_connect.icon) {
     return `${domain}/${type_connect.icon}`
+  }
   return null
 }
 
