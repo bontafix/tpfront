@@ -33,7 +33,8 @@
               >
                 <template v-if="col.key === 'contact' && !item['phone_number']"> - {{ item['phone_number'] }} </template>
                 <template v-else-if="col.key === 'contact'">
-                  <img v-if="item['type_connect']?.icon" :src="getIconPath(item['type_connect']) " alt="">
+                  <img v-if="item['type_connect']?.type_connect === 'Telegram'" src="/src/assets/images/telegram.svg" alt="">
+                  <img v-else-if="item['type_connect']?.type_connect === 'WhatsApp'" src="/src/assets/images/whatsapp.svg" alt="">
                   <a
                     :href="getConnectLink(item)"
                     :class="{'contact-link' : item.type_connect?.icon, 'pl-8': !item.type_connect?.icon}"
@@ -213,12 +214,6 @@ const getPath = (item) => {
 const deleteItem = (item) => {
   store.setDeletedStudent(item)
   emit('toggle-modal', 'deleteModal')
-}
-
-const getIconPath = (type_connect) => {
-  if(type_connect && type_connect.icon)
-    return `${domain}/${type_connect.icon}`
-  return null
 }
 
 const getConnectLink = (item) =>{
