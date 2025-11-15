@@ -6,177 +6,114 @@
           <div class="loader"></div>
         </div>
         <div class="v-home__container layout" v-if="!isLoading && allDisplayLessons.length">
-           <swiper
-           v-if="allDisplayLessons.length > 0"
-            class="v-home__left"
-            ref="swiperRef"
-            v-bind="swiperOptions"
-            :modules="modules"
-            :initial-slide="initialSlideIndex"
-            @slideChange="onSlideChange"
-            :space-between="30"
-          >
-            <swiper-slide
-              class="v-student-analytics__prev-item prev-lesson"
+          <swiper v-if="allDisplayLessons.length > 0" class="v-home__left" ref="swiperRef" v-bind="swiperOptions"
+            :modules="modules" :initial-slide="initialSlideIndex" @slideChange="onSlideChange" :space-between="30">
+            <swiper-slide class="v-student-analytics__prev-item prev-lesson"
               v-for="(lessonData, index) in allDisplayLessons"
-              :key="`${getLessonIdentifier(lessonData)}-${index}-${lessonData.dateKey}`"
-            >
-            <div class="v-home__lesson">
-              <div class="v-home__lesson-info">
-                <h1 class="v-home__lesson-title">
-                  {{ getLessonTitle(lessonData) }} ({{ formatDisplayDate(lessonData.date) }}):
-                  <span>
-                    {{ lessonData.student_name }}
-                    <span class="v-home__lesson-time">
-                      {{ formatTime(lessonData.start_time) }} -
-                      {{ formatTime(lessonData.end_time) }}
+              :key="`${getLessonIdentifier(lessonData)}-${index}-${lessonData.dateKey}`">
+              <div class="v-home__lesson">
+                <div class="v-home__lesson-info">
+                  <h1 class="v-home__lesson-title">
+                    {{ getLessonTitle(lessonData) }} ({{ formatDisplayDate(lessonData.date) }}):
+                    <span>
+                      {{ lessonData.student_name }}
+                      <span class="v-home__lesson-time">
+                        {{ formatTime(lessonData.start_time) }} -
+                        {{ formatTime(lessonData.end_time) }}
+                      </span>
                     </span>
-                  </span>
-                </h1>
-                <div class="flex gap-3">
-                  <div class="home-swiper-button-prev">
-                    <img
-                    class="rotate-180 day-el"
-                    src="/src/assets/images/arrow-right-home-day.svg"
-                    alt=""
-                    />
-                  <img
-                    class="rotate-180 night-el"
-                    src="/src/assets/images/arrow-right-home-night.svg"
-                    alt=""
-                  />
-                  </div>
-                  <div class="home-swiper-button-next">
-                    <img class="day-el" src="/src/assets/images/arrow-right-home-day.svg" alt="" />
-                    <img
-                      class="night-el"
-                      src="/src/assets/images/arrow-right-home-night.svg"
-                      alt=""
-                    />
+                  </h1>
+                  <div class="flex gap-3">
+                    <div class="home-swiper-button-prev">
+                      <img class="rotate-180 day-el" src="/src/assets/images/arrow-right-home-day.svg" alt="" />
+                      <img class="rotate-180 night-el" src="/src/assets/images/arrow-right-home-night.svg" alt="" />
+                    </div>
+                    <div class="home-swiper-button-next">
+                      <img class="day-el" src="/src/assets/images/arrow-right-home-day.svg" alt="" />
+                      <img class="night-el" src="/src/assets/images/arrow-right-home-night.svg" alt="" />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="v-home__lesson-container">
-                <div class="v-home__lesson-block">
-                  <div
-                    class="v-home__lesson-problems v-home__lesson-sec"
-                    v-if="getPreviousProblemsForLesson(getLessonIdentifier(lessonData)).length"
-                  >
-                    <h2 class="v-home__subtitle subtitle">Проблемы прошлого занятия</h2>
-                    <ul class="v-home__lesson-problems-list">
-                      <li
-                        class="v-home__lesson-problems-list-item problem"
-                        v-for="problem in getPreviousProblemsForLesson(getLessonIdentifier(lessonData))"
-                        :key="problem.id"
-                      >
-                        <div class="problem__close">
-                          <img src="/src/assets/images/flash.svg" alt="" />
-                        </div>
-                        <span class="problem__title">
-                          {{ problem.problem_text }}
-                        </span>
-                      </li>
-                    </ul>
+                <div class="v-home__lesson-container">
+                  <div class="v-home__lesson-block">
+                    <div class="v-home__lesson-problems v-home__lesson-sec"
+                      v-if="getPreviousProblemsForLesson(getLessonIdentifier(lessonData)).length">
+                      <h2 class="v-home__subtitle subtitle">Проблемы прошлого занятия</h2>
+                      <ul class="v-home__lesson-problems-list">
+                        <li class="v-home__lesson-problems-list-item problem"
+                          v-for="problem in getPreviousProblemsForLesson(getLessonIdentifier(lessonData))"
+                          :key="problem.id">
+                          <div class="problem__close">
+                            <img src="/src/assets/images/flash.svg" alt="" />
+                          </div>
+                          <span class="problem__title">
+                            {{ problem.problem_text }}
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="v-home__lesson-themes v-home__lesson-sec"
+                      :class="{ 'mb-3': lessonData.status === 'future' }">
+                      <h2 class="v-home__subtitle subtitle">
+                        {{ getThemesTitle(lessonData.status) }}
+                      </h2>
+                      <div v-if="isLessonDataLoading(getLessonIdentifier(lessonData))" class="lesson-data-loader">
+                        <div class="mini-loader"></div>
+                      </div>
+                      <ul class="v-home__lesson-themes-list" v-else>
+                        <li class="v-home__lesson-themes-list-item theme" :data-theme-id="theme.id"
+                          v-for="theme in getThemesForLesson(getLessonIdentifier(lessonData))" :key="theme.id">
+                          <span class="theme__title"> {{ theme.name }} </span>
+                          <div class="theme__close"
+                            @click="() => deleteTheme(theme.id, getLessonIdentifier(lessonData))">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
+                              fill="none">
+                              <path d="M9 3L3 9M3 3L9 9" stroke="#1D4ECC" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            </svg>
+                          </div>
+                        </li>
+                      </ul>
+                      <v-add-field v-if="!isLessonDataLoading(getLessonIdentifier(lessonData))"
+                        :placeholder="'Тема занятия'"
+                        @submit="(value) => submitTheme(value, getLessonIdentifier(lessonData))" />
+                    </div>
                   </div>
-                  <div class="v-home__lesson-themes v-home__lesson-sec" :class="{'mb-3': lessonData.status === 'future'}">
+                  <div class="v-home__lesson-current-problems v-home__lesson-sec" v-if="lessonData.status !== 'future'">
                     <h2 class="v-home__subtitle subtitle">
-                      {{ getThemesTitle(lessonData.status) }}
+                      {{ getProblemsTitle(lessonData.status) }}
                     </h2>
                     <div v-if="isLessonDataLoading(getLessonIdentifier(lessonData))" class="lesson-data-loader">
                       <div class="mini-loader"></div>
                     </div>
                     <ul class="v-home__lesson-themes-list" v-else>
-                      <li
-                        class="v-home__lesson-themes-list-item theme"
-                        :data-theme-id="theme.id"
-                        v-for="theme in getThemesForLesson(getLessonIdentifier(lessonData))"
-                        :key="theme.id"
-                      >
-                        <span class="theme__title"> {{ theme.name }} </span>
-                        <div class="theme__close" @click="() => deleteTheme(theme.id, getLessonIdentifier(lessonData))">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="12"
-                            height="12"
-                            viewBox="0 0 12 12"
-                            fill="none"
-                          >
-                            <path
-                              d="M9 3L3 9M3 3L9 9"
-                              stroke="#1D4ECC"
-                              stroke-width="1.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            />
+                      <li class="v-home__lesson-themes-list-item theme"
+                        v-for="problem in getProblemsForLesson(getLessonIdentifier(lessonData))" :key="problem.id">
+                        <span class="theme__title"> {{ problem.problem_text }} </span>
+                        <div class="theme__close"
+                          @click="() => deleteProblem(problem.id, getLessonIdentifier(lessonData))">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
+                            fill="none">
+                            <path d="M9 3L3 9M3 3L9 9" stroke="#FF3A3A" stroke-width="1.5" stroke-linecap="round"
+                              stroke-linejoin="round" />
                           </svg>
                         </div>
                       </li>
                     </ul>
-                    <v-add-field
-                      v-if="!isLessonDataLoading(getLessonIdentifier(lessonData))"
-                      :placeholder="'Тема занятия'"
-                      @submit="(value) => submitTheme(value, getLessonIdentifier(lessonData))"
-                    />
+                    <v-add-field v-if="!isLessonDataLoading(getLessonIdentifier(lessonData))"
+                      @submit="(value) => submitProblem(value, getLessonIdentifier(lessonData))"
+                      :placeholder="'Проблема'" />
                   </div>
+                  <v-homework ref="homeworkRef" @toggle-modal="toggleModal" @save-homework="saveHomework"
+                    @save-submission="saveSubmission" :lesson_id="getLessonIdentifier(lessonData)"
+                    :last-homework="getLastHomeworkForLesson(getLessonIdentifier(lessonData))"
+                    :no-prev-hw="!hasLastHomeworkForLesson(getLessonIdentifier(lessonData))" :mark_postition="'top'"
+                    :deletable="false" :homePageMode="getHwMode(lessonData)" />
                 </div>
-                <div class="v-home__lesson-current-problems v-home__lesson-sec" v-if="lessonData.status !== 'future'">
-                  <h2 class="v-home__subtitle subtitle">
-                    {{ getProblemsTitle(lessonData.status) }}
-                  </h2>
-                  <div v-if="isLessonDataLoading(getLessonIdentifier(lessonData))" class="lesson-data-loader">
-                    <div class="mini-loader"></div>
-                  </div>
-                  <ul class="v-home__lesson-themes-list" v-else>
-                    <li
-                      class="v-home__lesson-themes-list-item theme"
-                      v-for="problem in getProblemsForLesson(getLessonIdentifier(lessonData))"
-                      :key="problem.id"
-                    >
-                      <span class="theme__title"> {{ problem.problem_text }} </span>
-                      <div class="theme__close" @click="() => deleteProblem(problem.id, getLessonIdentifier(lessonData))">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="12"
-                          height="12"
-                          viewBox="0 0 12 12"
-                          fill="none"
-                        >
-                          <path
-                            d="M9 3L3 9M3 3L9 9"
-                            stroke="#FF3A3A"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </div>
-                    </li>
-                  </ul>
-                  <v-add-field
-                    v-if="!isLessonDataLoading(getLessonIdentifier(lessonData))"
-                    @submit="(value) => submitProblem(value, getLessonIdentifier(lessonData))"
-                    :placeholder="'Проблема'"
-                  />
-                </div>
-                <v-homework
-                  ref="homeworkRef"
-                  @toggle-modal="toggleModal"
-                  @save-homework="saveHomework"
-                  @save-submission="saveSubmission"
-                  :lesson_id="getLessonIdentifier(lessonData)"
-                  :last-homework="getLastHomeworkForLesson(getLessonIdentifier(lessonData))"
-                  :no-prev-hw="!hasLastHomeworkForLesson(getLessonIdentifier(lessonData))"
-                  :mark_postition="'top'"
-                  :deletable="false"
-                />
               </div>
-            </div>
-          </swiper-slide>
+            </swiper-slide>
           </swiper>
-          <v-home-right
-            @change-slide="changeSlide"
-            :current-slide="currentSlide"
-          />
+          <v-home-right @change-slide="changeSlide" :current-slide="currentSlide" />
         </div>
         <div class="layout" v-show="allDisplayLessons.length === 0 && !isLoading">
           <div class="null-screen">
@@ -295,6 +232,24 @@ const formatDisplayDate = (date) => {
       month: '2-digit'
     })
   }
+}
+
+const getHwMode = (lessonData) => {
+  const currentHomework = lastHomeworkByLesson.value[getLessonIdentifier(lessonData)]
+  if (currentHomework) {
+    const arr = currentHomework.map((item) => {
+      if (item.submissions?.length) {
+        return true
+      }
+      return false
+    })
+    if (arr.includes(true)) {
+      return 'completed'
+    } else {
+      return 'previous'
+    }
+  }
+  return 'previous'
 }
 
 const parseTime = (timeString) => {
@@ -752,7 +707,7 @@ const handleSaveFiles = (files) => {
   }
 }
 
-const   saveHomework = async (homework_data) => {
+const saveHomework = async (homework_data) => {
   try {
     const hwFormData = new FormData()
 
@@ -777,24 +732,24 @@ const   saveHomework = async (homework_data) => {
       throw new Error('Не выбран урок для сохранения домашнего задания')
     }
     let response;
-    if(studentId && !groupId) {
-        response = await setLessonHomeWork(lessonId, hwFormData)
-        let message = response?.data?.message
-        let requestType = 'success'
-        if(!message) {
-          requestType = 'error'
-          message = 'Произошла ошибка при добавлении дз'
-        }
-        emitter.emit('notify', {
-          type: requestType,
-          message: message
-        })
+    if (studentId && !groupId) {
+      response = await setLessonHomeWork(lessonId, hwFormData)
+      let message = response?.data?.message
+      let requestType = 'success'
+      if (!message) {
+        requestType = 'error'
+        message = 'Произошла ошибка при добавлении дз'
+      }
+      emitter.emit('notify', {
+        type: requestType,
+        message: message
+      })
     } else {
       hwFormData.append('lesson_id', lessonId)
       response = await createHomeworkGroup(groupId, hwFormData)
       let message = response?.data?.message
       let requestType = 'success'
-      if(!message) {
+      if (!message) {
         requestType = 'error'
         message = 'Произошла ошибка при установки оценки за дз'
       }
@@ -877,7 +832,7 @@ const connectWebSocket = () => {
       if (event.data !== 'ping') {
         // WebSocket message received
       }
-      if(event.data.includes('lesson_started') || event.data.includes('lesson_ended')) {
+      if (event.data.includes('lesson_started') || event.data.includes('lesson_ended')) {
         console.log('Урока закуончился')
         loadData()
       }
@@ -916,7 +871,7 @@ const cleanup = () => {
 // Lifecycle hooks
 onMounted(async () => {
   await loadData()
- /*  connectWebSocket() */
+  /*  connectWebSocket() */
 })
 
 onBeforeUnmount(() => {
@@ -946,8 +901,13 @@ onUnmounted(() => {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .v-home__lesson-date {
@@ -971,11 +931,13 @@ onUnmounted(() => {
   font-weight: 500;
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.3s ease;
 }
 
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 
