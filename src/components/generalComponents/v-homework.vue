@@ -103,6 +103,11 @@
           Сохранить
         </button>
       </div>
+
+      <button class="v-home__lesson-homework-button save mob" v-show="!isHwCompleted && !submissionAnswer"
+        :class="{ unactive: !hasChanges }" @click="saveHomework">
+        Сохранить
+      </button>
     </div>
   </div>
 </template>
@@ -339,7 +344,7 @@ const homeworkFileAdded = (newFiles) => {
 
 const saveHomework = () => {
   if (isSubmissionsCompleted.value) {
-    return 
+    return
   }
   console.log('Сохранение домашнего задания...')
   console.log('Список файлов при сохранении:', filesList.value)
