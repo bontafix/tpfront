@@ -4,64 +4,41 @@
       <div class="flex w-full justify-between">
         <h2 class="v-home__subtitle subtitle">{{ sectionTitle }}</h2>
         <div @click="deleteHomework" v-if="deletable">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g opacity="0.32">
-              <path d="M15 5L5 15M5 5L15 15" stroke="#717680" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
-              </g>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g opacity="0.32">
+              <path d="M15 5L5 15M5 5L15 15" stroke="#717680" stroke-width="1.67" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </g>
           </svg>
         </div>
 
       </div>
       <div class="v-home__lesson-homework-buttons" v-if="mode === 'all'">
-        <div
-          class="v-home__lesson-homework-header-button"
-          :class="{ active: !newHomework }"
-          @click="() => toggleHomework(false)"
-        >
+        <div class="v-home__lesson-homework-header-button" :class="{ active: !newHomework }"
+          @click="() => toggleHomework(false)">
           Предыдущее
         </div>
 
-        <div
-          class="v-home__lesson-homework-header-button"
-          :class="{ active: newHomework }"
-          @click="toggleHomework"
-        >
+        <div class="v-home__lesson-homework-header-button" :class="{ active: newHomework }" @click="toggleHomework">
           Новое
         </div>
       </div>
     </div>
 
     <div class="v-home__lesson-homework-new" v-if="newHomework">
-      <textarea
-        v-if="!noHomework"
-        class="v-home__lesson-homework-text"
-        v-model="homeworkText"
+      <textarea v-if="!noHomework" class="v-home__lesson-homework-text" v-model="homeworkText"
         @paste="handleTextPasteEvent"
-        placeholder="Введите текст домашнего задания. Для вставки файлов используйте Ctrl+V"
-      ></textarea>
+        placeholder="Введите текст домашнего задания. Для вставки файлов используйте Ctrl+V"></textarea>
 
-      <v-files-handler
-        ref="fileHandler"
-        v-model="filesList"
-        v-if="!noHomework"
-        @file-removed="homeworkFileRemoved"
-        @file-added="homeworkFileAdded"
-        @update:modelValue="updateFilesList"
-      />
+      <v-files-handler ref="fileHandler" v-model="filesList" v-if="!noHomework" @file-removed="homeworkFileRemoved"
+        @file-added="homeworkFileAdded" @update:modelValue="updateFilesList" />
 
       <div class="v-home__lesson-homework-deadline" v-if="!noHomework && mode === 'all'">
         <div class="v-home__lesson-homework-block">
           <div class="flex gap-3 items-center" v-if="!nextLesson">
             Дедлайн
-            <VueDatePicker
-              class="custom-datepicker"
-              v-model="deadline"
-              :locale="'ru-ru'"
-              :auto-apply="true"
-              :format="formatDate"
-              :teleport="true"
-              :append-to-body="true"
-            >
+            <VueDatePicker class="custom-datepicker" v-model="deadline" :locale="'ru-ru'" :auto-apply="true"
+              :format="formatDate" :teleport="true" :append-to-body="true">
               <template #clear-icon="{ clear }"> </template>
             </VueDatePicker>
           </div>
@@ -71,11 +48,7 @@
             <img class="day-el" src="/src/assets/images/add-file-day.svg" alt="" />
             <img class="night-el" src="/src/assets/images/add-file-night.svg" alt="" />
           </div>
-          <button
-            class="v-home__lesson-homework-button save"
-            :class="{ unactive: !canSave }"
-            @click="saveHomework"
-          >
+          <button class="v-home__lesson-homework-button save" :class="{ unactive: !canSave }" @click="saveHomework">
             Сохранить
           </button>
         </div>
@@ -88,11 +61,7 @@
 
         <label for="no-homework">Без задания</label>
       </div>
-      <button
-        class="v-home__lesson-homework-button save mob"
-        :class="{ unactive: !canSave }"
-        @click="saveHomework"
-      >
+      <button class="v-home__lesson-homework-button save mob" :class="{ unactive: !canSave }" @click="saveHomework">
         Сохранить
       </button>
     </div>
@@ -102,28 +71,19 @@
         <p class="block-description">{{ homeWork }}</p>
         <div class="flex gap-3 items-center" v-if="!nextLesson">
           <p class="block-description">Дедлайн </p>
-          <input
-            class="styled-datepicker"
-            :class="{ red: isDeadlineOverdue, green: !isDeadlineOverdue }"
-            type="date"
-            readonly
-            :value="previousDeadline"
-          />
+          <input class="styled-datepicker" :class="{ red: isDeadlineOverdue, green: !isDeadlineOverdue }" type="date"
+            readonly :value="previousDeadline" />
         </div>
       </div>
-      <v-files-handler v-model="prevFilesList" :deletable="false"/>
+      <v-files-handler v-model="prevFilesList" :deletable="false" />
       <h3 class="v-home__lesson-homework-prev-title">Ответ ученика</h3>
       <v-files-handler v-model="studentAnswer" />
-      <textarea
-        v-if="!noHomework && !isHwCompleted && !submissionAnswer && canSave"
-        class="v-home__lesson-homework-text mt-2"
-        v-model="homeworkText"
-        @paste="handleTextPasteEvent"
-        placeholder="Ваш комментарий"
-      ></textarea>
+      <textarea v-if="!noHomework && !isHwCompleted && !submissionAnswer && !isSubmissionsCompleted"
+        class="v-home__lesson-homework-text mt-2" v-model="homeworkText" @paste="handleTextPasteEvent"
+        placeholder="Ваш комментарий"></textarea>
       <div class="v-home__lesson-homework-footer mt-2">
         <div class="flex justify-between items-center w-full">
-            <p>
+          <p>
             {{ submissionAnswer }}
           </p>
 
@@ -133,25 +93,21 @@
               <v-styled-select :is-readonly="true" :default-value="submissionMark" />
             </template>
             <template v-else>
-              <v-styled-select
-                :is-readonly="false"
-                :default-value="mark"
-                @update:model-value="(value) => selectMark(value)"
-                :items="[2, 3, 4, 5]"
-                :position="'top'"
-              />
+              <v-styled-select :is-readonly="false" :default-value="mark"
+                @update:model-value="(value) => selectMark(value)" :items="[2, 3, 4, 5]" :position="'top'" />
             </template>
           </div>
         </div>
-        <button
-          class="v-home__lesson-homework-button save"
-          v-show="!isHwCompleted && !submissionAnswer"
-          :class="{ unactive: !hasChanges }"
-          @click="saveHomework"
-        >
+        <button class="v-home__lesson-homework-button save" v-show="!isHwCompleted && !submissionAnswer"
+          :class="{ unactive: !hasChanges }" @click="saveHomework">
           Сохранить
         </button>
       </div>
+
+      <button class="v-home__lesson-homework-button save mob" v-show="!isHwCompleted && !submissionAnswer"
+        :class="{ unactive: !hasChanges }" @click="saveHomework">
+        Сохранить
+      </button>
     </div>
   </div>
 </template>
@@ -165,11 +121,16 @@ import VueDatePicker from '@vuepic/vue-datepicker'
 import vFilesModal from '../modals/v-files-modal.vue'
 import vFilesHandler from '../generalComponents/v-files-handler.vue'
 import vStyledSelect from '../generalComponents/v-styled-select.vue'
+import { useRoute } from 'vue-router'
 
 const props = defineProps({
   mode: {
     type: String,
     default: () => 'all',
+  },
+  homePageMode: {
+    type: String,
+    default: () => 'previous',
   },
   mark_position: {
     type: String,
@@ -211,6 +172,8 @@ const nextLesson = ref(false)
 const newHomework = ref(props.mode === 'all')
 const selectedMark = ref(null)
 
+const route = useRoute()
+
 const sectionTitle = computed(() => {
   return props.title || 'Домашнее задание'
 })
@@ -236,10 +199,10 @@ const studentAnswer = computed(() => {
 })
 
 const homeWork = computed(() => {
-  if(props.lastHomework && props.lastHomework.length > 0) {
+  if (props.lastHomework && props.lastHomework.length > 0) {
     return props.lastHomework[0].title || ''
   }
-  if(props.hwData) {
+  if (props.hwData) {
     return props.hwData.title
   }
   return ''
@@ -248,7 +211,7 @@ const homeWork = computed(() => {
 const previousDeadline = computed(() => {
   if (props.lastHomework && props.lastHomework.length > 0) {
     return props.lastHomework[0].due_date
-  } if(props.hwData) {
+  } if (props.hwData) {
     return props.hwData.due_date
   }
   return ''
@@ -257,7 +220,7 @@ const previousDeadline = computed(() => {
 const submissionMark = computed(() => {
   if (props.submissionData && props.submissionData.length) {
     return props.submissionData[0].grade
-  } else if(props.lastHomework){
+  } else if (props.lastHomework) {
     return props.lastHomework[0]?.submissions?.length ? props.lastHomework[0].submissions[0].grade : null
   }
   return null
@@ -266,7 +229,7 @@ const submissionMark = computed(() => {
 const submissionAnswer = computed(() => {
   if (props.submissionData && props.submissionData.length) {
     return props.submissionData[0].feedback || ''
-  } else if(props.lastHomework){
+  } else if (props.lastHomework) {
     return props.lastHomework[0]?.submissions?.length ? props.lastHomework[0].submissions[0].feedback : ''
   }
   return ''
@@ -274,6 +237,13 @@ const submissionAnswer = computed(() => {
 
 const isHwCompleted = computed(() => {
   return props.mode ? props.mode === 'completed' : true
+})
+
+const isSubmissionsCompleted = computed(() => {
+  if (route.name === 'home_teacher' && props.homePageMode === 'completed') {
+    return true
+  }
+  return false
 })
 
 const isDeadlineOverdue = computed(() => {
@@ -337,7 +307,7 @@ const formatFilesToken = (files, pathField = 'file_url', nameField = 'file_url')
       file: pathField === 'file_url'
         ? `${domainDownload}${pathSeparator}${filePath}`
         : `${domainDownload}/homework_answers${pathSeparator}${filePath}`,
-      file_token: { ...file, domainDownload},
+      file_token: { ...file, domainDownload },
       description: file.description || file.comment || '',
       homework_id: file.homework_id,
       uploaded_at: file.uploaded_at,
@@ -356,7 +326,7 @@ const selectMark = (value) => {
 }
 
 const openFilesModal = () => {
- emit('toggle-modal', 'files')
+  emit('toggle-modal', 'files')
 }
 
 // Обработчик обновления списка файлов из v-files-handler
@@ -373,7 +343,7 @@ const homeworkFileAdded = (newFiles) => {
 }
 
 const saveHomework = () => {
-  if (!canSave.value) {
+  if (isSubmissionsCompleted.value) {
     return
   }
   console.log('Сохранение домашнего задания...')
@@ -383,7 +353,7 @@ const saveHomework = () => {
   const conductedDate = new Date()
   let hwdata = null;
 
-  if(newHomework.value) {
+  if (newHomework.value) {
     hwdata = {
       title: homeworkText.value,
       due_date: formatDateToBase(deadline.value),
@@ -394,14 +364,14 @@ const saveHomework = () => {
     console.log('Данные для сохранения нового ДЗ:', hwdata)
     emit('save-homework', hwdata)
 
-  } else if(!newHomework.value && (props.lastHomework || props.hwData)) {
+  } else if (!newHomework.value && (props.lastHomework || props.hwData)) {
     const homeWorkId = props.lastHomework ? props.lastHomework[0].id : props.hwData.id
     hwdata = {
-        submission_date: formatDateToBase(conductedDate, 'yyyy-mm-dd'),
-        grade: String(selectedMark.value),
-        feedback: homeworkText.value,
-        conducted_date: formatDateToBase(conductedDate, 'yyyy-mm-dd'),
-        homework_id: homeWorkId,
+      submission_date: formatDateToBase(conductedDate, 'yyyy-mm-dd'),
+      grade: String(selectedMark.value),
+      feedback: homeworkText.value,
+      conducted_date: formatDateToBase(conductedDate, 'yyyy-mm-dd'),
+      homework_id: homeWorkId,
     }
     console.log('Данные для сохранения ответа на ДЗ:', hwdata)
     emit('save-submission', hwdata)
@@ -409,7 +379,7 @@ const saveHomework = () => {
 }
 
 const toggleHomework = (value = true) => {
-  if(!props.noPrevHw) {
+  if (!props.noPrevHw) {
     newHomework.value = value
   }
 }

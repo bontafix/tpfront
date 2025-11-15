@@ -1,110 +1,65 @@
 <template>
   <div class="v-styled-select" ref="selectContainer" v-click-outside="closeDropdown">
-    <div
-      class="v-styled-select__field"
-      :class="{ readonly: isReadonly }"
-      @click="toggleDropdownMenu"
-    >
+    <div class="v-styled-select__field" :class="{ readonly: isReadonly }" @click="toggleDropdownMenu">
       <div class="v-styled-select__value">
-        <img
-          src="/src/assets/images/studentIcon.svg"
-          alt=""
-          class="mr-2"
-          v-if="props.studentIcon"
-        />
+        <img src="/src/assets/images/studentIcon.svg" alt="" class="mr-2" v-if="props.studentIcon" />
         <div v-if="hasImage">
-          <img :src="imageContent" alt="">
+          <img v-if="imageContent.type_connect === 'Telegram'" src="/src/assets/images/telegram.svg" alt="" />
+          <img v-else-if="imageContent.type_connect === 'WhatsApp'" src="/src/assets/images/whatsapp.svg" alt="" />
+          <img v-else :src="imageContent.icon" alt="" />
         </div>
         <div v-else-if="hasHtmlContent" v-html="displayValue"></div>
-        <input
-          v-if="!displayValue && !hasImage"
-          class="dsd"
-          type="text"
-          readonly
-          value="-"
-        />
-        <input
-          v-if="displayValue"
-          class=""
-          type="text"
-          :value="displayValue"
-          readonly
-        />
+        <input v-if="!displayValue && !hasImage" class="dsd" type="text" readonly value="-" />
+        <input v-if="displayValue" class="" type="text" :value="displayValue" readonly />
       </div>
       <div class="v-styled-select__image" :class="imageClass" v-show="!isReadonly">
-        <svg
-          width="12"
-          height="8"
-          viewBox="0 0 12 8"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M1 1.5L6 6.5L11 1.5"
-            stroke="#717680"
-            stroke-width="1.66667"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
+        <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 1.5L6 6.5L11 1.5" stroke="#717680" stroke-width="1.66667" stroke-linecap="round"
+            stroke-linejoin="round" />
         </svg>
       </div>
     </div>
     <transition name="fade">
-      <ul
-        class="v-styled-select__list"
-        v-show="isDropdownMenu"
-        ref="listRef"
-        :style="dropdownStyle"
-      >
-        <li
-          class="v-styled-select__list-item"
-          v-for="(item, index) in items"
-          :key="index"
-          :class="{
-            selected: !isMultiselect ? isSelected(item) : false,
-          }"
-          @click="!isMultiselect ? selectSingle(item) : null"
-        >
+      <ul class="v-styled-select__list" v-show="isDropdownMenu" ref="listRef" :style="dropdownStyle">
+        <li class="v-styled-select__list-item" v-for="(item, index) in items" :key="index" :class="{
+          selected: !isMultiselect ? isSelected(item) : false,
+        }" @click="!isMultiselect ? selectSingle(item) : null">
           <template v-if="isMultiselect">
             <label class="checkbox-label" :for="'item-' + (item.id || index)">
               <div class="styled-checkbox">
-                <input
-                  type="checkbox"
-                  :id="'item-' + (item.id || index)"
-                  :checked="isSelected(item)"
-                  @change="() => toggleItem(item)"
-                />
+                <input type="checkbox" :id="'item-' + (item.id || index)" :checked="isSelected(item)"
+                  @change="() => toggleItem(item)" />
                 <label :for="'item-' + (item.id || index)"> </label>
               </div>
-              <div v-if="item.icon" class="flex items-center gap-2">
-                <img :src="getImageIcon(item.icon)" alt="" class="select-item-icon">
-              </div>
-              <div v-else-if="item.type_connect && item.type_connect !== 'Phone'" class="flex items-center gap-2">
-                <img v-if="item.type_connect === 'Telegram'" src="/src/assets/images/telegram.svg" :alt="item.title" />
-                <img v-if="item.type_connect === 'WhatsApp'" src="/src/assets/images/whatsapp.svg" :alt="item.title" />
-              </div>
-              <span v-else-if="containsHtml(getItemDisplayText(item))" v-html="getItemDisplayText(item)"></span>
-              <span v-else>
+              <span v-if="containsHtml(getItemDisplayText(item))" v-html="getItemDisplayText(item)"></span>
+              <span v-else-if="getItemDisplayText(item)">
                 {{ getItemDisplayText(item) }}
               </span>
+              <div v-else-if="item.type_connect && item.type_connect !== 'Phone'" class="flex items-center gap-2">
+                <img v-if="item.type_connect === 'Telegram'" src="/src/assets/images/telegram.svg" :alt="item.title" />
+                <img v-else-if="item.type_connect === 'WhatsApp'" src="/src/assets/images/whatsapp.svg"
+                  :alt="item.title" />
+              </div>
+              <div v-else-if="item.icon" class="flex items-center gap-2">
+                <img :src="getImageIcon(item.icon)" alt="" class="select-item-icon" />
+              </div>
             </label>
           </template>
           <template v-else>
-            <div v-if="item.icon" class="flex items-center gap-2">
-              <img :src="getImageIcon(item.icon)" alt="" class="select-item-icon">
-              <span v-html="getItemDisplayText(item)"></span>
-            </div>
-            <div v-else-if="item.type_connect && item.type_connect !== 'Phone'" class="flex items-center gap-2">
-                <img v-if="item.type_connect === 'Telegram'" src="/src/assets/images/telegram.svg" :alt="item.title" />
-                <img v-if="item.type_connect === 'WhatsApp'" src="/src/assets/images/whatsapp.svg" :alt="item.title" />
-              </div>
-            <span v-else-if="containsHtml(getItemDisplayText(item))" v-html="getItemDisplayText(item)"></span>
+            <span v-if="containsHtml(getItemDisplayText(item))" v-html="getItemDisplayText(item)"></span>
             <span v-else-if="getItemDisplayText(item)">
               {{ getItemDisplayText(item) }}
             </span>
-            <span v-else>
-              -
-            </span>
+            <div v-else-if="item.type_connect && item.type_connect !== 'Phone'" class="flex items-center gap-2">
+              <img v-if="item.type_connect === 'Telegram'" src="/src/assets/images/telegram.svg" :alt="item.title" />
+              <img v-else-if="item.type_connect === 'WhatsApp'" src="/src/assets/images/whatsapp.svg"
+                :alt="item.title" />
+            </div>
+            <div v-else-if="item.icon" class="flex items-center gap-2">
+              <img :src="getImageIcon(item.icon)" alt="" class="select-item-icon" />
+              <span v-html="getItemDisplayText(item)"></span>
+            </div>
+            <span v-else> - </span>
           </template>
         </li>
       </ul>
@@ -143,7 +98,7 @@ const props = defineProps({
   position: {
     type: String,
     default: '',
-    validator: val => ['', 'top'].includes(val)
+    validator: (val) => ['', 'top'].includes(val),
   },
 })
 
@@ -181,17 +136,17 @@ const getImageIcon = (icon) => {
 
 const hasImage = computed(() => {
   if (selectedValues.value.length === 0) {
-    return props.items?.length > 0 && props.items[0].icon ? true : false
+    return props.items?.length > 0 && (props.items[0].icon || (props.items[0].type_connect && props.item[0].type_connect !== 'Phone')) ? true : false
   }
-  return selectedValues.value.some((item) => item && item.icon)
+  return selectedValues.value.some((item) => item && (item.icon || (item.type_connect && item.type_connect !== 'Phone')))
 })
 
 const imageContent = computed(() => {
   if (selectedValues.value.length === 0) {
-    return props.items?.length > 0 && props.items[0].icon ? props.items[0].icon : ''
+    return props.items?.length > 0 && (props.items[0].icon || props.items[0].type_connect) ? props.items[0] : ''
   }
-  const imageItem = selectedValues.value.find((item) => item && item.icon)
-  if (imageItem) return `${domain}${imageItem.icon}`
+  const imageItem = selectedValues.value.find((item) => item && (item.icon || item.type_connect))
+  if (imageItem) return imageItem
   return ''
 })
 
@@ -199,9 +154,7 @@ const displayValue = computed(() => {
   if (selectedValues.value.length === 0) {
     return ''
   }
-  return selectedValues.value
-    .map((item) => getItemDisplayText(item))
-    .join(', ')
+  return selectedValues.value.map((item) => getItemDisplayText(item)).join(', ')
 })
 
 const hasHtmlContent = computed(() => {
@@ -219,7 +172,6 @@ const dropdownStyle = computed(() => ({
   position: 'absolute',
   zIndex: 1000,
 }))
-
 
 const imageClass = computed(() => ({
   openUp: shouldOpenUp.value,
@@ -239,9 +191,7 @@ const isSelected = (item) => {
 
 const toggleItem = (item) => {
   const itemId = getItemId(item)
-  const index = selectedValues.value.findIndex(
-    (selectedItem) => getItemId(selectedItem) === itemId,
-  )
+  const index = selectedValues.value.findIndex((selectedItem) => getItemId(selectedItem) === itemId)
 
   if (index >= 0) {
     selectedValues.value.splice(index, 1)
@@ -303,7 +253,6 @@ const toggleDropdownMenu = async (event) => {
   }
 }
 
-
 const closeDropdown = () => {
   isDropdownMenu.value = false
 }
@@ -324,7 +273,6 @@ const updateDropdownPosition = () => {
     shouldOpenUp.value = listHeight > spaceBelow && spaceAbove > spaceBelow
   }
 }
-
 
 onMounted(() => {
   window.addEventListener('resize', updateDropdownPosition)
@@ -385,4 +333,3 @@ defineExpose({
   updateSelection,
 })
 </script>
-
