@@ -343,7 +343,7 @@ const homeworkFileAdded = (newFiles) => {
 }
 
 const saveHomework = () => {
-  if (isSubmissionsCompleted.value) {
+  if (isSubmissionsCompleted.value && !newHomework.value) {
     return
   }
   console.log('Сохранение домашнего задания...')
