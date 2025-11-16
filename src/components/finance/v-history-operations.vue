@@ -126,7 +126,7 @@
                   </button> -->
                   <button
                     class="custom-btn light-red"
-                    @click="() => showDeleteOperationModal(operation.id)"
+                    @click="() => showDeleteOperationModal(operation)"
                   >
                     <svg
                       width="20"
