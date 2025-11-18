@@ -37,6 +37,7 @@ const props = defineProps({
   display: flex;
   flex-direction: column;
   gap: 20px;
+  cursor: pointer;
 }
 
 .blog__image {

@@ -10,7 +10,7 @@
         </a>
       </div>
 
-      <button class="primary-button blog-section__header-button" @click="openBlogPage">
+      <button class="primary-button blog-section__header-button" @click="openBlogsPage">
         Перейти в блог
       </button>
     </div>
@@ -22,6 +22,7 @@
           key === 0 && 'blog-section__lead-post blog-section__lead-post_mobile',
           key !== 0 && 'blog-section__classic-post',
         ]"
+        @click="() => openBlogPage(item.id)"
       >
         <template v-if="key === 0">
           <img
@@ -94,9 +95,12 @@ const router = useRouter()
 
 const news = ref()
 
-function openBlogPage() {
-  console.log('blog')
-  router.push({ name: 'blog' })
+function openBlogPage(id) {
+  router.push(`/blog/${id.toString()}`)
+}
+
+function openBlogsPage() {
+  router.push({ name: 'blogs' })
 }
 
 onMounted(async () => {
