@@ -7,10 +7,12 @@
                 <div class="blogs__bread-crumbs">
                     <a href="/" class="blogs__bread-crumb-title">Главная</a>
                     <img src="/src/assets/icons/strelka.svg" alt="Стрелка" class="blogs__strelka" />
-                    <p class="blogs__bread-crumb-title">Блог</p>
+                    <a href="/blogs" class="blogs__bread-crumb-title">Блог</a>
+                    <img src="/src/assets/icons/strelka.svg" alt="Стрелка" class="blogs__strelka" />
+                    <p class="blogs__bread-crumb-title">{{ data?.title }}</p>
                 </div>
 
-                <div class="blog__center-container" v-if="data.id">
+                <div class="blog__center-container" v-if="data?.id">
                     <LeftContainer :data="data" />
                     <RightContainer />
                 </div>
@@ -32,7 +34,7 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute()
 
-const data = ref({})
+const data = ref(null)
 
 onMounted(async () => {
     console.log('mounted')
