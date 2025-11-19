@@ -9,18 +9,40 @@
           <button class="primary-button" @click="pushToFaq">Перейти</button>
         </div>
       </div>
-      <div class="faq-section__container">
-        <div v-for="(item, index) in faqItems" :key="index" class="faq-section__item" :class="{ 'active': openedFaqIndex === index }">
-          <div class="faq-section__question" @click="toggleFaq(index)">
-            <h3>{{ item.question }}</h3>
+      <div class="faq-section__container" itemscope itemtype="https://schema.org/FAQPage">
+        <div
+          v-for="(item, index) in faqItems"
+          :key="index"
+          class="faq-section__item"
+          :class="{ 'active': openedFaqIndex === index }"
+          itemprop="mainEntity"
+          itemscope
+          itemtype="https://schema.org/Question"
+        >
+          <div
+            class="faq-section__question"
+            @click="toggleFaq(index)"
+            role="button"
+            :aria-expanded="openedFaqIndex === index ? 'true' : 'false'"
+            :aria-controls="`faq-answer-${index}`"
+            tabindex="0"
+          >
+            <h3 itemprop="name">{{ item.question }}</h3>
             <div class="faq-section__icon">
               <span v-if="openedFaqIndex === index"><img src="@/assets/icons/rev_strelka.svg"></span>
               <span v-else><img src="@/assets/icons/strelka.svg"></span>
             </div>
           </div>
-          <div class="faq-section__answer" :class="{ 'open': openedFaqIndex === index }">
+          <div
+            class="faq-section__answer"
+            :id="`faq-answer-${index}`"
+            :class="{ 'open': openedFaqIndex === index }"
+            itemprop="acceptedAnswer"
+            itemscope
+            itemtype="https://schema.org/Answer"
+          >
             <div class="faq-section__answer-content">
-              <p>{{ item.answer }}</p>
+              <p itemprop="text">{{ item.answer }}</p>
             </div>
           </div>
         </div>
@@ -38,7 +60,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import router from '@/router'
+import router from '@/router';
 
 const openedFaqIndex = ref(null);
 const faqItems = [
@@ -69,8 +91,6 @@ const toggleFaq = (index) => {
 };
 
 function pushToFaq() {
-  router.push({
-    name: 'faq',
-  })
+  router.push({ name: 'faq' });
 }
 </script>

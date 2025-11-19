@@ -14,7 +14,7 @@
     </div>
 
     <div class="blogs__items-container">
-      <Blog v-for="blog in currentBlogs" :key="blog.id" :blog="blog" />
+      <Blog v-for="blog in currentBlogs" :key="blog.id" :blog="blog" @click="() => openBlogPage(blog.id)" />
     </div>
 
     <div class="blogs__pagination">
@@ -72,11 +72,15 @@ const currentBlogs = computed(() => {
   return blogs.value[currentPage.value - 1] || []
 })
 
+function openBlogPage(id) {
+  router.push(`/blog/${id.toString()}`)
+}
+
 function goToPage(page) {
   if (page < 1 || page > pages.value) return
 
   currentPage.value = page
-  router.push(`/blog?page=${page.toString()}`)
+  router.push(`/blogs?page=${page.toString()}`)
   window.scrollTo(0, 0)
 }
 
@@ -90,11 +94,11 @@ async function getBlogs() {
       currentPage.value = pageFromUrl
     } else {
       currentPage.value = 1
-      router.replace(`/blog?page=1`)
+      router.replace(`/blogs?page=1`)
     }
   } else {
     currentPage.value = 1
-    router.replace(`/blog?page=1`)
+    router.replace(`/blogs?page=1`)
   }
 }
 

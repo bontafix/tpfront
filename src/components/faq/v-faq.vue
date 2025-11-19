@@ -1,21 +1,35 @@
 <template>
   <main>
     <Header />
-    <div class="content">
+
+    <section class="faq content">
       <h1 class="faq-title">FAQ</h1>
 
-      <div class="container-col">
+      <div class="faq-container container-col">
         <div class="faq-page-container">
-          <div v-for="(item, index) in faqItems" :key="index" class="faq-item"
-            :class="{ 'active': openedFaqIndex === index }">
-            <div class="faq-question" @click="toggleFaq(index)">
+          <div
+            v-for="(item, index) in faqItems"
+            :key="index"
+            class="faq-item"
+            :class="{ 'active': openedFaqIndex === index }"
+          >
+            <button
+              class="faq-question"
+              @click="toggleFaq(index)"
+              :aria-expanded="openedFaqIndex === index"
+              :aria-controls="'faq-answer-' + index"
+            >
               <h3 class="faq-question-text">{{ item.question }}</h3>
-              <div class="faq-icon">
-                <span v-if="openedFaqIndex === index"><img src="@/assets/icons/rev_strelka.svg"></span>
-                <span v-else><img src="@/assets/icons/strelka.svg"></span>
-              </div>
-            </div>
-            <div class="faq-answer" :class="{ 'open': openedFaqIndex === index }">
+              <span class="faq-icon">
+                <img :src="openedFaqIndex === index ? arrowUp : arrowDown" alt="" />
+              </span>
+            </button>
+
+            <div
+              :id="'faq-answer-' + index"
+              class="faq-answer"
+              v-show="openedFaqIndex === index"
+            >
               <div class="faq-answer-content">
                 <p class="inter-400">{{ item.answer }}</p>
               </div>
@@ -26,25 +40,32 @@
         <div class="ask-question">
           <h4 class="sub-title">Остались вопросы?</h4>
           <div class="container-row">
-            <a href="https://t.me/teacherplanner" class="tg-button">
-              <img src="../../assets/images/telegram.svg"> Написать в поддержку</a>
+            <a
+              href="https://t.me/teacherplanner"
+              class="tg-button"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="../../assets/images/telegram.svg" alt="Telegram" />
+              Написать в поддержку
+            </a>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <Footer />
   </main>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import '../../assets/scss/faq.scss';
 import Header from '../landing/blocks/Header.vue';
 import Footer from '../landing/blocks/Footer.vue';
-
 import { ref } from 'vue';
 
-const openedFaqIndex = ref(null);
+const openedFaqIndex = ref<number | null>(null);
+
 const faqItems = [
   {
     question: 'Нужно ли ученикам платить за доступ к платформе?',
@@ -90,14 +111,12 @@ const faqItems = [
     question: 'После проведения занятия, баланс ученика не изменился',
     answer: 'Если вы не будете использовать сервис, ваша учетная запись останется активной, и вы сможете вернуться в любое время без потери данных. Однако, если ваша учетная запись неактивна в течение длительного времени, мы можем связаться с вами для уточнения, желаете ли вы продолжить использование платформы'
   },
-
 ];
 
-const toggleFaq = (index) => {
-  if (openedFaqIndex.value === index) {
-    openedFaqIndex.value = null;
-  } else {
-    openedFaqIndex.value = index;
-  }
+const toggleFaq = (index: number) => {
+  openedFaqIndex.value = openedFaqIndex.value === index ? null : index;
 };
+
+const arrowUp = require('@/assets/icons/rev_strelka.svg');
+const arrowDown = require('@/assets/icons/strelka.svg');
 </script>

@@ -5,12 +5,12 @@ const props = defineProps<{
 </script>
 
 <template>
-    <div class="checkbox">
-        <div class="rounded-as-icon">
-            <img class="ci" src="../../../assets/icons/checkbox.svg" alt="x">
-        </div>
-        <p class="func-desc inter-400">{{ description }}</p>
+  <div class="checkbox" role="listitem">
+    <div class="rounded-as-icon" aria-hidden="true">
+      <img class="ci" src="../../../assets/icons/checkbox.svg" alt="" />
     </div>
+    <p class="func-desc inter-400">{{ description }}</p>
+  </div>
 </template>
 
 <style lang="scss" scoped>

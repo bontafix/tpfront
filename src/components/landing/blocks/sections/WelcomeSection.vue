@@ -1,19 +1,24 @@
 <template>
-  <section class="welcome" id="welcome">
+  <section class="welcome" id="welcome" itemscope itemtype="https://schema.org/Product">
     <div class="welcome__head">
-      <h1 class="welcome__title title">Teacher Planner</h1>
-      <p class="welcome__desc desc inter-400">
+      <h1 class="welcome__title title" itemprop="name">Teacher Planner</h1>
+      <p class="welcome__desc desc inter-400" itemprop="description">
         Цифровой инструмент современного репетитора с аналитикой занятий, кабинетом ученика и
         автоматическим учетом финансов
       </p>
     </div>
 
-    <img class="welcome__mobile-image" src="../../../../assets/images/mobile_desktop_main.jpg" alt="Mobile Image" />
+    <img
+      class="welcome__mobile-image"
+      src="../../../../assets/images/mobile_desktop_main.jpg"
+      alt="Teacher Planner для мобильных устройств"
+      itemprop="image"
+    />
 
     <div class="welcome__buttons">
       <button class="welcome__button welcome__button--secondary secondary-button">
         <div class="welcome__button-content" @click="openModal">
-          <img src="../../../../assets/icons/demo.svg" alt="Demo Icon" />
+          <img src="../../../../assets/icons/demo.svg" alt="Иконка запроса демо" />
           <span>Запросить демо</span>
         </div>
       </button>
@@ -21,14 +26,19 @@
       <button v-else class="welcome__button primary-button" @click="pushToRegister">Регистрация</button>
     </div>
 
-    <img class="welcome__main-image" src="../../../../assets/images/desktop_main.png" alt="Main Image" />
+    <img
+      class="welcome__main-image"
+      src="../../../../assets/images/desktop_main.png"
+      alt="Teacher Planner для рабочего стола"
+      itemprop="image"
+    />
 
     <vPlatformRequest v-if="showModal" @close="closeModal" />
   </section>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import router from '@/router'
 import { isUserAuth } from '@/utils'
 
@@ -36,6 +46,7 @@ import vPlatformRequest from '@/components/modals/landing/v-platform-request.vue
 
 const showModal = ref(false)
 const isModalOpen = ref(false)
+const userAuth = ref(false)
 
 function openModal() {
   showModal.value = true
@@ -47,8 +58,6 @@ function closeModal() {
   isModalOpen.value = false
 }
 
-const userAuth = ref(false)
-
 watch(isModalOpen, (newValue) => {
   if (newValue) {
     document.documentElement.classList.add('modal-open')
@@ -58,21 +67,14 @@ watch(isModalOpen, (newValue) => {
 })
 
 function pushToRegister() {
-  if(userAuth.value) {
-    router.push({
-      name: 'home_teacher',
-    })
+  if (userAuth.value) {
+    router.push({ name: 'home_teacher' })
   } else {
-    router.push({
-      name: 'register',
-      query: {
-        from: 'landing-welcome',
-      },
-    })
+    router.push({ name: 'register', query: { from: 'landing-welcome' } })
   }
 }
 
-onMounted(()=>{
+onMounted(() => {
   isUserAuth().then(authenticated => {
     userAuth.value = authenticated
   })

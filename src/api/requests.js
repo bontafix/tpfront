@@ -519,6 +519,14 @@ export async function getNews() {
   }
 }
 
+export async function getNewsById(id) {
+  try {
+    return await makeGetRequest(`/api/public/news/${id}`)
+  } catch (error) {
+    console.error('Произошла ошибка при получении новостей', error)
+  }
+}
+
 export async function getLessonsOnMonth(year, month) {
   try {
     return await makeGetRequest(`/api/lessons/${year}/${month}`)
