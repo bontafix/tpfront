@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { useHead } from '@unhead/vue'
-import Blog from './components/blog.vue'
+import Blog from '@/components/blogPage/components/blog.vue'
 import { getNews } from '@/api/requests'
 import { useRoute, useRouter } from 'vue-router'
 
