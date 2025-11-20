@@ -1,57 +1,42 @@
 <template>
-  <section class="blogs" itemscope itemtype="https://schema.org/Blog">
-    <nav class="blogs__bread-crumbs" aria-label="breadcrumb">
-      <a href="/" class="blogs__bread-crumb-title" itemprop="url">Главная</a>
+  <section class="blogs">
+    <div class="blogs__bread-crumbs">
+      <a href="/" class="blogs__bread-crumb-title">Главная</a>
       <img src="/src/assets/icons/strelka.svg" alt="Стрелка" class="blogs__strelka" />
-      <span class="blogs__bread-crumb-title" aria-current="page">Блог</span>
-    </nav>
+      <p class="blogs__bread-crumb-title">Блог</p>
+    </div>
 
-    <header class="blogs__header">
-      <h1 class="blogs__title" itemprop="headline">Наши эксперты делятся</h1>
-      <a
-        href="https://t.me/teacherplanner"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="blogs__title-link"
-        itemprop="sameAs"
-      >
+    <div class="blogs__header">
+      <h1 class="blogs__title">Наши эксперты делятся</h1>
+      <a href="https://t.me/teacherplanner" target="_blank" class="blogs__title-link">
         Хотите написать статью?
       </a>
-    </header>
+    </div>
 
-    <section class="blogs__items-container">
+    <div class="blogs__items-container">
       <Blog
         v-for="blog in currentBlogs"
         :key="blog.id"
         :blog="blog"
         @click="() => openBlogPage(blog.id)"
-        itemprop="blogPost"
-        itemscope
-        itemtype="https://schema.org/BlogPosting"
       />
-    </section>
+    </div>
 
-    <nav class="blogs__pagination" aria-label="Pagination">
+    <div class="blogs__pagination">
       <button
         class="blogs__pagination-button"
         v-if="currentPage !== 1"
         @click="goToPage(currentPage - 1)"
-        aria-label="Предыдущая страница"
       >
-        <img
-          src="/src/assets/icons/strelka.svg"
-          alt="Стрелка назад"
-          class="blogs__pagination-icon-left"
-        />
+        <img src="/src/assets/icons/strelka.svg" alt="Стрелка" class="blogs__pagination-icon-left" />
       </button>
 
       <span
         v-for="page in pages"
         :key="page"
         class="blogs__pagination-page"
-        :class="{ blogs__pagination-page_active: currentPage === page }"
+        :class="[currentPage === page && 'blogs__pagination-page_active']"
         @click="goToPage(page)"
-        :aria-current="currentPage === page ? 'page' : null"
       >
         {{ page }}
       </span>
@@ -60,20 +45,16 @@
         class="blogs__pagination-button"
         v-if="currentPage !== pages && pages > 0"
         @click="goToPage(currentPage + 1)"
-        aria-label="Следующая страница"
       >
-        <img
-          src="/src/assets/icons/strelka.svg"
-          alt="Стрелка вперед"
-          class="blogs__pagination-icon-right"
-        />
+        <img src="/src/assets/icons/strelka.svg" alt="Стрелка" class="blogs__pagination-icon-right" />
       </button>
-    </nav>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
+import { useHead } from '@unhead/vue'
 import Blog from './blog.vue'
 import { getNews } from '@/api/requests'
 import { useRoute, useRouter } from 'vue-router'
@@ -81,7 +62,7 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 
-const blogs = ref<any[]>([])
+const blogs = ref([])
 const pages = ref(1)
 const currentPage = ref(1)
 
@@ -89,45 +70,86 @@ const currentBlogs = computed(() => {
   return blogs.value[currentPage.value - 1] || []
 })
 
-function openBlogPage(id: number | string) {
-  router.push({ path: `/blog/${id}` })
+function openBlogPage(id) {
+  router.push(`/blog/${id}`)
 }
 
-function goToPage(page: number) {
+function goToPage(page) {
   if (page < 1 || page > pages.value) return
-
   currentPage.value = page
-  router.push({ path: `/blogs`, query: { page } })
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  router.push(`/blogs?page=${page}`)
+  window.scrollTo(0, 0)
 }
 
 async function getBlogs() {
   const result = await getNews()
   chunkBlogs(result)
   pages.value = blogs.value.length
+
   if (route.query.page) {
     const pageFromUrl = Number(route.query.page)
     if (pageFromUrl >= 1 && pageFromUrl <= pages.value) {
       currentPage.value = pageFromUrl
     } else {
       currentPage.value = 1
-      router.replace({ path: '/blogs', query: { page: 1 } })
+      router.replace(`/blogs?page=1`)
     }
   } else {
     currentPage.value = 1
-    router.replace({ path: '/blogs', query: { page: 1 } })
+    router.replace(`/blogs?page=1`)
   }
 }
 
-function chunkBlogs(array: any[]) {
-  blogs.value = []
-  for (let i = 0; i < array.length; i += 12) {
-    blogs.value.push(array.slice(i, i + 12))
+function chunkBlogs(array) {
+  const chunkSize = 12
+  const chunks = []
+  for (let i = 0; i < array.length; i += chunkSize) {
+    chunks.push(array.slice(i, i + chunkSize))
   }
+  blogs.value = chunks
 }
 
 onMounted(async () => {
   await getBlogs()
+})
+
+useHead({
+  title: 'Блог TeacherPlanner — статьи для преподавателей и репетиторов',
+  meta: [
+    { name: 'description', content: 'Материалы и статьи для репетиторов и преподавателей: методики, аналитика, организация занятий, развитие учеников, повышение эффективности обучения.' },
+    { name: 'keywords', content: 'блог для репетиторов, статьи для преподавателей, методики обучения, советы репетиторам, TeacherPlanner блог' },
+
+    { property: 'og:title', content: 'Блог TeacherPlanner' },
+    { property: 'og:description', content: 'Полезные статьи и материалы для учителей, репетиторов и онлайн-преподавателей.' },
+    { property: 'og:url', content: 'https://teacherplanner.ru/blogs' },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:image', content: 'https://teacherplanner.ru/meta/blog-cover.jpg' },
+
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Блог TeacherPlanner' },
+    { name: 'twitter:description', content: 'Статьи по методикам обучения и инструментам для преподавателей.' },
+    { name: 'twitter:image', content: 'https://teacherplanner.ru/meta/blog-cover.jpg' }
+  ],
+  link: [
+    { rel: 'canonical', href: 'https://teacherplanner.ru/blogs' }
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "headline": "Блог TeacherPlanner",
+        "description": "Статьи для репетиторов и преподавателей по методике, аналитике и организации обучения.",
+        "url": "https://teacherplanner.ru/blogs",
+        "publisher": {
+          "@type": "Organization",
+          "name": "TeacherPlanner",
+          "url": "https://teacherplanner.ru"
+        }
+      })
+    }
+  ]
 })
 </script>
 
@@ -152,9 +174,7 @@ onMounted(async () => {
   font-weight: 500;
   font-size: 16px;
   line-height: 32px;
-  letter-spacing: -2%;
   color: #344055;
-  text-decoration: none;
 }
 
 .blogs__strelka {
@@ -229,15 +249,13 @@ onMounted(async () => {
   border-radius: 8px;
   cursor: pointer;
   font-family: Inter;
-  font-weight: 400;
   font-size: 16px;
-  line-height: 24px;
   opacity: 0.5;
 }
 
 .blogs__pagination-page:hover {
   background-color: #f3f4f6;
-  transition: 0.3s ease-in-out;
+  transition: 0.3s;
 }
 
 .blogs__pagination-page_active {
@@ -264,15 +282,8 @@ onMounted(async () => {
     gap: 20px;
   }
 
-  .blogs__bread-crumbs {
-    gap: 6px;
-  }
-
   .blogs__bread-crumb-title {
-    font-weight: 400;
     font-size: 13px;
-    line-height: 20px;
-    letter-spacing: 0;
   }
 
   .blogs__header {
@@ -284,26 +295,10 @@ onMounted(async () => {
 
   .blogs__title {
     font-size: 17px;
-    line-height: 26px;
   }
 
   .blogs__title-link {
-    font-weight: 400;
     font-size: 14px;
-    line-height: 20px;
-  }
-
-  .blogs__items-container {
-    gap: 40px 20px;
-  }
-
-  .blogs__pagination {
-    margin-top: 16px;
-  }
-
-  .blogs__pagination-button {
-    width: 36px;
-    height: 40px;
   }
 
   .blogs__pagination-page {
@@ -316,11 +311,6 @@ onMounted(async () => {
   .blogs {
     max-width: 100%;
     margin: 20px auto 56px auto;
-  }
-
-  .blogs__strelka {
-    width: 16px;
-    height: 16px;
   }
 
   .blogs__items-container {
