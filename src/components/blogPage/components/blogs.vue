@@ -1,31 +1,46 @@
 <template>
-  <section class="blogs">
-    <div class="blogs__bread-crumbs">
-      <a href="/" class="blogs__bread-crumb-title">Главная</a>
+  <section class="blogs" itemscope itemtype="https://schema.org/Blog">
+    <nav class="blogs__bread-crumbs" aria-label="breadcrumb">
+      <a href="/" class="blogs__bread-crumb-title" itemprop="url">Главная</a>
       <img src="/src/assets/icons/strelka.svg" alt="Стрелка" class="blogs__strelka" />
-      <p class="blogs__bread-crumb-title">Блог</p>
-    </div>
+      <span class="blogs__bread-crumb-title" aria-current="page">Блог</span>
+    </nav>
 
-    <div class="blogs__header">
-      <h1 class="blogs__title">Наши эксперты делятся</h1>
-      <a href="https://t.me/teacherplanner" target="_blank" class="blogs__title-link">
+    <header class="blogs__header">
+      <h1 class="blogs__title" itemprop="headline">Наши эксперты делятся</h1>
+      <a
+        href="https://t.me/teacherplanner"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="blogs__title-link"
+        itemprop="sameAs"
+      >
         Хотите написать статью?
       </a>
-    </div>
+    </header>
 
-    <div class="blogs__items-container">
-      <Blog v-for="blog in currentBlogs" :key="blog.id" :blog="blog" @click="() => openBlogPage(blog.id)" />
-    </div>
+    <section class="blogs__items-container">
+      <Blog
+        v-for="blog in currentBlogs"
+        :key="blog.id"
+        :blog="blog"
+        @click="() => openBlogPage(blog.id)"
+        itemprop="blogPost"
+        itemscope
+        itemtype="https://schema.org/BlogPosting"
+      />
+    </section>
 
-    <div class="blogs__pagination">
+    <nav class="blogs__pagination" aria-label="Pagination">
       <button
         class="blogs__pagination-button"
         v-if="currentPage !== 1"
         @click="goToPage(currentPage - 1)"
+        aria-label="Предыдущая страница"
       >
         <img
           src="/src/assets/icons/strelka.svg"
-          alt="Стрелка"
+          alt="Стрелка назад"
           class="blogs__pagination-icon-left"
         />
       </button>
@@ -34,8 +49,9 @@
         v-for="page in pages"
         :key="page"
         class="blogs__pagination-page"
-        :class="[currentPage === page && 'blogs__pagination-page_active']"
+        :class="{ blogs__pagination-page_active: currentPage === page }"
         @click="goToPage(page)"
+        :aria-current="currentPage === page ? 'page' : null"
       >
         {{ page }}
       </span>
@@ -44,14 +60,15 @@
         class="blogs__pagination-button"
         v-if="currentPage !== pages && pages > 0"
         @click="goToPage(currentPage + 1)"
+        aria-label="Следующая страница"
       >
         <img
           src="/src/assets/icons/strelka.svg"
-          alt="Стрелка"
+          alt="Стрелка вперед"
           class="blogs__pagination-icon-right"
         />
       </button>
-    </div>
+    </nav>
   </section>
 </template>
 
@@ -64,7 +81,7 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 
-const blogs = ref([])
+const blogs = ref<any[]>([])
 const pages = ref(1)
 const currentPage = ref(1)
 
@@ -72,16 +89,16 @@ const currentBlogs = computed(() => {
   return blogs.value[currentPage.value - 1] || []
 })
 
-function openBlogPage(id) {
-  router.push(`/blog/${id.toString()}`)
+function openBlogPage(id: number | string) {
+  router.push({ path: `/blog/${id}` })
 }
 
-function goToPage(page) {
+function goToPage(page: number) {
   if (page < 1 || page > pages.value) return
 
   currentPage.value = page
-  router.push(`/blogs?page=${page.toString()}`)
-  window.scrollTo(0, 0)
+  router.push({ path: `/blogs`, query: { page } })
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 async function getBlogs() {
@@ -94,15 +111,16 @@ async function getBlogs() {
       currentPage.value = pageFromUrl
     } else {
       currentPage.value = 1
-      router.replace(`/blogs?page=1`)
+      router.replace({ path: '/blogs', query: { page: 1 } })
     }
   } else {
     currentPage.value = 1
-    router.replace(`/blogs?page=1`)
+    router.replace({ path: '/blogs', query: { page: 1 } })
   }
 }
 
-function chunkBlogs(array) {
+function chunkBlogs(array: any[]) {
+  blogs.value = []
   for (let i = 0; i < array.length; i += 12) {
     blogs.value.push(array.slice(i, i + 12))
   }
@@ -136,6 +154,7 @@ onMounted(async () => {
   line-height: 32px;
   letter-spacing: -2%;
   color: #344055;
+  text-decoration: none;
 }
 
 .blogs__strelka {
@@ -161,12 +180,9 @@ onMounted(async () => {
 .blogs__title-link {
   font-family: Inter;
   font-weight: 500;
-  font-style: Medium;
   font-size: 16px;
   line-height: 24px;
   text-decoration: underline;
-  text-decoration-style: solid;
-  text-decoration-thickness: 4.5%;
   color: #1d4ecc;
 }
 
@@ -214,7 +230,6 @@ onMounted(async () => {
   cursor: pointer;
   font-family: Inter;
   font-weight: 400;
-  font-style: Regular;
   font-size: 16px;
   line-height: 24px;
   opacity: 0.5;
@@ -274,7 +289,6 @@ onMounted(async () => {
 
   .blogs__title-link {
     font-weight: 400;
-    font-style: Regular;
     font-size: 14px;
     line-height: 20px;
   }
@@ -295,7 +309,7 @@ onMounted(async () => {
   .blogs__pagination-page {
     width: 44px;
     height: 40px;
-   }
+  }
 }
 
 @media screen and (max-width: 767px) {
