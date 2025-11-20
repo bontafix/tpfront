@@ -1,34 +1,9 @@
-<script setup lang="ts">
-import CheckboxItem from '../CheckboxItem.vue'
-import router from '@/router'
-import { ref, onMounted } from 'vue'
-
-const showFreeServiceOverlay = ref(true)
-
-function pushToRegister() {
-  router.push({
-    name: 'register',
-    query: {
-      from: 'landing-tarifs',
-    },
-  })
-}
-
-function openFreeServiceOverlay() {
-  showFreeServiceOverlay.value = true
-}
-
-function closeFreeServiceOverlay() {
-  showFreeServiceOverlay.value = false
-}
-
-onMounted(() => {
-  showFreeServiceOverlay.value = true;
-})
-</script>
-
 <template>
   <section class="tarifs-section" id="tarifs" itemscope itemtype="https://schema.org/Product">
+    <meta itemprop="category" content="Тарифы" />
+    <meta itemprop="name" content="Тарифы Teacher Planner — выберите подходящий план" />
+    <meta itemprop="description" content="Подберите тариф по количеству учеников и увеличивайте их число вместе с Teacher Planner" />
+
     <div class="tarifs-section__badge" itemprop="category">Тарифы</div>
     <h2 class="section-title inter-500 tarifs-section__title" itemprop="name">
       Подберите тариф по количеству учеников и увеличивайте их число вместе с ТР
@@ -38,6 +13,10 @@ onMounted(() => {
       <div class="tarifs-section__tarifs" :class="{ 'tarifs-section__tarifs--blurred': showFreeServiceOverlay }">
 
         <div class="tarifs-section__tarif" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+          <meta itemprop="name" content="Базовый тариф" />
+          <meta itemprop="price" content="0" />
+          <meta itemprop="priceCurrency" content="RUB" />
+          <meta itemprop="image" content="@/assets/icons/checkbox2.svg" />
           <div class="rounded-as-icon">
             <img src="@/assets/icons/checkbox2.svg" alt="Базовый тариф" itemprop="image"/>
           </div>
@@ -55,6 +34,10 @@ onMounted(() => {
         </div>
 
         <div class="tarifs-section__tarif tarifs-section__tarif--featured" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+          <meta itemprop="name" content="Продвинутый тариф" />
+          <meta itemprop="price" content="399" />
+          <meta itemprop="priceCurrency" content="RUB" />
+          <meta itemprop="image" content="@/assets/icons/checkbox2.svg" />
           <div class="rounded-as-icon">
             <img src="@/assets/icons/checkbox2.svg" alt="Продвинутый тариф" itemprop="image"/>
           </div>
@@ -73,6 +56,10 @@ onMounted(() => {
         </div>
 
         <div class="tarifs-section__tarif" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+          <meta itemprop="name" content="Эксперт тариф" />
+          <meta itemprop="price" content="599" />
+          <meta itemprop="priceCurrency" content="RUB" />
+          <meta itemprop="image" content="@/assets/icons/checkbox2.svg" />
           <div class="rounded-as-icon">
             <img src="@/assets/icons/checkbox2.svg" alt="Эксперт тариф" itemprop="image"/>
           </div>
@@ -92,6 +79,10 @@ onMounted(() => {
         </div>
 
         <div class="tarifs-section__tarif" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+          <meta itemprop="name" content="Школа тариф" />
+          <meta itemprop="price" content="0" />
+          <meta itemprop="priceCurrency" content="RUB" />
+          <meta itemprop="image" content="@/assets/icons/checkbox2.svg" />
           <div class="rounded-as-icon">
             <img src="@/assets/icons/checkbox2.svg" alt="Школа тариф" itemprop="image"/>
           </div>
