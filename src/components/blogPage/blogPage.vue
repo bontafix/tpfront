@@ -23,7 +23,7 @@
               "@context": "https://schema.org",
               "@type": "Blog",
               "name": data?.title || "",
-              "url": window.location.href,
+              "url": currentUrl,
               "description": data?.preview_text || "",
               "publisher": {
                 "@type": "Organization",
@@ -45,7 +45,7 @@
                       },
                       "datePublished": data.published_at,
                       "dateModified": data.updated_at || data.published_at,
-                      "mainEntityOfPage": window.location.href,
+                      "mainEntityOfPage": currentUrl,
                       "keywords": data.keywords
                     }
                   ]
@@ -58,7 +58,7 @@
         <meta property="og:title" :content="data?.title" />
         <meta property="og:description" :content="data?.preview_text" />
         <meta property="og:image" :content="data?.file ? `https://teacherplanner.ru${data.file}` : ''" />
-        <meta property="og:url" :content="window.location.href" />
+        <meta property="og:url" :content="currentUrl" />
         <meta property="og:site_name" content="Teacher Planner" />
       </section>
 
@@ -72,12 +72,19 @@ import Header from '../landing/blocks/Header.vue'
 import Footer from '../landing/blocks/Footer.vue'
 import LeftContainer from './components/leftContainer.vue'
 import RightContainer from './components/rightContainer.vue'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { getNewsById } from '@/api/requests'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const data = ref<any>(null)
+
+const currentUrl = computed(() => {
+  if (typeof window !== 'undefined') {
+    return window.location.href
+  }
+  return `https://teacherplanner.ru${route.path}`
+})
 
 onMounted(async () => {
   data.value = await getNewsById(route.params.id)
