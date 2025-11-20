@@ -54,26 +54,26 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
-import Blog from './Blog.vue' // Важно: файл должен точно называться Blog.vue с правильным регистром
+import Blog from './blog.vue'
 import { getNews } from '@/api/requests'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
 
-const blogs = ref([]) // массив страниц с блогами
-const pages = ref(1)  // количество страниц
-const currentPage = ref(1) // текущая страница
+const blogs = ref([])
+const pages = ref(1)
+const currentPage = ref(1)
 
 const currentBlogs = computed(() => {
   return blogs.value[currentPage.value - 1] || []
 })
 
-function openBlogPage(id: number) {
+function openBlogPage(id) {
   router.push(`/blog/${id.toString()}`)
 }
 
-function goToPage(page: number) {
+function goToPage(page) {
   if (page < 1 || page > pages.value) return
   currentPage.value = page
   router.push(`/blogs?page=${page.toString()}`)
@@ -99,7 +99,7 @@ async function getBlogs() {
   }
 }
 
-function chunkBlogs(array: any[]) {
+function chunkBlogs(array) {
   for (let i = 0; i < array.length; i += 12) {
     blogs.value.push(array.slice(i, i + 12))
   }
@@ -227,7 +227,6 @@ onMounted(async () => {
   color: #344055;
 }
 
-/* Адаптив */
 @media screen and (max-width: 1439px) {
   .blogs {
     max-width: 1024px;
