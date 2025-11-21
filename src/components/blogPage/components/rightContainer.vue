@@ -12,11 +12,21 @@
         itemscope
         itemtype="https://schema.org/BlogPosting"
       >
-        <meta itemprop="position" :content="index + 1" />
-        <time class="sidebar-latest-blogs__date" :datetime="item.published_at" itemprop="datePublished">
-          {{ new Date(item.published_at).toLocaleDateString('ru-RU') }}
-        </time>
-        <h4 class="sidebar-latest-blogs__text" itemprop="headline">{{ item.title }}</h4>
+        <div class="sidebar-latest-blogs__text-container">
+          <meta itemprop="position" :content="index + 1" />
+          <time
+            class="sidebar-latest-blogs__date"
+            :datetime="item.published_at"
+            itemprop="datePublished"
+          >
+            {{ new Date(item.published_at).toLocaleDateString('ru-RU') }}
+          </time>
+          <h4 class="sidebar-latest-blogs__text" itemprop="headline">{{ item.title }}</h4>
+        </div>
+
+        <button class="sidebar-latest-blogs__button" @click="() => openBlogPageTablet(item.id)">
+          Перейти к статье
+        </button>
       </div>
     </div>
   </aside>
@@ -29,6 +39,12 @@ import { ref, onMounted } from 'vue'
 const blogs = ref([])
 
 function openBlogPage(id) {
+  if (window.innerWidth > 1439 || window.innerWidth < 768) {
+    window.location.href = `/blog/${id}`
+  }
+}
+
+function openBlogPageTablet(id) {
   window.location.href = `/blog/${id}`
 }
 
@@ -75,15 +91,18 @@ onMounted(async () => {
 .sidebar-latest-blogs__item {
   padding-top: 22px;
   border-top: 1px solid #e9eaeb;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
   cursor: pointer;
 }
 
 .sidebar-latest-blogs__item:first-of-type {
   padding-top: 0;
   border-top: unset;
+}
+
+.sidebar-latest-blogs__text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .sidebar-latest-blogs__date {
@@ -100,5 +119,83 @@ onMounted(async () => {
   font-size: 17px;
   line-height: 140%;
   color: #344055;
+}
+
+.sidebar-latest-blogs__button {
+  display: none;
+}
+
+@media screen and (max-width: 1439px) {
+  .sidebar-latest-blogs {
+    max-width: unset;
+  }
+
+  .sidebar-latest-blogs__container {
+    gap: 24px;
+  }
+
+  .sidebar-latest-blogs__item {
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 22px;
+    cursor: unset;
+  }
+
+  .sidebar-latest-blogs__button {
+    display: flex;
+    border-radius: 8px;
+    border: 1px solid #e9eaeb;
+    color: #344055;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 1px 2px rgba(10, 13, 18, 0.05);
+    padding: 12px 24px;
+    font-family: Inter;
+    font-weight: 600;
+    font-style: Semi Bold;
+    font-size: 14px;
+    line-height: 24px;
+    background-color: #ffffff;
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .sidebar-latest-blogs {
+    padding: 26px 20px 44px 20px;
+    border-radius: 10px;
+  }
+
+  .sidebar-latest-blogs__title {
+    font-size: 16px;
+  }
+
+  .sidebar-latest-blogs__container {
+    gap: 20px;
+  }
+
+  .sidebar-latest-blogs__item {
+    padding-top: 20px;
+    cursor: pointer;
+  }
+
+  .sidebar-latest-blogs__date {
+    font-size: 12px;
+  }
+
+  .sidebar-latest-blogs__text {
+    font-size: 14px;
+  }
+
+  .sidebar-latest-blogs__button {
+    padding: 10px 24px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .sidebar-latest-blogs__button {
+    display: none;
+  }
 }
 </style>

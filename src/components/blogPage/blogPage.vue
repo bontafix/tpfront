@@ -9,7 +9,7 @@
           <img src="/src/assets/icons/strelka.svg" alt="Стрелка" class="blogs__strelka" />
           <a href="/blogs" class="blogs__bread-crumb-title">Блог</a>
           <img src="/src/assets/icons/strelka.svg" alt="Стрелка" class="blogs__strelka" />
-          <p class="blogs__bread-crumb-title" itemprop="headline">{{ data?.title }}</p>
+          <p class="blogs__bread-crumb-title last" itemprop="headline">{{ data?.title }}</p>
         </nav>
 
         <div class="blog__center-container" v-if="data?.id">
@@ -90,5 +90,64 @@ main {
 .blog__center-container {
   display: flex;
   gap: 81px;
+}
+
+@media screen and (max-width: 1439px) {
+  .blog {
+    max-width: 1024px;
+    padding: 0 40px;
+    margin: 42px auto 80px auto;
+  }
+
+  .blog__center-container {
+    flex-direction: column;
+    gap: 65px;
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .blog {
+    max-width: 768px;
+    margin: 26px auto 56px auto;
+    gap: 20px;
+  }
+
+  .blogs-section__bread-crumbs {
+    gap: 6px;
+  }
+
+  .blogs-section__bread-crumb-title {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  .blog__center-container {
+    gap: 48px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .blog {
+    max-width: 100%;
+    margin: 20px auto 56px auto;
+  }
+
+  .blog__center-container {
+    gap: 36px;
+  }
+
+  .blogs__strelka {
+    width: 16px;
+    height: 16px;
+  }
+
+  .blogs__strelka:last-of-type {
+    display: none;
+  }
+
+  .last {
+    display: none;
+  }
 }
 </style>

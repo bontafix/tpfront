@@ -14,7 +14,9 @@
     <h2 class="blog-article__subtitle" itemprop="description">{{ data.preview_text }}</h2>
 
     <div class="blog-article__keywords" itemprop="keywords">
-      <span v-for="keyword in keywords" :key="keyword" class="blog-article__keyword">{{ keyword }}</span>
+      <span v-for="keyword in keywords" :key="keyword" class="blog-article__keyword">{{
+        keyword
+      }}</span>
     </div>
 
     <img
@@ -108,5 +110,63 @@ const keywords = computed(() => props.data.keywords.split(', '))
   font-size: 17px;
   line-height: 27px;
   color: #344055;
+}
+
+@media screen and (max-width: 1439px) {
+  .blog-article__image {
+    max-width: 944px;
+    max-height: 536px;
+    border-radius: 12px;
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .blog-article__date {
+    font-size: 12px;
+  }
+
+  .blog-article__title {
+    font-size: 17px;
+    line-height: 26px;
+    margin: 8px 0;
+  }
+
+  .blog-article__subtitle {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  .blog-article__keywords {
+    margin: 20px 0 0 0;
+    gap: 6px;
+  }
+
+  .blog-article__keyword {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+
+  .blog-article__image {
+    max-width: 688px;
+    border-radius: 10px;
+    max-height: 407px;
+    margin: 20px 0 28px 0;
+  }
+
+  .blog-article__content {
+    font-size: 13px;
+    line-height: 20px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .blog-article__keywords {
+    flex-wrap: wrap;
+    gap: 8px 6px;
+  }
+
+  .blog-article__image {
+    max-height: 240px;
+  }
 }
 </style>
