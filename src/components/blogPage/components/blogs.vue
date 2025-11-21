@@ -1,61 +1,54 @@
 <template>
-  <section class="blogs">
-    <div class="blogs__bread-crumbs">
-      <a href="/" class="blogs__bread-crumb-title">Главная</a>
-      <img src="/src/assets/icons/strelka.svg" alt="Стрелка" class="blogs__strelka" />
-      <p class="blogs__bread-crumb-title">Блог</p>
-    </div>
+  <section class="blogs-section" itemscope itemtype="https://schema.org/Blog">
+    <nav class="blogs-section__bread-crumbs" aria-label="Навигация по сайту">
+      <a href="/" class="blogs-section__bread-crumb-title">Главная</a>
+      <img src="/src/assets/icons/strelka.svg" alt="Стрелка" class="blogs-section__strelka" />
+      <span class="blogs-section__bread-crumb-title" aria-current="page">Блог</span>
+    </nav>
 
-    <div class="blogs__header">
-      <h1 class="blogs__title">Наши эксперты делятся</h1>
-      <a href="https://t.me/teacherplanner" target="_blank" class="blogs__title-link">
+    <header class="blogs-section__header">
+      <h1 class="blogs-section__title" itemprop="headline">Наши эксперты делятся</h1>
+      <a href="https://t.me/teacherplanner" target="_blank" class="blogs-section__title-link">
         Хотите написать статью?
       </a>
-    </div>
+    </header>
 
-    <div class="blogs__items-container">
+    <div class="blogs-section__items" itemprop="blogPost">
       <Blog v-for="blog in currentBlogs" :key="blog.id" :blog="blog" @click="() => openBlogPage(blog.id)" />
     </div>
 
-    <div class="blogs__pagination">
+    <nav class="blogs-section__pagination" aria-label="Пагинация">
       <button
-        class="blogs__pagination-button"
+        class="blogs-section__pagination-button"
         v-if="currentPage !== 1"
         @click="goToPage(currentPage - 1)"
       >
-        <img
-          src="/src/assets/icons/strelka.svg"
-          alt="Стрелка"
-          class="blogs__pagination-icon-left"
-        />
+        <img src="/src/assets/icons/strelka.svg" alt="Предыдущая страница" class="blogs-section__pagination-icon-left" />
       </button>
 
       <span
         v-for="page in pages"
         :key="page"
-        class="blogs__pagination-page"
-        :class="[currentPage === page && 'blogs__pagination-page_active']"
+        class="blogs-section__pagination-page"
+        :class="[currentPage === page && 'blogs-section__pagination-page_active']"
         @click="goToPage(page)"
+        :aria-current="currentPage === page ? 'page' : null"
       >
         {{ page }}
       </span>
 
       <button
-        class="blogs__pagination-button"
+        class="blogs-section__pagination-button"
         v-if="currentPage !== pages && pages > 0"
         @click="goToPage(currentPage + 1)"
       >
-        <img
-          src="/src/assets/icons/strelka.svg"
-          alt="Стрелка"
-          class="blogs__pagination-icon-right"
-        />
+        <img src="/src/assets/icons/strelka.svg" alt="Следующая страница" class="blogs-section__pagination-icon-right" />
       </button>
-    </div>
+    </nav>
   </section>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { onMounted, ref, computed } from 'vue'
 import Blog from './blog.vue'
 import { getNews } from '@/api/requests'
@@ -68,9 +61,7 @@ const blogs = ref([])
 const pages = ref(1)
 const currentPage = ref(1)
 
-const currentBlogs = computed(() => {
-  return blogs.value[currentPage.value - 1] || []
-})
+const currentBlogs = computed(() => blogs.value[currentPage.value - 1] || [])
 
 function openBlogPage(id) {
   router.push(`/blog/${id.toString()}`)
@@ -78,7 +69,6 @@ function openBlogPage(id) {
 
 function goToPage(page) {
   if (page < 1 || page > pages.value) return
-
   currentPage.value = page
   router.push(`/blogs?page=${page.toString()}`)
   window.scrollTo(0, 0)
@@ -108,13 +98,11 @@ function chunkBlogs(array) {
   }
 }
 
-onMounted(async () => {
-  await getBlogs()
-})
+onMounted(getBlogs)
 </script>
 
 <style scoped>
-.blogs {
+.blogs-section {
   display: flex;
   flex-direction: column;
   gap: 32px;
@@ -123,66 +111,62 @@ onMounted(async () => {
   padding: 0 60px;
 }
 
-.blogs__bread-crumbs {
+.blogs-section__bread-crumbs {
   display: flex;
   gap: 12px;
   align-items: center;
 }
 
-.blogs__bread-crumb-title {
-  font-family: Inter;
+.blogs-section__bread-crumb-title {
+  font-family: Inter, sans-serif;
   font-weight: 500;
   font-size: 16px;
   line-height: 32px;
-  letter-spacing: -2%;
   color: #344055;
 }
 
-.blogs__strelka {
+.blogs-section__strelka {
   transform: rotate(-90deg);
   width: 20px;
   height: 20px;
 }
 
-.blogs__header {
+.blogs-section__header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
 }
 
-.blogs__title {
-  font-family: Inter;
+.blogs-section__title {
+  font-family: Inter, sans-serif;
   font-weight: 600;
   font-size: 28px;
   line-height: 36px;
   color: #344055;
 }
 
-.blogs__title-link {
-  font-family: Inter;
+.blogs-section__title-link {
+  font-family: Inter, sans-serif;
   font-weight: 500;
-  font-style: Medium;
   font-size: 16px;
   line-height: 24px;
   text-decoration: underline;
-  text-decoration-style: solid;
-  text-decoration-thickness: 4.5%;
   color: #1d4ecc;
 }
 
-.blogs__items-container {
+.blogs-section__items {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 56px 24px;
 }
 
-.blogs__pagination {
+.blogs-section__pagination {
   display: flex;
   gap: 4px;
   margin-top: 32px;
 }
 
-.blogs__pagination-button {
+.blogs-section__pagination-button {
   width: 36px;
   height: 48px;
   display: flex;
@@ -191,20 +175,20 @@ onMounted(async () => {
   border-radius: 8px;
 }
 
-.blogs__pagination-button:hover {
+.blogs-section__pagination-button:hover {
   background-color: #f3f4f6;
   transition: 0.3s ease-in-out;
 }
 
-.blogs__pagination-icon-left {
+.blogs-section__pagination-icon-left {
   transform: rotate(90deg);
 }
 
-.blogs__pagination-icon-right {
+.blogs-section__pagination-icon-right {
   transform: rotate(-90deg);
 }
 
-.blogs__pagination-page {
+.blogs-section__pagination-page {
   width: 56px;
   height: 48px;
   display: flex;
@@ -212,104 +196,89 @@ onMounted(async () => {
   align-items: center;
   border-radius: 8px;
   cursor: pointer;
-  font-family: Inter;
+  font-family: Inter, sans-serif;
   font-weight: 400;
-  font-style: Regular;
   font-size: 16px;
   line-height: 24px;
   opacity: 0.5;
 }
 
-.blogs__pagination-page:hover {
+.blogs-section__pagination-page:hover {
   background-color: #f3f4f6;
   transition: 0.3s ease-in-out;
 }
 
-.blogs__pagination-page_active {
+.blogs-section__pagination-page_active {
   background-color: #f3f4f6;
   color: #344055;
 }
 
 @media screen and (max-width: 1439px) {
-  .blogs {
+  .blogs-section {
     max-width: 1024px;
     padding: 0 40px;
     margin: 42px auto 80px auto;
   }
-
-  .blogs__items-container {
+  .blogs-section__items {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media screen and (max-width: 1023px) {
-  .blogs {
+  .blogs-section {
     max-width: 768px;
     margin: 26px auto 56px auto;
     gap: 20px;
   }
-
-  .blogs__bread-crumbs {
+  .blogs-section__bread-crumbs {
     gap: 6px;
   }
-
-  .blogs__bread-crumb-title {
+  .blogs-section__bread-crumb-title {
     font-weight: 400;
     font-size: 13px;
     line-height: 20px;
-    letter-spacing: 0;
   }
-
-  .blogs__header {
+  .blogs-section__header {
     margin-top: 6px;
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
-
-  .blogs__title {
+  .blogs-section__title {
     font-size: 17px;
     line-height: 26px;
   }
-
-  .blogs__title-link {
+  .blogs-section__title-link {
     font-weight: 400;
-    font-style: Regular;
     font-size: 14px;
     line-height: 20px;
   }
-
-  .blogs__items-container {
+  .blogs-section__items {
     gap: 40px 20px;
   }
-
-  .blogs__pagination {
+  .blogs-section__pagination {
     margin-top: 16px;
   }
-
-  .blogs__pagination-button {
+  .blogs-section__pagination-button {
     width: 36px;
     height: 40px;
   }
-
-  .blogs__pagination-page {
+  .blogs-section__pagination-page {
     width: 44px;
     height: 40px;
-   }
+  }
 }
 
 @media screen and (max-width: 767px) {
-  .blogs {
+  .blogs-section {
     max-width: 100%;
     margin: 20px auto 56px auto;
   }
-
-  .blogs__strelka {
+  .blogs-section__strelka {
     width: 16px;
     height: 16px;
   }
-
-  .blogs__items-container {
+  .blogs-section__items {
     grid-template-columns: 1fr;
     gap: 36px;
   }
