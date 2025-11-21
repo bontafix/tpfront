@@ -1,11 +1,6 @@
 <template>
-  <article class="left" itemscope itemtype="https://schema.org/BlogPosting">
-    <meta itemprop="mainEntityOfPage" :content="`/blog/${data.id}`" />
-    <meta itemprop="datePublished" :content="data.published_at" />
-    <meta itemprop="dateModified" :content="data.updated_at || data.published_at" />
-    <meta itemprop="author" content="Teacher Planner" />
-
-    <p class="left__date" itemprop="datePublished">
+  <div class="left">
+    <p class="left__date">
       {{
         new Date(data.published_at).toLocaleDateString('ru-RU', {
           day: '2-digit',
@@ -13,38 +8,24 @@
           year: 'numeric',
         })
       }}
+      <!-- | Автор: -->
     </p>
-
-    <h1 class="left__title" itemprop="headline">{{ data.title }}</h1>
+    <h1 class="left__title">{{ data.title }}</h1>
     <h2 class="left__subtitle">{{ data.preview_text }}</h2>
 
     <div class="left__keywords">
-      <span
-        v-for="keyword in keywords"
-        :key="keyword"
-        class="left__keyword"
-        itemprop="keywords"
-      >
-        {{ keyword }}
-      </span>
+      <span v-for="keyword in keywords" :key="keyword" class="left__keyword">{{ keyword }}</span>
     </div>
 
-    <img
-      class="left__image"
-      :src="`${domain}${data.file}`"
-      :alt="`Изображение к новости: ${data.title}`"
-      itemprop="image"
-    />
+    <img class="left__image" :src="`${domain}${data.file}`" alt="Изображение новости" />
 
-    <div class="left__text" itemprop="articleBody">
-      <p v-html="data.text"></p>
-    </div>
-  </article>
+    <p class="left__text">{{ data.text }}</p>
+  </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { domain } from '@/utils'
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 const props = defineProps({
   data: {
@@ -66,6 +47,7 @@ const keywords = computed(() => props.data.keywords.split(', '))
 .left__date {
   font-family: Inter;
   font-weight: 400;
+  font-style: Regular;
   font-size: 16px;
   line-height: 24px;
   color: #344055;
@@ -74,6 +56,7 @@ const keywords = computed(() => props.data.keywords.split(', '))
 .left__title {
   font-family: Inter;
   font-weight: 600;
+  font-style: Semi Bold;
   font-size: 28px;
   line-height: 36px;
   color: #344055;
@@ -83,6 +66,7 @@ const keywords = computed(() => props.data.keywords.split(', '))
 .left__subtitle {
   font-family: Inter;
   font-weight: 400;
+  font-style: Regular;
   font-size: 18px;
   line-height: 28px;
   color: #344055;
@@ -93,21 +77,21 @@ const keywords = computed(() => props.data.keywords.split(', '))
   display: flex;
   gap: 10px;
 }
-
+*
 .left__keyword {
   border-radius: 50px;
   background-color: #f4f7ff;
   padding: 11px 18px;
   font-family: Inter;
   font-weight: 400;
+  font-style: Regular;
   font-size: 15px;
   line-height: 100%;
   color: #1d4ecc;
 }
 
 .left__image {
-  width: 100%;
-  max-width: 860px;
+  width: 860px;
   object-fit: cover;
   border-radius: 16px;
   max-height: 428px;
@@ -117,6 +101,7 @@ const keywords = computed(() => props.data.keywords.split(', '))
 .left__text {
   font-family: Inter;
   font-weight: 400;
+  font-style: Regular;
   font-size: 17px;
   line-height: 27px;
   color: #344055;
