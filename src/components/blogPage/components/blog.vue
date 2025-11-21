@@ -1,26 +1,14 @@
 <template>
-  <article class="blog" itemscope itemtype="https://schema.org/BlogPosting">
-    <figure class="blog__figure">
-      <img
-        :src="`${domain}${blog.file}`"
-        :alt="`Изображение к статье: ${blog.title}`"
-        :title="blog.title"
-        class="blog__image"
-        itemprop="image"
-      />
-    </figure>
+  <div class="blog">
+    <img :src="`${domain}${blog.file}`" alt="Новость" class="blog__image" />
 
     <div class="blog__container">
       <div class="blog__text-container">
-        <h3 class="blog__title" itemprop="headline">{{ blog.title }}</h3>
-        <p class="blog__text" itemprop="description">{{ blog.preview_text }}...</p>
+        <h3 class="blog__title">{{ blog.title }}</h3>
+        <p class="blog__text">{{ blog.preview_text }}...</p>
       </div>
 
-      <time
-        class="blog__date"
-        :datetime="new Date(blog.published_at).toISOString()"
-        itemprop="datePublished"
-      >
+      <p class="blog__date">
         {{
           new Date(blog.published_at).toLocaleDateString('ru', {
             day: 'numeric',
@@ -28,13 +16,9 @@
             year: 'numeric',
           })
         }}
-      </time>
-
-      <meta itemprop="author" :content="blog.author || 'Teacher Planner'" />
-      <meta itemprop="url" :content="`${domain}/blog/${blog.id}`" />
-      <meta itemprop="mainEntityOfPage" :content="`${domain}/blog/${blog.id}`" />
+      </p>
     </div>
-  </article>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -54,10 +38,6 @@ const props = defineProps({
   flex-direction: column;
   gap: 20px;
   cursor: pointer;
-}
-
-.blog__figure {
-  margin: 0;
 }
 
 .blog__image {
@@ -86,7 +66,7 @@ const props = defineProps({
 .blog__title {
   font-family: Inter;
   font-weight: 600;
-  font-style: normal;
+  font-style: Semi Bold;
   font-size: 20px;
   line-height: 28px;
   color: #344055;
@@ -95,17 +75,17 @@ const props = defineProps({
 .blog__text {
   font-family: Inter;
   font-weight: 400;
-  font-style: normal;
+  font-style: Regular;
   font-size: 16px;
   line-height: 24px;
   color: #344055;
-  opacity: 0.85;
+  opacity: 0.8;
 }
 
 .blog__date {
   font-family: Inter;
   font-weight: 400;
-  font-style: normal;
+  font-style: Regular;
   font-size: 16px;
   line-height: 24px;
   color: #344055;
