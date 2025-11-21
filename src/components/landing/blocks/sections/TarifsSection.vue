@@ -1,130 +1,188 @@
 <template>
-  <section class="tarifs-section" id="tarifs" itemscope itemtype="https://schema.org/Product">
-    <meta itemprop="category" content="Тарифы" />
-    <meta itemprop="name" content="Тарифы Teacher Planner — выберите подходящий план" />
-    <meta itemprop="description" content="Подберите тариф по количеству учеников и увеличивайте их число вместе с Teacher Planner" />
-
-    <div class="tarifs-section__badge" itemprop="category">Тарифы</div>
-    <h2 class="section-title inter-500 tarifs-section__title" itemprop="name">
-      Подберите тариф по количеству учеников и увеличивайте их число вместе с ТР
-    </h2>
-
-    <div class="tarifs-section__container">
-      <div class="tarifs-section__tarifs" :class="{ 'tarifs-section__tarifs--blurred': showFreeServiceOverlay }">
-
-        <div class="tarifs-section__tarif" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-          <meta itemprop="name" content="Базовый тариф" />
-          <meta itemprop="price" content="0" />
-          <meta itemprop="priceCurrency" content="RUB" />
-          <meta itemprop="image" content="@/assets/icons/checkbox2.svg" />
-          <div class="rounded-as-icon">
-            <img src="@/assets/icons/checkbox2.svg" alt="Базовый тариф" itemprop="image"/>
+  <div class="blog-section">
+    <div class="blog-section__header">
+      <div class="blog-section__header-container">
+        <h2 class="blog-section__title section-title">Наши эксперты делятся</h2>
+        <a href="https://t.me/teacherplanner" target="_blank" class="desktop-only">
+          <div class="blog-section__button blog-section__mobile-hidden">
+            Хотите написать статью?
           </div>
-          <p class="tarifs-section__tariftitle" itemprop="name">Базовый</p>
-          <h3 class="tarifs-section__func-title" itemprop="price">Бесплатно</h3>
-
-          <div class="tarifs-section__tarif-features">
-            <CheckboxItem description="До 5 учеников" />
-            <CheckboxItem description="Личный кабинет ученика" />
-            <CheckboxItem description="Финансовая аналитика" />
-            <CheckboxItem description="Аналитика занятий" />
-          </div>
-
-          <button class="primary-button" @click="pushToRegister">Начать работу</button>
-        </div>
-
-        <div class="tarifs-section__tarif tarifs-section__tarif--featured" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-          <meta itemprop="name" content="Продвинутый тариф" />
-          <meta itemprop="price" content="399" />
-          <meta itemprop="priceCurrency" content="RUB" />
-          <meta itemprop="image" content="@/assets/icons/checkbox2.svg" />
-          <div class="rounded-as-icon">
-            <img src="@/assets/icons/checkbox2.svg" alt="Продвинутый тариф" itemprop="image"/>
-          </div>
-          <p class="tarifs-section__tariftitle" itemprop="name">Продвинутый</p>
-          <h3 class="tarifs-section__func-title" itemprop="price">399 ₽ / месяц</h3>
-
-          <div class="tarifs-section__tarif-features">
-            <CheckboxItem description="До 12 учеников" />
-            <CheckboxItem description="Личный кабинет ученика" />
-            <CheckboxItem description="Финансовая аналитика" />
-            <CheckboxItem description="Аналитика занятий" />
-            <CheckboxItem description="Методическая аналитика" />
-          </div>
-
-          <button class="secondary-button" @click="openFreeServiceOverlay">Выбрать</button>
-        </div>
-
-        <div class="tarifs-section__tarif" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-          <meta itemprop="name" content="Эксперт тариф" />
-          <meta itemprop="price" content="599" />
-          <meta itemprop="priceCurrency" content="RUB" />
-          <meta itemprop="image" content="@/assets/icons/checkbox2.svg" />
-          <div class="rounded-as-icon">
-            <img src="@/assets/icons/checkbox2.svg" alt="Эксперт тариф" itemprop="image"/>
-          </div>
-          <p class="tarifs-section__tariftitle" itemprop="name">Эксперт</p>
-          <h3 class="tarifs-section__func-title" itemprop="price">599 ₽ / месяц</h3>
-
-          <div class="tarifs-section__tarif-features">
-            <CheckboxItem description="Количество учеников неограничено" />
-            <CheckboxItem description="Личный кабинет ученика" />
-            <CheckboxItem description="Финансовая аналитика" />
-            <CheckboxItem description="Аналитика занятий" />
-            <CheckboxItem description="Методическая аналитика" />
-            <CheckboxItem description="Подключение двух сотрудников" />
-          </div>
-
-          <button class="primary-button" @click="openFreeServiceOverlay">Выбрать</button>
-        </div>
-
-        <div class="tarifs-section__tarif" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-          <meta itemprop="name" content="Школа тариф" />
-          <meta itemprop="price" content="0" />
-          <meta itemprop="priceCurrency" content="RUB" />
-          <meta itemprop="image" content="@/assets/icons/checkbox2.svg" />
-          <div class="rounded-as-icon">
-            <img src="@/assets/icons/checkbox2.svg" alt="Школа тариф" itemprop="image"/>
-          </div>
-          <p class="tarifs-section__tariftitle" itemprop="name">Школа</p>
-          <h3 class="tarifs-section__func-title" itemprop="price">Рассчитывается индивидуально</h3>
-
-          <div class="tarifs-section__tarif-features">
-            <CheckboxItem description="Бизнес аккаунт" />
-            <CheckboxItem description="Все функции платформы" />
-            <CheckboxItem description="Подключение сотрудников" />
-            <CheckboxItem description="Количество учеников неограничено" />
-          </div>
-
-          <button class="primary-button" @click="openFreeServiceOverlay">Выбрать</button>
-        </div>
-
+        </a>
       </div>
 
-      <div
-        v-if="showFreeServiceOverlay"
-        class="tarifs-section__free-service-overlay"
-        @click="closeFreeServiceOverlay"
-      >
-        <div class="tarifs-section__free-service-content" @click.stop>
-          <h2 class="section-title" itemprop="description">
-            На текущий момент, наш сервис является бесплатным для всех пользователей
-          </h2>
-          <p class="desc inter-400">
-            Успейте присоединиться и получить статус первого пользователя сервиса, в дальнейшем это
-            гарантирует наличие специальных условий для Вас на пользование сервисом*
-          </p>
-          <div class="tarifs-section__caption">
-            *Специальные условия остаются на усмотрение лицензиара и действуют ограниченный период
-            времени
-          </div>
-
-          <div class="tarifs-section__overlay-buttons">
-            <button class="primary-button" @click="pushToRegister">Начать работу</button>
-          </div>
-        </div>
-      </div>
-
+      <button class="primary-button blog-section__header-button" @click="openBlogsPage">
+        Перейти в блог
+      </button>
     </div>
-  </section>
+    <div class="blog-section__posts">
+      <div
+        v-for="(item, key) in news"
+        :key="item.id"
+        :class="[
+          key === 0 && 'blog-section__lead-post blog-section__lead-post_mobile',
+          key !== 0 && 'blog-section__classic-post',
+        ]"
+        @click="() => openBlogPage(item.id)"
+      >
+        <template v-if="key === 0">
+          <img
+            loading="lazy"
+            :src="`${domain}${item.file}`"
+            alt="Lead Post"
+            class="blog-section__featured-image blog-section__featured-image_mobile"
+          />
+          <div class="blog-section__image-text blog-section__mobile-container">
+            <p class="blog-section__post-date blog-section__post-date_mobile">
+              {{
+                new Date(item.published_at).toLocaleDateString('ru', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })
+              }}
+            </p>
+            <h4 class="blog-section__post-title blog-section__post-title_mobile">
+              {{ item.title }}
+            </h4>
+            <p class="blog-section__post-preview blog-section__post-preview_mobile">
+              {{ item.preview_text }}...
+            </p>
+          </div>
+        </template>
+        <template v-else>
+          <img
+            loading="lazy"
+            :src="`${domain}${item.file}`"
+            alt="First Post Mobile"
+            class="blog-section__classic-image"
+          />
+          <div class="blog-section__post-data">
+            <p class="blog-section__post-date">
+              {{
+                new Date(item.published_at).toLocaleDateString('ru', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })
+              }}
+            </p>
+            <h4 class="blog-section__post-title">{{ item.title }}</h4>
+            <p class="blog-section__post-preview">{{ item.preview_text }}...</p>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <div class="blog-section__footer blog-section__mobile blog-section__footer-mobile">
+      <a href="https://t.me/teacherplanner" target="_blank">
+        <div class="blog-section__button">Хотите написать статью?</div>
+      </a>
+
+      <button class="primary-button blog-section__footer-button-mobile" @click="openBlogPage">
+        Перейти в блог
+      </button>
+    </div>
+  </div>
 </template>
+
+<script setup>
+import { onMounted, ref } from 'vue'
+import { getNews } from '@/api/requests'
+import { useRouter } from 'vue-router'
+import { domain } from '@/utils'
+
+const router = useRouter()
+
+const news = ref()
+
+function openBlogPage(id) {
+  router.push(`/blog/${id.toString()}`)
+}
+
+function openBlogsPage() {
+  router.push({ name: 'blogs' })
+}
+
+onMounted(async () => {
+  const response = await getNews()
+  const filteredValue = response.sort((a, b) => {
+    return new Date(b.published_at) - new Date(a.published_at)
+  })
+  news.value = filteredValue.slice(0, 5)
+})
+</script>
+
+<style scoped>
+.blog-section__header-container {
+  display: flex;
+  gap: 25px;
+}
+
+.blog-section__header-container > a {
+  margin-top: 16px;
+}
+
+.blog-section__footer-button-mobile {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .blog-section__header-button {
+    display: none;
+  }
+
+  .blog-section__lead-post_mobile {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .blog-section__featured-image_mobile {
+    border-radius: 16px;
+  }
+
+  .blog-section__mobile-container {
+    position: relative;
+    background: inherit;
+    border-right: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+    border-left: 1px solid #e5e7eb;
+  }
+
+  .blog-section__post-date_mobile {
+    color: #344055 !important;
+    font-family: Inter, sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    opacity: 0.72;
+  }
+
+  .blog-section__post-title_mobile {
+    color: #344055 !important;
+  }
+
+  .blog-section__post-preview_mobile {
+    color: #344055 !important;
+    font-family: Inter, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    opacity: 0.8;
+  }
+
+  .blog-section__footer-mobile {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .blog-section__footer-button-mobile {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .blog-section__footer-mobile {
+    gap: 20px;
+    flex-direction: column;
+  }
+}
+</style>
