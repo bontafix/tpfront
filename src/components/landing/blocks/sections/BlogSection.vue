@@ -24,8 +24,6 @@
           target="_blank"
           rel="noopener noreferrer"
           class="desktop-only"
-          aria-label="Перейти в Telegram Teacher Planner для публикации экспертной статьи"
-          title="Хотите опубликовать экспертную статью?"
         >
           <div class="blog-section__button blog-section__mobile-hidden">
             Хотите опубликовать экспертную статью?
@@ -33,12 +31,7 @@
         </a>
       </div>
 
-      <button
-        class="primary-button blog-section__header-button"
-        @click="openBlogsPage"
-        aria-label="Открыть блог Teacher Planner"
-        title="Перейти в блог Teacher Planner"
-      >
+      <button class="primary-button blog-section__header-button" @click="openBlogsPage">
         Перейти в блог
       </button>
     </div>
@@ -55,7 +48,7 @@
         itemtype="https://schema.org/BlogPosting"
         :class="[
           key === 0 && 'blog-section__lead-post blog-section__lead-post_mobile',
-          key !== 0 && 'blog-section__classic-post',
+          key !== 0 && 'blog-section__classic-post'
         ]"
         @click="openBlogPage(item.id)"
       >
@@ -83,26 +76,19 @@
                   new Date(item.published_at).toLocaleDateString("ru", {
                     day: "numeric",
                     month: "long",
-                    year: "numeric",
+                    year: "numeric"
                   })
                 }}
               </time>
             </p>
 
             <h2 class="blog-section__post-title blog-section__post-title_mobile" itemprop="headline">
-              <router-link 
-                :to="`/blog/${item.id}`"
-                :aria-label="`Читать статью: ${item.title}`"
-                itemprop="url"
-              >
+              <router-link :to="`/blog/${item.id}`" itemprop="url">
                 {{ item.title }}
               </router-link>
             </h2>
 
-            <p
-              class="blog-section__post-preview blog-section__post-preview_mobile"
-              itemprop="description"
-            >
+            <p class="blog-section__post-preview blog-section__post-preview_mobile" itemprop="description">
               {{ (item.preview_text || '').slice(0, 160).trim() }}…
             </p>
           </div>
@@ -127,19 +113,14 @@
                   new Date(item.published_at).toLocaleDateString("ru", {
                     day: "numeric",
                     month: "long",
-                    year: "numeric",
+                    year: "numeric"
                   })
                 }}
               </time>
             </p>
 
             <h3 class="blog-section__post-title" itemprop="headline">
-              <router-link
-                :to="`/blog/${item.id}`"
-                :title="`Читать статью: ${item.title}`"
-                :aria-label="`Читать статью: ${item.title}`"
-                itemprop="url"
-              >
+              <router-link :to="`/blog/${item.id}`" itemprop="url">
                 {{ item.title }}
               </router-link>
             </h3>
@@ -152,23 +133,17 @@
       </div>
     </div>
 
-    <div
-      class="blog-section__footer blog-section__mobile blog-section__footer-mobile"
-    >
+    <div class="blog-section__footer blog-section__mobile blog-section__footer-mobile">
       <a
         href="https://t.me/teacherplanner?utm_source=site&utm_medium=blog_block"
         target="_blank"
         rel="noopener noreferrer"
-        title="Написать экспертную статью"
-        aria-label="Написать экспертную статью в блоге Teacher Planner"
       >
         <div class="blog-section__button">Хотите написать статью?</div>
       </a>
 
       <button
         class="primary-button blog-section__footer-button-mobile"
-        aria-label="Открыть блог Teacher Planner"
-        title="Перейти в блог"
         @click="openBlogsPage"
       >
         Перейти в блог
@@ -196,30 +171,32 @@ function openBlogsPage() {
 
 onMounted(async () => {
   const response = await getNews();
-  const filteredValue = response.sort((a, b) => {
-    return new Date(b.published_at) - new Date(a.published_at);
-  });
-  news.value = filteredValue.slice(0, 5);
-});
-</script>
+  news.value = response
+    .sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
+    .slice(0, 5);
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Blog",
-  "name": "Блог Teacher Planner",
-  "description": "Статьи для репетиторов, советы по онлайн-обучению и ведению занятий",
-  "url": "https://teacherplanner.ru/blogs",
-  "publisher": {
-    "@type": "Organization",
-    "name": "Teacher Planner",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://api.dev-teacherplanner.ru/uploads/news/novosti-dlya-testirovaniya-24-8b7d3bdc.png"
-    }
-  },
-  "inLanguage": "ru-RU"
-}
+  const ld = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "Блог Teacher Planner",
+    "description": "Статьи для репетиторов, советы по онлайн-обучению",
+    "url": "https://teacherplanner.ru/blogs",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Teacher Planner",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://api.dev-teacherplanner.ru/uploads/news/novosti-dlya-testirovaniya-24-8b7d3bdc.png"
+      }
+    },
+    "inLanguage": "ru-RU"
+  };
+
+  const script = document.createElement("script");
+  script.type = "application/ld+json";
+  script.text = JSON.stringify(ld);
+  document.head.appendChild(script);
+});
 </script>
 
 <style scoped>
