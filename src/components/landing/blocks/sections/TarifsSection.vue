@@ -1,188 +1,141 @@
-<template>
-  <div class="blog-section">
-    <div class="blog-section__header">
-      <div class="blog-section__header-container">
-        <h2 class="blog-section__title section-title">Наши эксперты делятся</h2>
-        <a href="https://t.me/teacherplanner" target="_blank" class="desktop-only">
-          <div class="blog-section__button blog-section__mobile-hidden">
-            Хотите написать статью?
-          </div>
-        </a>
-      </div>
+<script setup lang="ts">
+import CheckboxItem from '../CheckboxItem.vue'
+import router from '@/router'
+import { ref, onMounted } from 'vue'
 
-      <button class="primary-button blog-section__header-button" @click="openBlogsPage">
-        Перейти в блог
-      </button>
-    </div>
-    <div class="blog-section__posts">
-      <div
-        v-for="(item, key) in news"
-        :key="item.id"
-        :class="[
-          key === 0 && 'blog-section__lead-post blog-section__lead-post_mobile',
-          key !== 0 && 'blog-section__classic-post',
-        ]"
-        @click="() => openBlogPage(item.id)"
-      >
-        <template v-if="key === 0">
-          <img
-            loading="lazy"
-            :src="`${domain}${item.file}`"
-            alt="Lead Post"
-            class="blog-section__featured-image blog-section__featured-image_mobile"
-          />
-          <div class="blog-section__image-text blog-section__mobile-container">
-            <p class="blog-section__post-date blog-section__post-date_mobile">
-              {{
-                new Date(item.published_at).toLocaleDateString('ru', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })
-              }}
-            </p>
-            <h4 class="blog-section__post-title blog-section__post-title_mobile">
-              {{ item.title }}
-            </h4>
-            <p class="blog-section__post-preview blog-section__post-preview_mobile">
-              {{ item.preview_text }}...
-            </p>
-          </div>
-        </template>
-        <template v-else>
-          <img
-            loading="lazy"
-            :src="`${domain}${item.file}`"
-            alt="First Post Mobile"
-            class="blog-section__classic-image"
-          />
-          <div class="blog-section__post-data">
-            <p class="blog-section__post-date">
-              {{
-                new Date(item.published_at).toLocaleDateString('ru', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })
-              }}
-            </p>
-            <h4 class="blog-section__post-title">{{ item.title }}</h4>
-            <p class="blog-section__post-preview">{{ item.preview_text }}...</p>
-          </div>
-        </template>
-      </div>
-    </div>
+const showFreeServiceOverlay = ref(true)
 
-    <div class="blog-section__footer blog-section__mobile blog-section__footer-mobile">
-      <a href="https://t.me/teacherplanner" target="_blank">
-        <div class="blog-section__button">Хотите написать статью?</div>
-      </a>
-
-      <button class="primary-button blog-section__footer-button-mobile" @click="openBlogPage">
-        Перейти в блог
-      </button>
-    </div>
-  </div>
-</template>
-
-<script setup>
-import { onMounted, ref } from 'vue'
-import { getNews } from '@/api/requests'
-import { useRouter } from 'vue-router'
-import { domain } from '@/utils'
-
-const router = useRouter()
-
-const news = ref()
-
-function openBlogPage(id) {
-  router.push(`/blog/${id.toString()}`)
-}
-
-function openBlogsPage() {
-  router.push({ name: 'blogs' })
-}
-
-onMounted(async () => {
-  const response = await getNews()
-  const filteredValue = response.sort((a, b) => {
-    return new Date(b.published_at) - new Date(a.published_at)
+function pushToRegister() {
+  router.push({
+    name: 'register',
+    query: {
+      from: 'landing-tarifs',
+    },
   })
-  news.value = filteredValue.slice(0, 5)
+}
+
+function openFreeServiceOverlay() {
+  showFreeServiceOverlay.value = true
+}
+
+function closeFreeServiceOverlay() {
+  showFreeServiceOverlay.value = true
+}
+
+onMounted(() => {
+  showFreeServiceOverlay.value = true;
 })
 </script>
 
-<style scoped>
-.blog-section__header-container {
-  display: flex;
-  gap: 25px;
-}
+<template>
+  <section class="tarifs-section" id="tarifs">
+    <div class="tarifs-section__badge">Тарифы</div>
+    <h2 class="section-title inter-500 tarifs-section__title">
+      Подберите тариф по количеству учеников и увеличивайте их число вместе с ТР
+    </h2>
 
-.blog-section__header-container > a {
-  margin-top: 16px;
-}
+    <div class="tarifs-section__container">
+      <div class="tarifs-section__tarifs" :class="{ 'tarifs-section__tarifs--blurred': showFreeServiceOverlay }">
+        <div class="tarifs-section__tarif">
+          <div class="rounded-as-icon">
+            <img src="@/assets/icons/checkbox2.svg" alt="Free" />
+          </div>
+          <p class="tarifs-section__tariftitle">Базовый</p>
+          <h3 class="tarifs-section__func-title">Бесплатно</h3>
 
-.blog-section__footer-button-mobile {
-  display: none;
-}
+          <div class="tarifs-section__tarif-features">
+            <CheckboxItem description="До 5 учеников" />
+            <CheckboxItem description="Личный кабинет ученика" />
+            <CheckboxItem description="Финансовая аналитика" />
+            <CheckboxItem description="Аналитика занятий" />
+          </div>
 
-@media screen and (max-width: 768px) {
-  .blog-section__header-button {
-    display: none;
-  }
+          <button class="primary-button" @click="pushToRegister">Начать работу</button>
+        </div>
 
-  .blog-section__lead-post_mobile {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
+        <div class="tarifs-section__tarif tarifs-section__tarif--featured">
+          <div class="rounded-as-icon">
+            <img src="@/assets/icons/checkbox2.svg" alt="Free" />
+          </div>
+          <p class="tarifs-section__tariftitle">Продвинутый</p>
+          <h3 class="tarifs-section__func-title">399 ₽ / месяц</h3>
 
-  .blog-section__featured-image_mobile {
-    border-radius: 16px;
-  }
+          <div class="tarifs-section__tarif-features">
+            <CheckboxItem description="До 12 учеников" />
+            <CheckboxItem description="Личный кабинет ученика" />
+            <CheckboxItem description="Финансовая аналитика" />
+            <CheckboxItem description="Аналитика занятий" />
+            <CheckboxItem description="Методическая аналитика" />
+          </div>
 
-  .blog-section__mobile-container {
-    position: relative;
-    background: inherit;
-    border-right: 1px solid #e5e7eb;
-    border-bottom: 1px solid #e5e7eb;
-    border-left: 1px solid #e5e7eb;
-  }
+          <button class="secondary-button" @click="openFreeServiceOverlay">Выбрать</button>
+        </div>
 
-  .blog-section__post-date_mobile {
-    color: #344055 !important;
-    font-family: Inter, sans-serif;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    opacity: 0.72;
-  }
+        <div class="tarifs-section__tarif">
+          <div class="rounded-as-icon">
+            <img src="@/assets/icons/checkbox2.svg" alt="Free" />
+          </div>
+          <p class="tarifs-section__tariftitle">Эксперт</p>
+          <h3 class="tarifs-section__func-title">599 ₽ / месяц</h3>
 
-  .blog-section__post-title_mobile {
-    color: #344055 !important;
-  }
+          <div class="tarifs-section__tarif-features">
+            <CheckboxItem description="Количество учеников неограничено" />
+            <CheckboxItem description="Личный кабинет ученика" />
+            <CheckboxItem description="Финансовая аналитика" />
+            <CheckboxItem description="Аналитика занятий" />
+            <CheckboxItem description="Методическая аналитика" />
+            <CheckboxItem description="Подключение двух сотрудников" />
+          </div>
 
-  .blog-section__post-preview_mobile {
-    color: #344055 !important;
-    font-family: Inter, sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    opacity: 0.8;
-  }
+          <button class="primary-button" @click="openFreeServiceOverlay">Выбрать</button>
+        </div>
 
-  .blog-section__footer-mobile {
-    justify-content: space-between;
-    align-items: center;
-  }
+        <div class="tarifs-section__tarif">
+          <div class="rounded-as-icon">
+            <img src="@/assets/icons/checkbox2.svg" alt="Free" />
+          </div>
+          <p class="tarifs-section__tariftitle">Школа</p>
+          <h3 class="tarifs-section__func-title">Расчитывается индивидуально</h3>
 
-  .blog-section__footer-button-mobile {
-    display: flex;
-  }
-}
+          <div class="tarifs-section__tarif-features">
+            <CheckboxItem description="Бизнес аккаунт" />
+            <CheckboxItem description="Все функции платформы" />
+            <CheckboxItem description="Подключение сотрудников" />
+            <CheckboxItem description="Количество учеников неограничено" />
+          </div>
 
-@media screen and (max-width: 420px) {
-  .blog-section__footer-mobile {
-    gap: 20px;
-    flex-direction: column;
-  }
-}
-</style>
+          <button class="primary-button" @click="openFreeServiceOverlay">Выбрать</button>
+        </div>
+      </div>
+
+      <!-- Оверлей с информацией о бесплатном сервисе -->
+      <div
+        v-if="showFreeServiceOverlay"
+        class="tarifs-section__free-service-overlay"
+        @click="closeFreeServiceOverlay"
+      >
+        <div class="tarifs-section__free-service-content" @click.stop>
+          <h2 class="section-title">
+            На текущий момент, наш сервис является бесплатным для всех пользователей
+          </h2>
+          <p class="desc inter-400">
+            Успейте присоединиться и получить статус первого пользователя сервиса, в дальнейшем это
+            гарантирует наличие специальных условий для Вас на пользование сервисом*
+          </p>
+          <div class="tarifs-section__caption">
+            *Специальные условия остаются на усмотрение лицензиара и действуют ограниченный период
+            времени
+          </div>
+
+          <div class="tarifs-section__overlay-buttons">
+            <button class="primary-button" @click="pushToRegister">Начать работу</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<!-- <style lang="scss" scoped>
+// Стили перенесены в landing.scss по БЭМ. Этот блок можно удалить.
+</style> -->
