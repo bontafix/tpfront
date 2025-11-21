@@ -14,12 +14,7 @@
     </div>
 
     <div class="blogs__items-container">
-      <Blog
-        v-for="blog in currentBlogs"
-        :key="blog.id"
-        :blog="blog"
-        @click="() => openBlogPage(blog.id)"
-      />
+      <Blog v-for="blog in currentBlogs" :key="blog.id" :blog="blog" @click="() => openBlogPage(blog.id)" />
     </div>
 
     <div class="blogs__pagination">
@@ -28,7 +23,11 @@
         v-if="currentPage !== 1"
         @click="goToPage(currentPage - 1)"
       >
-        <img src="/src/assets/icons/strelka.svg" alt="Стрелка" class="blogs__pagination-icon-left" />
+        <img
+          src="/src/assets/icons/strelka.svg"
+          alt="Стрелка"
+          class="blogs__pagination-icon-left"
+        />
       </button>
 
       <span
@@ -46,7 +45,11 @@
         v-if="currentPage !== pages && pages > 0"
         @click="goToPage(currentPage + 1)"
       >
-        <img src="/src/assets/icons/strelka.svg" alt="Стрелка" class="blogs__pagination-icon-right" />
+        <img
+          src="/src/assets/icons/strelka.svg"
+          alt="Стрелка"
+          class="blogs__pagination-icon-right"
+        />
       </button>
     </div>
   </section>
@@ -75,6 +78,7 @@ function openBlogPage(id) {
 
 function goToPage(page) {
   if (page < 1 || page > pages.value) return
+
   currentPage.value = page
   router.push(`/blogs?page=${page.toString()}`)
   window.scrollTo(0, 0)
@@ -84,7 +88,6 @@ async function getBlogs() {
   const result = await getNews()
   chunkBlogs(result)
   pages.value = blogs.value.length
-
   if (route.query.page) {
     const pageFromUrl = Number(route.query.page)
     if (pageFromUrl >= 1 && pageFromUrl <= pages.value) {
@@ -292,7 +295,7 @@ onMounted(async () => {
   .blogs__pagination-page {
     width: 44px;
     height: 40px;
-  }
+   }
 }
 
 @media screen and (max-width: 767px) {
