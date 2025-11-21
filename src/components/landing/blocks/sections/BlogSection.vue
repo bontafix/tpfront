@@ -66,7 +66,7 @@
 
         <template v-if="key === 0">
           <img
-            :decoding="'async'"
+            decoding="async"
             :src="`${domain}${item.file}`"
             :alt="`${item.title} — статья для репетиторов Teacher Planner`"
             :title="item.title"
@@ -110,7 +110,7 @@
 
         <template v-else>
           <img
-            :loading="'lazy'"
+            loading="lazy"
             :src="`${domain}${item.file}`"
             :alt="`${item.title} — полезная статья для преподавателей и репетиторов`"
             :title="item.title"
@@ -175,25 +175,6 @@
       </button>
     </div>
   </div>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Blog",
-    "name": "Блог Teacher Planner",
-    "description": "Статьи для репетиторов, советы по онлайн-обучению и ведению занятий",
-    "url": "https://teacherplanner.ru/blogs",
-    "publisher": {
-      "@type": "Organization",
-      "name": "Teacher Planner",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://teacherplanner.ru/logo.png"
-      }
-    },
-    "inLanguage": "ru-RU"
-  }
-  </script>
 </template>
 
 <script setup>
@@ -203,7 +184,7 @@ import { useRouter } from "vue-router";
 import { domain } from "@/utils";
 
 const router = useRouter();
-const news = ref();
+const news = ref([]);
 
 function openBlogPage(id) {
   router.push(`/blog/${id.toString()}`);
@@ -220,6 +201,25 @@ onMounted(async () => {
   });
   news.value = filteredValue.slice(0, 5);
 });
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Блог Teacher Planner",
+  "description": "Статьи для репетиторов, советы по онлайн-обучению и ведению занятий",
+  "url": "https://teacherplanner.ru/blogs",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Teacher Planner",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://api.dev-teacherplanner.ru/uploads/news/novosti-dlya-testirovaniya-24-8b7d3bdc.png"
+    }
+  },
+  "inLanguage": "ru-RU"
+}
 </script>
 
 <style scoped>
