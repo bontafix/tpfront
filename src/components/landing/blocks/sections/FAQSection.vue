@@ -45,16 +45,10 @@
             <h3 itemprop="name">{{ item.question }}</h3>
             <div class="faq-section__icon">
               <span v-if="openedFaqIndex === index">
-                <img
-                  src="@/assets/icons/rev_strelka.svg"
-                  alt="Скрыть ответ"
-                />
+                <img src="@/assets/icons/rev_strelka.svg" alt="Скрыть ответ" />
               </span>
               <span v-else>
-                <img
-                  src="@/assets/icons/strelka.svg"
-                  alt="Показать ответ"
-                />
+                <img src="@/assets/icons/strelka.svg" alt="Показать ответ" />
               </span>
             </div>
           </div>
@@ -94,52 +88,11 @@
     <meta name="description" content="Часто задаваемые вопросы о Teacher Planner: стоимость, количество учеников, условия использования платформы и ответы на другие популярные вопросы." />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://teacherplanner.ru/#faq" />
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Нужно ли ученикам платить за доступ к платформе?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Нет, для учеников пользование нашим сервисом абсолютно бесплатно."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Есть ли ограничения на количество учеников?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ограничений по количеству учеников нет."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Сколько стоит сервис?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "На текущий момент сервис бесплатен для всех пользователей. Ранние пользователи получают особые условия в будущем."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Что произойдет, если я не пользуюсь своим аккаунтом?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Учетная запись останется активной. При долгой неактивности мы можем уточнить, хотите ли вы продолжать использование сервиса."
-          }
-        }
-      ]
-    }
-    </script>
   </section>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import router from "@/router";
 
 const openedFaqIndex = ref(null);
@@ -156,21 +109,40 @@ const faqItems = [
   {
     question: "Сколько стоит сервис?",
     answer:
-      "На текущий момент, наш сервис является бесплатным для всех пользователей. Успейте присоединиться и получить статус первого пользователя сервиса, в дальнейшем это гарантирует наличие специальных условий для Вас на пользование сервисом"
+      "На текущий момент, наш сервис является бесплатным для всех пользователей. Ранние пользователи получают особые условия в будущем."
   },
   {
     question: "Что произойдет, если я не пользуюсь своим аккаунтом?",
     answer:
-      "Если вы не будете использовать сервис, ваша учетная запись останется активной, и вы сможете вернуться в любое время без потери данных. Однако, если ваша учетная запись неактивна в течение длительного времени, мы можем связаться с вами для уточнения, желаете ли вы продолжить использование платформы"
+      "Учетная запись останется активной. При долгой неактивности мы можем уточнить, хотите ли вы продолжать использование сервиса."
   }
 ];
 
 const toggleFaq = (index) => {
-  openedFaqIndex.value =
-    openedFaqIndex.value === index ? null : index;
+  openedFaqIndex.value = openedFaqIndex.value === index ? null : index;
 };
 
 function pushToFaq() {
   router.push({ name: "faq" });
 }
+
+onMounted(() => {
+  const ld = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqItems.map(item => ({
+      "@type": "Question",
+      "name": item.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.answer
+      }
+    }))
+  };
+
+  const script = document.createElement("script");
+  script.type = "application/ld+json";
+  script.text = JSON.stringify(ld);
+  document.head.appendChild(script);
+});
 </script>
