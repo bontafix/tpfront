@@ -2,17 +2,17 @@
   <main>
     <Header />
 
-    <div class="content-container">
+    <div class="content-container" itemscope itemtype="https://schema.org/WebPage">
       <Blogs />
       <Footer />
     </div>
   </main>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import Header from '../landing/blocks/Header.vue'
 import Footer from '../landing/blocks/Footer.vue'
-import Blogs from './components/blogs.vue';
+import Blogs from './components/blogs.vue'
 </script>
 
 <style scoped>
