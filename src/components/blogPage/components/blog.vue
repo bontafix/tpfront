@@ -1,30 +1,20 @@
 <template>
-  <div class="blog">
-    <img :src="`${domain}${blog.file}`" alt="Новость" class="blog__image" />
-
-    <div class="blog__container">
-      <div class="blog__text-container">
-        <h3 class="blog__title">{{ blog.title }}</h3>
-        <p class="blog__text">{{ blog.preview_text }}...</p>
-      </div>
-
-      <p class="blog__date">
-        {{
-          new Date(blog.published_at).toLocaleDateString('ru', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-          })
-        }}
-      </p>
+  <article class="blog-post" itemscope itemtype="https://schema.org/BlogPosting">
+    <img :src="`${domain}${blog.file}`" :alt="blog.title" class="blog-post__image" itemprop="image" />
+    <div class="blog-post__container">
+      <h2 class="blog-post__title" itemprop="headline">{{ blog.title }}</h2>
+      <p class="blog-post__text" itemprop="description">{{ blog.preview_text }}...</p>
+      <time class="blog-post__date" itemprop="datePublished" :datetime="blog.published_at">
+        {{ new Date(blog.published_at).toLocaleDateString('ru', { day: 'numeric', month: 'long', year: 'numeric' }) }}
+      </time>
     </div>
-  </div>
+  </article>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { domain } from '@/utils'
 
-const props = defineProps({
+defineProps({
   blog: {
     type: Object,
     required: true,
@@ -33,14 +23,14 @@ const props = defineProps({
 </script>
 
 <style scoped>
-.blog {
+.blog-post {
   display: flex;
   flex-direction: column;
   gap: 20px;
   cursor: pointer;
 }
 
-.blog__image {
+.blog-post__image {
   min-height: 266px;
   height: 266px;
   max-height: 266px;
@@ -48,7 +38,7 @@ const props = defineProps({
   border-radius: 16px;
 }
 
-.blog__container {
+.blog-post__container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -56,78 +46,61 @@ const props = defineProps({
   gap: 12px;
 }
 
-.blog__text-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin: 0 4px;
-}
-
-.blog__title {
-  font-family: Inter;
+.blog-post__title {
+  font-family: Inter, sans-serif;
   font-weight: 600;
-  font-style: Semi Bold;
   font-size: 20px;
   line-height: 28px;
   color: #344055;
 }
 
-.blog__text {
-  font-family: Inter;
+.blog-post__text {
+  font-family: Inter, sans-serif;
   font-weight: 400;
-  font-style: Regular;
   font-size: 16px;
   line-height: 24px;
   color: #344055;
   opacity: 0.8;
 }
 
-.blog__date {
-  font-family: Inter;
+.blog-post__date {
+  font-family: Inter, sans-serif;
   font-weight: 400;
-  font-style: Regular;
   font-size: 16px;
   line-height: 24px;
   color: #344055;
   opacity: 0.5;
-  margin: 0 4px;
 }
 
 @media screen and (max-width: 1023px) {
-  .blog {
+  .blog-post {
     gap: 14px;
   }
 
-  .blog__image {
+  .blog-post__image {
     min-height: 204px;
     height: 204px;
     max-height: 204px;
     border-radius: 12px;
   }
 
-  .blog__container {
+  .blog-post__container {
     gap: 8px;
   }
 
-  .blog__text-container {
-    gap: 4px;
-    margin: 0 8px;
-  }
-
-  .blog__title {
+  .blog-post__title {
     font-size: 15px;
     line-height: 22px;
   }
 
-  .blog__text {
+  .blog-post__text {
     font-size: 13px;
     line-height: 20px;
   }
 
-  .blog__date {
+  .blog-post__date {
     font-size: 13px;
     line-height: 20px;
-    margin: 0 8px;
   }
 }
 </style>
