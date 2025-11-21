@@ -68,29 +68,11 @@
     <Teleport to="body">
       <vReview v-if="showModal" @close="closeModal" />
     </Teleport>
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": "Отзывы преподавателей о Teacher Planner",
-      "itemListElement": [
-        <template v-for="(item, index) in reviews">
-          {
-            "@type": "Review",
-            "author": "{{ item.name }}",
-            "reviewBody": "{{ item.text }}",
-            "position": {{ index + 1 }}
-          }<span v-if="index < reviews.length - 1">,</span>
-        </template>
-      ]
-    }
-    </script>
   </section>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import vReview from '@/components/modals/landing/v-review.vue'
 import { getReviews } from '@/api/requests'
 import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -100,7 +82,6 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 
 const modules = [Navigation]
-
 const swiperOptions: any = {
   navigation: {
     nextEl: '.home-swiper-button-next',
@@ -124,18 +105,26 @@ function onResize() {
   resolution.value = window.innerWidth
 }
 
-watch(showModal, (newValue) => {
-  if (newValue) {
-    document.body.style.overflow = 'hidden'
-  } else {
-    document.body.style.overflow = ''
-  }
-})
-
 onMounted(async () => {
   resolution.value = window.innerWidth
   window.addEventListener('resize', onResize)
   reviews.value = await getReviews()
+
+  const ld = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Отзывы преподавателей о Teacher Planner",
+    "itemListElement": reviews.value.map((item, index) => ({
+      "@type": "Review",
+      "author": item.name,
+      "reviewBody": item.text,
+      "position": index + 1
+    }))
+  }
+  const script = document.createElement('script')
+  script.type = 'application/ld+json'
+  script.text = JSON.stringify(ld)
+  document.head.appendChild(script)
 })
 
 onUnmounted(() => {
