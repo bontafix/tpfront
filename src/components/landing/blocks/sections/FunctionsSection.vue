@@ -1,8 +1,10 @@
 <template>
-  <section class="functions-section" id="functions" itemscope itemtype="https://schema.org/HowTo">
+  <section class="functions-section" id="functions" itemscope itemtype="https://schema.org/ItemList">
+    <meta itemprop="name" content="Функции TeacherPlanner" />
+
     <div class="functions-section__head">
-      <div class="functions-section__badge" itemprop="name">Функции</div>
-      <h2 class="functions-section__title section-title inter-500" itemprop="description">
+      <div class="functions-section__badge">Функции</div>
+      <h2 class="functions-section__title section-title inter-500">
         Чистое рабочее место – первый шаг навстречу новой жизни репетитора
       </h2>
       <p class="functions-section__desc desc inter-400">
@@ -10,42 +12,64 @@
       </p>
     </div>
 
-    <div class="functions-section__list" itemprop="step">
-      <FunctionItem class="function-item"
-        title="Календарь, созданный специально для репетитора"
-        description="Создавайте карточки учеников, пробные уроки и формируйте расписание за 3 клика"
-        iconPath="calendar.svg"
-        imagePath="calendar.gif"
-        mobilePath="calendar_mobile.png"
-        itemprop="step" />
+    <div class="functions-section__list">
+      <div itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <meta itemprop="position" content="1" />
+        <FunctionItem
+          class="function-item"
+          title="Календарь, созданный специально для репетитора"
+          description="Создавайте карточки учеников, пробные уроки и формируйте расписание за 3 клика"
+          iconPath="calendar.svg"
+          imagePath="calendar.gif"
+          mobilePath="calendar_mobile.png"
+        />
+      </div>
 
-      <FunctionItem class="function-item"
-        title="Быстрый доступ к текущим занятиям"
-        description="Заменяет блокнот и находит всю нужную информацию с прошлого урока. Ускорьте свою подготовку к урокам за счет быстрого доступа к информации!"
-        iconPath="rocket.svg"
-        imagePath="current_lesson.gif"
-        :reverse="true"
-        mobilePath="cl_mobile.png"
-        itemprop="step" />
+      <div itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <meta itemprop="position" content="2" />
+        <FunctionItem
+          class="function-item"
+          title="Быстрый доступ к текущим занятиям"
+          description="Заменяет блокнот и находит всю нужную информацию с прошлого урока."
+          iconPath="rocket.svg"
+          imagePath="current_lesson.gif"
+          :reverse="true"
+          mobilePath="cl_mobile.png"
+        />
+      </div>
 
-      <FunctionItem class="function-item"
-        title="Аналитика занятий"
-        description="Наблюдать за успехами каждого ученика стало еще проще – откройте для себя раздел аналитики проведенных занятий и достигайте результата вместе со своими учениками."
-        iconPath="analytics.svg"
-        imagePath="analytics.gif"
-        mobilePath="analytics_mobile.png"
-        :checkboxes="['Повышайте качество своих уроков', 'Сохраняйте индивидуальный подход даже при работе с большим количеством учеников']"
-        itemprop="step" />
+      <div itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <meta itemprop="position" content="3" />
+        <FunctionItem
+          class="function-item"
+          title="Аналитика занятий"
+          description="Наблюдать за успехами каждого ученика стало еще проще."
+          iconPath="analytics.svg"
+          imagePath="analytics.gif"
+          mobilePath="analytics_mobile.png"
+          :checkboxes="[
+            'Повышайте качество своих уроков',
+            'Сохраняйте индивидуальный подход даже при работе с большим количеством учеников'
+          ]"
+        />
+      </div>
 
-      <FunctionItem class="function-item"
-        title="Финансовая аналитика"
-        description="Не нужно держать все в голове, сфокусируйтесь на проведении уроков, а учет финансов предоставьте TeacherPlanner"
-        iconPath="finance.svg"
-        imagePath="finance.gif"
-        :reverse="true"
-        mobilePath="finance_mobile.png"
-        :checkboxes="['Учет оплаченных занятий', 'Подробная финансовая статистика']"
-        itemprop="step" />
+      <div itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <meta itemprop="position" content="4" />
+        <FunctionItem
+          class="function-item"
+          title="Финансовая аналитика"
+          description="Не нужно держать все в голове — учет финансов предоставьте TeacherPlanner"
+          iconPath="finance.svg"
+          imagePath="finance.gif"
+          :reverse="true"
+          mobilePath="finance_mobile.png"
+          :checkboxes="[
+            'Учет оплаченных занятий',
+            'Подробная финансовая статистика'
+          ]"
+        />
+      </div>
     </div>
   </section>
 </template>

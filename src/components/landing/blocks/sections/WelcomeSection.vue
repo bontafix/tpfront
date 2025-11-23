@@ -1,5 +1,9 @@
 <template>
   <section class="welcome" id="welcome" itemscope itemtype="https://schema.org/Product">
+    <meta itemprop="name" content="Teacher Planner" />
+    <meta itemprop="description" content="Цифровой инструмент современного репетитора с аналитикой занятий, кабинетом ученика и автоматическим учетом финансов" />
+    <meta itemprop="image" content="../../../../assets/images/desktop_main.png" />
+
     <div class="welcome__head">
       <h1 class="welcome__title title" itemprop="name">Teacher Planner</h1>
       <p class="welcome__desc desc inter-400" itemprop="description">
