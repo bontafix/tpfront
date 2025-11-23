@@ -1,0 +1,20 @@
+User-agent: *
+
+Allow: /
+
+Allow: /faq/
+
+Allow: /blogs
+Allow: /blogs$
+
+Allow: /blogs?page=
+
+Allow: /blog/
+Allow: /blog/*
+
+Disallow: /
+
+Allow: /sitemap.xml
+
+Sitemap: https://teacherplanner.ru/sitemap.xml
+Host: teacherplanner.ru
