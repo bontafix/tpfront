@@ -7,7 +7,7 @@
         v-for="(item, index) in blogs"
         :key="item.id"
         class="sidebar-latest-blogs__item"
-        @click="() => openBlogPage(item.id)"
+        @click="() => openBlogPage(item.id, item.slug)"
         :itemprop="'itemListElement'"
         itemscope
         itemtype="https://schema.org/BlogPosting"
@@ -38,9 +38,9 @@ import { ref, onMounted } from 'vue'
 
 const blogs = ref([])
 
-function openBlogPage(id) {
+function openBlogPage(id, slug) {
   if (window.innerWidth > 1439 || window.innerWidth < 768) {
-    window.location.href = `/blog/${id}`
+    window.location.href = `/blog/${id.toString()}/${slug.toString()}`
   }
 }
 
