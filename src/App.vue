@@ -20,7 +20,13 @@ const userAuth = async () => {
 const loadData = async () => {
   await store.setUserAuthenticated()
   const authenticated = store.isAuth
-  if (!authenticated && route.path !== '/') {
+  if (
+    !authenticated &&
+    route.path !== '/' &&
+    route.name !== 'blogs' &&
+    route.name !== 'blog' &&
+    route.name !== 'faq'
+  ) {
     router.push({ name: 'login' })
   }
 }

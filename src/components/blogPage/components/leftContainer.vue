@@ -27,14 +27,15 @@
     />
 
     <div class="blog-article__content" itemprop="articleBody">
-      <p v-html="data.text"></p>
+      <p v-html="markdownText"></p>
     </div>
   </article>
 </template>
 
 <script setup>
 import { domain } from '@/utils'
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import MarkdownIt from 'markdown-it'
 
 const props = defineProps({
   data: {
@@ -43,7 +44,18 @@ const props = defineProps({
   },
 })
 
+const markdownText = ref()
+
 const keywords = computed(() => props.data.keywords.split(', '))
+
+onMounted(() => {
+  const markdown = new MarkdownIt({
+    breaks: true,
+    linkify: true,
+    typographer: true,
+  })
+  markdownText.value = markdown.render(props.data.text)
+})
 </script>
 
 <style scoped>
@@ -168,5 +180,20 @@ const keywords = computed(() => props.data.keywords.split(', '))
   .blog-article__image {
     max-height: 240px;
   }
+}
+</style>
+
+<style>
+h1 {
+  font-family: Inter;
+  font-weight: 600;
+  font-style: Semi Bold;
+  font-size: 23px;
+  line-height: 40px;
+  color: #344055;
+}
+
+a {
+  color: #1d4ecc;
 }
 </style>
