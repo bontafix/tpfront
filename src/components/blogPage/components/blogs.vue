@@ -14,7 +14,7 @@
     </header>
 
     <div class="blogs-section__items" itemprop="blogPost">
-      <Blog v-for="blog in currentBlogs" :key="blog.id" :blog="blog" @click="() => openBlogPage(blog.id)" />
+      <Blog v-for="blog in currentBlogs" :key="blog.id" :blog="blog" @click="() => openBlogPage(blog.id, blog.slug)" />
     </div>
 
     <nav class="blogs-section__pagination" aria-label="Пагинация">
@@ -63,8 +63,8 @@ const currentPage = ref(1)
 
 const currentBlogs = computed(() => blogs.value[currentPage.value - 1] || [])
 
-function openBlogPage(id) {
-  router.push(`/blog/${id.toString()}`)
+function openBlogPage(id, slug) {
+  router.push(`/blog/${id.toString()}/${slug.toString()}`)
 }
 
 function goToPage(page) {

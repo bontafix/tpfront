@@ -195,5 +195,9 @@ h1 {
 
 a {
   color: #1d4ecc;
+  font-family: Inter, sans-serif;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 27px;
 }
 </style>

@@ -50,7 +50,7 @@
           key === 0 && 'blog-section__lead-post blog-section__lead-post_mobile',
           key !== 0 && 'blog-section__classic-post'
         ]"
-        @click="openBlogPage(item.id)"
+        @click="openBlogPage(item.id, item.slug)"
       >
         <meta itemprop="mainEntityOfPage" :content="`https://teacherplanner.ru/blog/${item.id}`" />
         <meta itemprop="author" content="Teacher Planner" />
@@ -161,8 +161,8 @@ import { domain } from "@/utils";
 const router = useRouter();
 const news = ref([]);
 
-function openBlogPage(id) {
-  router.push(`/blog/${id.toString()}`);
+function openBlogPage(id, slug) {
+  router.push(`/blog/${id.toString()}/${slug.toString()}`);
 }
 
 function openBlogsPage() {
