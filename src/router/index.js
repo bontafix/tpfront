@@ -57,6 +57,8 @@ const vConditionalRoute = () => import('@/components/conditionalRoute/v-conditio
 const blogsPage = () => import('@/components/blogPage/blogsPage.vue')
 const blogPage = () => import('@/components/blogPage/blogPage.vue')
 
+const notFoundPage = () => import('@/components/404Page/404Page.vue')
+
 
 /* ================================================================== Маршруты ================================================================== */
 
@@ -243,9 +245,14 @@ const router = createRouter({
       component: blogsPage
     },
     {
-      path: '/blog/:id',
+      path: '/blog/:id/:slug',
       name: 'blog',
       component: blogPage
+    },
+    {
+      path: '/:pathMatch(.*)',
+      name: '404',
+      component: notFoundPage,
     }
   ],
 })

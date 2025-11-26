@@ -27,14 +27,15 @@
     />
 
     <div class="blog-article__content" itemprop="articleBody">
-      <p v-html="data.text"></p>
+      <p v-html="markdownText"></p>
     </div>
   </article>
 </template>
 
 <script setup>
 import { domain } from '@/utils'
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import MarkdownIt from 'markdown-it'
 
 const props = defineProps({
   data: {
@@ -43,7 +44,18 @@ const props = defineProps({
   },
 })
 
+const markdownText = ref()
+
 const keywords = computed(() => props.data.keywords.split(', '))
+
+onMounted(() => {
+  const markdown = new MarkdownIt({
+    breaks: true,
+    linkify: true,
+    typographer: true,
+  })
+  markdownText.value = markdown.render(props.data.text)
+})
 </script>
 
 <style scoped>
@@ -167,6 +179,89 @@ const keywords = computed(() => props.data.keywords.split(', '))
 
   .blog-article__image {
     max-height: 240px;
+  }
+}
+</style>
+
+<style>
+h1 {
+  font-family: Inter;
+  font-weight: 600;
+  font-style: Semi Bold;
+  font-size: 23px;
+  line-height: 40px;
+  color: #344055;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-family: Inter;
+  font-weight: 600;
+  font-style: Semi Bold;
+  font-size: 23px;
+  line-height: 40px;
+  color: #344055;
+  margin-bottom: 10px;
+}
+
+a {
+  color: #1d4ecc;
+  font-family: Inter, sans-serif;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 27px;
+}
+
+p {
+  font-family: Inter;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 17px;
+  line-height: 27px;
+  color: #344055;
+}
+
+blockquote {
+  padding: 28px 32px;
+  border: 1px solid #e9eaeb;
+  border-radius: 12px;
+  margin: 32px 0;
+  font-family: Inter;
+  font-weight: 500;
+  font-style: Italic;
+  font-size: 16px;
+  line-height: 26px;
+  color: #344055;
+  background-color: #f8f9fb;
+}
+
+@media screen and (max-width: 1023px) {
+  h1 {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  h2 {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  a {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  p {
+    font-size: 13px;
+    line-height: 20px;
+    color: #344055;
+  }
+
+  blockquote {
+    padding: 16px 20px;
+    margin: 24px 0 28px 0;
+    font-size: 13px;
+    line-height: 21px;
   }
 }
 </style>
