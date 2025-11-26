@@ -6,12 +6,12 @@
     <meta property="og:title" content="Блог Teacher Planner — статьи для репетиторов и онлайн-преподавателей" />
     <meta property="og:description" content="Экспертные материалы, советы репетиторам и полезные статьи по онлайн-обучению." />
     <meta property="og:url" content="https://teacherplanner.ru/blogs" />
-    <meta property="og:image" content="https://api.dev-teacherplanner.ru/uploads/news/novosti-dlya-testirovaniya-24-8b7d3bdc.png" />
+    <meta property="og:image" content="https://dev-teacherplanner.ru/og-image.jpg" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Блог Teacher Planner — эксперты делятся опытом" />
     <meta name="twitter:description" content="Статьи, советы и разборы для репетиторов и онлайн-учителей." />
-    <meta name="twitter:image" content="https://api.dev-teacherplanner.ru/uploads/news/novosti-dlya-testirovaniya-24-8b7d3bdc.png" />
+    <meta name="twitter:image" content="https://dev-teacherplanner.ru/og-image.jpg" />
 
     <div class="blog-section__header">
       <div class="blog-section__header-container">
@@ -186,7 +186,7 @@ onMounted(async () => {
       "name": "Teacher Planner",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://api.dev-teacherplanner.ru/uploads/news/novosti-dlya-testirovaniya-24-8b7d3bdc.png"
+        "url": "https://dev-teacherplanner.ru/og-image.jpg"
       }
     },
     "inLanguage": "ru-RU"
