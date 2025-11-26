@@ -198,8 +198,8 @@ h2 {
   font-family: Inter;
   font-weight: 600;
   font-style: Semi Bold;
-  font-size: 21px;
-  line-height: 36px;
+  font-size: 23px;
+  line-height: 40px;
   color: #344055;
   margin-bottom: 10px;
 }
@@ -242,8 +242,8 @@ blockquote {
   }
 
   h2 {
-    font-size: 15px;
-    line-height: 22px;
+    font-size: 16px;
+    line-height: 24px;
   }
 
   a {
