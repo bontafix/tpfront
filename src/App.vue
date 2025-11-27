@@ -27,7 +27,11 @@ const loadData = async () => {
     route.name !== 'blog' &&
     route.name !== 'faq'
   ) {
-    router.push({ name: 'login' })
+    await router.push({ name: 'login' })
+  } else if (store.user_type === 'teacher') {
+      await router.push({name: 'home_teacher'})
+  } else if (store.user_type === 'student') {
+      await router.push({name: 'student_cabinet'})
   }
 }
 
