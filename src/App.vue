@@ -20,19 +20,25 @@ const userAuth = async () => {
 const loadData = async () => {
   await store.setUserAuthenticated()
   const authenticated = store.isAuth
+
+  const isLandingPage = route.path === '/' ||
+    route.name === 'blogs' ||
+    route.name === 'blog' ||
+    route.name === 'faq';
+
   if (
-    !authenticated &&
-    route.path !== '/' &&
-    route.name !== 'blogs' &&
-    route.name !== 'blog' &&
-    route.name !== 'faq'
+    !authenticated && !isLandingPage
   ) {
     await router.push({ name: 'login' })
-  } else if (store.user_type === 'teacher') {
+  } else if (isLandingPage) {
+    if (store.user_type === 'teacher') {
       await router.push({name: 'home_teacher'})
-  } else if (store.user_type === 'student') {
+    } else if (store.user_type === 'student') {
       await router.push({name: 'student_cabinet'})
+    }
   }
+
+
 }
 
 onMounted(async () => {
