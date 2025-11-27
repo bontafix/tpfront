@@ -78,7 +78,7 @@ export const useMyStore = defineStore('myStore', {
     },
 
     async setUserAuthenticated() {
-      if(this.isAuth === null) {
+      if(this.isAuth === null || !this.user_type) {
         const response = await checkUserAuth()
         this.isAuth = response.authorized
         this.user_type = response.user_type;
