@@ -191,6 +191,17 @@ h1 {
   font-size: 23px;
   line-height: 40px;
   color: #344055;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-family: Inter;
+  font-weight: 600;
+  font-style: Semi Bold;
+  font-size: 23px;
+  line-height: 40px;
+  color: #344055;
+  margin-bottom: 10px;
 }
 
 a {
@@ -199,5 +210,58 @@ a {
   font-weight: 400;
   font-size: 17px;
   line-height: 27px;
+}
+
+p {
+  font-family: Inter;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 17px;
+  line-height: 27px;
+  color: #344055;
+}
+
+blockquote {
+  padding: 28px 32px;
+  border: 1px solid #e9eaeb;
+  border-radius: 12px;
+  margin: 32px 0;
+  font-family: Inter;
+  font-weight: 500;
+  font-style: Italic;
+  font-size: 16px;
+  line-height: 26px;
+  color: #344055;
+  background-color: #f8f9fb;
+}
+
+@media screen and (max-width: 1023px) {
+  h1 {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  h2 {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  a {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  p {
+    font-size: 13px;
+    line-height: 20px;
+    color: #344055;
+  }
+
+  blockquote {
+    padding: 16px 20px;
+    margin: 24px 0 28px 0;
+    font-size: 13px;
+    line-height: 21px;
+  }
 }
 </style>
