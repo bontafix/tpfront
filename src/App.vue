@@ -1,5 +1,4 @@
 <script setup>
-import { computed, nextTick } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import { onMounted } from 'vue'
 import { isUserAuth } from '@/utils'
@@ -21,24 +20,21 @@ const loadData = async () => {
   await store.setUserAuthenticated()
   const authenticated = store.isAuth
 
-  const isLandingPage = route.path === '/' ||
-    route.name === 'blogs' ||
-    route.name === 'blog' ||
-    route.name === 'faq';
-
   if (
-    !authenticated && !isLandingPage
+    !authenticated &&
+    route.name !== 'landing' &&
+    route.name !== 'blogs' &&
+    route.name !== 'blog' &&
+    route.name !== 'faq'
   ) {
     await router.push({ name: 'login' })
-  } else if (isLandingPage) {
+  } else if (authenticated && route.name === 'landing') {
     if (store.user_type === 'teacher') {
-      await router.push({name: 'home_teacher'})
+      await router.push({ name: 'home_teacher' })
     } else if (store.user_type === 'student') {
-      await router.push({name: 'student_cabinet'})
+      await router.push({ name: 'student_cabinet' })
     }
   }
-
-
 }
 
 onMounted(async () => {
