@@ -141,8 +141,8 @@ const closeMenu = () => {
 
 const logout = async () => {
   await logoutUser()
+  store.isAuth = null
   router.push({name: 'landing'})
-
 }
 
 const toggleDropdown = async () => {
