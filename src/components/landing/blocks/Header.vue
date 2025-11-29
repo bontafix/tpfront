@@ -14,25 +14,33 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import router from '@/router'
 import { isUserAuth } from '@/utils'
+import { useMyStore } from '@/stores/myStore'
 
 const userAuth = ref(false)
+const myStore = useMyStore()
 
 function pushToLogin() {
-  if(userAuth.value) {
-    router.push({
-      name: 'home_teacher',
-    })
-  } else {
+  if (userAuth.value) {
+    if (myStore.user_type === 'teacher') {
       router.push({
+        name: 'home_teacher',
+      })
+    } else if (myStore.user_type === 'student') {
+      router.push({
+        name: 'student_cabinet',
+      })
+    }
+  } else {
+    router.push({
       name: 'login',
     })
   }
 }
 
-onMounted(()=>{
+onMounted(() => {
   isUserAuth().then(authenticated => {
     userAuth.value = authenticated
   })
