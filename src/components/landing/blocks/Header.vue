@@ -8,6 +8,7 @@
       <a href="#reviews" class="navigation-button">Отзывы</a>
       <a href="#faq" class="navigation-button">FAQ</a>
     </div>
+    
     <button v-show="!userAuth" class="primary-button login-button" @click="pushToLogin">Вход</button>
     <button v-show="userAuth" class="navigation-button bold" @click="pushToLogin">Главная</button>
   </header>
