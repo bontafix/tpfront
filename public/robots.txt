@@ -9,7 +9,6 @@ Allow: /blogs$
 
 Allow: /blogs?page=
 
-Allow: /blog/
 Allow: /blog/*
 
 Disallow: /
