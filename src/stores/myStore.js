@@ -7,33 +7,30 @@ export const useMyStore = defineStore('myStore', {
     info: null,
     userInfo: null,
     notifications: null,
-
     isAuth: null,
 
     subjects: [
-{ id: 1, name: "Английский язык" },
-{ id: 2, name: "Математика" },
-{ id: 3, name: "Физика" },
-{ id: 4, name: "Химия" },
-{ id: 5, name: "Биология" },
-{ id: 6, name: "Русский язык" },
-{ id: 7, name: "Литература" },
-{ id: 8, name: "Музыка" },
-{ id: 9, name: "Информатика" },
-{ id: 10, name: "Программирование" },
-{ id: 11, name: "Китайский язык" },
-{ id: 12, name: "Корейский язык" },
-{ id: 13, name: "Японский язык" },
-{ id: 14, name: "Немецкий язык" },
-{ id: 15, name: "Окружающий мир" },
-{ id: 16, name: "География" },
-{ id: 17, name: "История" },
-{ id: 18, name: "Обществознание" },
-{ id: 19, name: "Французский язык" },
-{ id: 20, name: "Испанский язык" }
-
-
-],
+      { id: 1, name: "Английский язык" },
+      { id: 2, name: "Математика" },
+      { id: 3, name: "Физика" },
+      { id: 4, name: "Химия" },
+      { id: 5, name: "Биология" },
+      { id: 6, name: "Русский язык" },
+      { id: 7, name: "Литература" },
+      { id: 8, name: "Музыка" },
+      { id: 9, name: "Информатика" },
+      { id: 10, name: "Программирование" },
+      { id: 11, name: "Китайский язык" },
+      { id: 12, name: "Корейский язык" },
+      { id: 13, name: "Японский язык" },
+      { id: 14, name: "Немецкий язык" },
+      { id: 15, name: "Окружающий мир" },
+      { id: 16, name: "География" },
+      { id: 17, name: "История" },
+      { id: 18, name: "Обществознание" },
+      { id: 19, name: "Французский язык" },
+      { id: 20, name: "Испанский язык" }
+    ],
 
     user_type: '',
 
@@ -81,9 +78,10 @@ export const useMyStore = defineStore('myStore', {
     },
 
     async setUserAuthenticated() {
-      if(this.isAuth === null) {
+      if(!this.isAuth || !this.user_type) {
         const response = await checkUserAuth()
         this.isAuth = response.authorized
+        this.user_type = response.user_type;
       }
     }
   },

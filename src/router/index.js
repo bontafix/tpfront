@@ -38,7 +38,7 @@ const vGroupDetails = () => import('@/components/students/v-group-details.vue')
 const VHistoryOperations = () => import('@/components/finance/v-history-operations.vue')
 
 /* Личный кабинет учителя */
-const vCabinet = () => import( '@/components/teacherCabinet/v-cabinet.vue')
+const vCabinet = () => import('@/components/teacherCabinet/v-cabinet.vue')
 
 /* Новости */
 const vNews = () => import('@/components/newsPage/v-news.vue')
@@ -47,7 +47,7 @@ const vNews = () => import('@/components/newsPage/v-news.vue')
 const vLogin = () => import('@/components/user/v-login.vue')
 
 /* Кабинет ученика */
-const vStudentCabinet  = () => import('@/components/studentCabinet/v-student-cabinet.vue')
+const vStudentCabinet = () => import('@/components/studentCabinet/v-student-cabinet.vue')
 
 /* Уведомления */
 const vNotifications = () => import('@/components/notificationsPage/v-notifications.vue')
@@ -159,7 +159,7 @@ const studentCabinet = [
     path: 'student-cabinet/',
     name: 'student_cabinet',
     component: vStudentCabinet,
-    meta: {isStudent: true}
+    meta: { isStudent: true }
   }
 ]
 
@@ -258,15 +258,38 @@ const router = createRouter({
 })
 
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const store = useMyStore()
+  await store.setUserAuthenticated()
 
-  // user_type может быть 'student' или 'teacher'
+  const authenticated = store.isAuth
   const userType = store.user_type || localStorage.getItem('user_type')
-  if (to.meta.isStudent && userType === 'teacher') {
-    // запрещаем teacher заходить на student-only страницы
-    return next({ name: 'home_teacher' })
+
+  if (
+    !authenticated &&
+    to.name !== 'landing' &&
+    to.name !== 'blogs' &&
+    to.name !== 'blog' &&
+    to.name !== 'faq' &&
+    to.name !== 'login' &&
+    to.name !== 'register' &&
+    to.name !== 'link_profile'
+  ) {
+    return next({ name: 'login' })
+  } else if (authenticated && to.name === 'landing') {
+    if (userType === 'teacher') {
+      next({ name: 'home_teacher' })
+    } else if (userType === 'student') {
+      next({ name: 'student_cabinet' })
+    } else {
+      next()
+    }
   }
+  // user_type может быть 'student' или 'teacher'
+  // if (to.meta.isStudent && userType === 'teacher') {
+  //   // запрещаем teacher заходить на student-only страницы
+  //   return next({ name: 'home_teacher' })
+  // }
 
   next()
 })

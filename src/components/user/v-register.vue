@@ -102,6 +102,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { registerUser } from '@/api/requests'
+import { useMyStore } from '@/stores/myStore.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -126,7 +127,7 @@ const isValid = computed(() => {
   )
 })
 
-
+const store = useMyStore();
 
 const passwordInputType = ref('password')
 
@@ -145,10 +146,14 @@ const submitForm = async () => {
       teacher_ref_cod: String(form.value.teacher_ref_cod)
     }
 
-    await registerUser(requestBody)
-    router.push({ name: 'login' })
+    await registerUser(requestBody);
+    await store.setUserAuthenticated();
+    if (store.user_type === 'teacher') {
+      await router.push({name: 'home_teacher'});
+    } else if (store.user_type === 'student') {
+      await router.push({name: 'student_cabinet'});
+    }
   }
-  return
 }
 
 onMounted(() => {
