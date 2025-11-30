@@ -271,8 +271,9 @@ router.beforeEach(async (to, from, next) => {
     to.name !== 'blogs' &&
     to.name !== 'blog' &&
     to.name !== 'faq' &&
-    to.name !== 'login' && 
-    to.name !== 'register'
+    to.name !== 'login' &&
+    to.name !== 'register' &&
+    to.name !== 'link_profile'
   ) {
     return next({ name: 'login' })
   } else if (authenticated && to.name === 'landing') {
