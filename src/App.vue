@@ -4,6 +4,7 @@ import { onMounted } from 'vue'
 import { isUserAuth } from '@/utils'
 import { connectWebSocket } from './ws'
 import { useMyStore } from './stores/myStore'
+import vCookieModal from './components/generalComponents/v-cookie-modal.vue'
 
 import vNotification from './components/generalComponents/v-notification.vue'
 
@@ -27,6 +28,7 @@ onMounted(async () => {
 <template>
   <RouterView />
   <v-notification />
+  <v-cookie-modal />
 </template>
 
 <style>
