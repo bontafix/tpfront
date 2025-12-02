@@ -2137,7 +2137,7 @@ input:checked + .slider::before {
   }
 }
 .calendar-row__item.active {
-  background-color: #eaf0ff !important;
+  border: 2px solid #E9EAEB !important;
   color: var(--custom-black-text);
 }
 .night__mode .calendar-row__item.active {

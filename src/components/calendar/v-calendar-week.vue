@@ -41,6 +41,7 @@
                         class="calendar-row__item"
                         @dragover.prevent
                         @drop="(event) => handleDrop(event, columnIndex)"
+                        :class="{ active: day?.date === activeDay }"
                       >
                         <div class="calendar-row__item-content calendar-card">
                           <div
@@ -252,7 +253,7 @@ const config = ref({
   },
 })
 
-
+const activeDay = computed(() => `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDay() < 10 ? '0' + new Date().getDay() : new Date().getDay()}`)
 
 /* ============================================================ Методы ============================================================ */
 

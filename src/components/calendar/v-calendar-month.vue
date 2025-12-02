@@ -32,6 +32,7 @@
                         :key="dayIndex"
                         @dragover.prevent
                         @drop="(event) => handleDrop(event, dayIndex, weekIndex)"
+                        :class="{ active: day?.date === activeDay }"
                       >
                         <div class="calendar-row__item-container">
                           <div class="calendar-row__item-content calendar-card" v-if="day">

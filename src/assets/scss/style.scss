@@ -2388,12 +2388,11 @@ input:checked + .slider::before {
       }
     }
     &__item.active {
-      background-color: #eaf0ff !important;
+      border: 2px solid #E9EAEB !important;
       color: var(--custom-black-text);
-
     }
     .night__mode &__item.active {
-      background-color: #4c4c4c !important;
+      border: 2px solid #E9EAEB !important;
     }
     &__item-content {
       min-height: 188px;
