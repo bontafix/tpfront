@@ -1,0 +1,340 @@
+[33mcommit 6af0d38fe28f32708b3004c020b3880733e51d54[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Merge: 68ddc63 7b233c4
+Author: Martin <ppirks@gmail.com>
+Date:   Wed Nov 12 23:17:41 2025 +0300
+
+    Merge unrelated histories: keep local version
+
+[33mcommit 68ddc632313b5b95f0cb9ec44eda41903cc6f51f[m[33m ([m[1;32mdev[m[33m)[m
+Author: dankuzmenko <sh0k555@yandex.ru>
+Date:   Wed Nov 12 21:00:52 2025 +0300
+
+    #645: поправил изображения способа связи
+
+[33mcommit 09313a756d1592a6626724f08e42d750c9fa44c5[m
+Author: Kuzmenko Daniil <sh0k555@yandex.ru>
+Date:   Wed Nov 12 16:05:11 2025 +0300
+
+    #645: изменил путь к изображениям способов связи на странице учеников. Скрыл поле комментария, если выставлена оценка в ответе ученика. Вернул изменения Антона
+
+[33mcommit a4e4b04339d2a8381865af027979f0f3b43da435[m
+Author: Kuzmenko Daniil <sh0k555@yandex.ru>
+Date:   Tue Nov 11 16:43:12 2025 +0300
+
+    #645: Добавил обновление страницы после добавления оценки и создания занятия. Перенес коммиты #639, #637 с другой ветки
+
+[33mcommit 796ad5bd9ff9c40c08899e8f898faf23b65b89d4[m
+Author: Kuzmenko Daniil <sh0k555@yandex.ru>
+Date:   Tue Nov 11 10:35:15 2025 +0300
+
+    #640: добавил логику удаления ДЗ пользователя
+
+[33mcommit 312b404fa91b6239ea49d9aaa82f383f958bedc9[m[33m ([m[1;31mmy/dev[m[33m)[m
+Author: Martin <ppirks@gmail.com>
+Date:   Mon Nov 10 17:04:23 2025 +0300
+
+    Fix: base url
+
+[33mcommit 486fc01be870e9b157203f400889c5c553fc83f3[m
+Author: Martin <ppirks@gmail.com>
+Date:   Mon Nov 10 17:02:19 2025 +0300
+
+    Fix: list student answer
+
+[33mcommit 01f068fbbde3f4cc035af76fd7cda201113edb2f[m[33m ([m[1;32mdebug-auth[m[33m)[m
+Author: Martin <ppirks@gmail.com>
+Date:   Mon Nov 10 13:12:07 2025 +0300
+
+    Fix: url answer in student cabinet
+
+[33mcommit a09d5652778699af2db2c711aff7d22a94257a95[m
+Author: Martin <ppirks@gmail.com>
+Date:   Mon Nov 10 09:48:22 2025 +0300
+
+    Fix: base url
+
+[33mcommit 0496c30bc865b24824fde76557b73f3ff8ca3ff7[m
+Author: Martin <ppirks@gmail.com>
+Date:   Mon Nov 10 09:41:06 2025 +0300
+
+    deploy
+
+[33mcommit 81573fc9ac810ebc97b661a79762f3c071d384c7[m[33m ([m[1;31mmy/main[m[33m)[m
+Author: Martin <ppirks@gmail.com>
+Date:   Mon Nov 10 08:38:08 2025 +0300
+
+    Fix: ws
+
+[33mcommit ae80d3f6ee27ae0824d8f2c9b3a1299d7810b122[m
+Author: Martin <ppirks@gmail.com>
+Date:   Sun Nov 9 22:37:42 2025 +0300
+
+    Fix: create url answer + Ok!
+
+[33mcommit b0055382a7c3cd3ff8ac672ac623fd1ec5265f85[m
+Author: Martin <ppirks@gmail.com>
+Date:   Sun Nov 9 22:33:54 2025 +0300
+
+    Fix: create url Ok!
+
+[33mcommit d268b61cfa995e5913b7492574aa8b90766c027a[m
+Author: Martin <ppirks@gmail.com>
+Date:   Sun Nov 9 19:15:06 2025 +0300
+
+    Fix: create url for answer
+
+[33mcommit 189443fa37100f210567c8762c77f30417cac92c[m
+Author: Martin <ppirks@gmail.com>
+Date:   Sun Nov 9 07:47:27 2025 +0300
+
+    Fix: domain in url with token, but not domainDownload
+
+[33mcommit e7cb1f14f751b9d897e5d2ca293353cb2901bce4[m
+Author: Martin <ppirks@gmail.com>
+Date:   Sat Nov 8 22:03:47 2025 +0300
+
+    Fix: domainDownload
+
+[33mcommit cc4032f4948b6a20e3c9d9ffd1ffbd23955acf1c[m
+Author: Martin <ppirks@gmail.com>
+Date:   Sat Nov 8 21:36:02 2025 +0300
+
+    Fix: function formatFilesToken domainDownload
+
+[33mcommit 7967b857394cf50b3966625fa70567f766edee2f[m
+Author: Martin <ppirks@gmail.com>
+Date:   Sat Nov 8 21:21:37 2025 +0300
+
+    Add: function formatFilesToken
+
+[33mcommit 35230d65abea29717468fdc2477134f00a19806c[m
+Author: Martin <ppirks@gmail.com>
+Date:   Fri Nov 7 16:22:09 2025 +0300
+
+    Fix: url domainDownload download in url delete
+
+[33mcommit 3a7005f4d3c477da4bff375083383de855f16b05[m
+Author: Martin <ppirks@gmail.com>
+Date:   Thu Nov 6 17:04:01 2025 +0300
+
+    teacherplanner alex init
+
+[33mcommit 7b233c49a3801e880e4c14d1e847416d2d899452[m
+Author: Anton Lysenkov <soul4code@gmail.com>
+Date:   Sun Nov 2 17:53:52 2025 +0400
+
+    Revert "Fix edit rule"
+    
+    This reverts commit 46dd304adc8adc8201eae1bdc3dea5890f066768.
+
+[33mcommit 46dd304adc8adc8201eae1bdc3dea5890f066768[m
+Author: Anton Lysenkov <soul4code@gmail.com>
+Date:   Sat Nov 1 21:05:59 2025 +0400
+
+    Fix edit rule
+
+[33mcommit 221b98f05c25baf88c61fa6c4ac0c0ed2a90e05f[m
+Author: Kuzmenko Daniil <sh0k555@yandex.ru>
+Date:   Wed Oct 29 17:50:33 2025 +0300
+
+    Сетку новостей на 1440px сделал в 3 колонки
+
+[33mcommit 0bc0d51ff160978d00dad8b63e2004274513ff33[m
+Author: Marcel <marcel@localhost>
+Date:   Wed Oct 29 15:16:09 2025 +0300
+
+    Fix: test 22
+
+[33mcommit c7b3e9de68ce7730b896141938f0ff5c25fc07de[m
+Author: Kuzmenko Daniil <sh0k555@yandex.ru>
+Date:   Tue Oct 28 14:33:56 2025 +0300
+
+    Исправил ссылку на изображения типов связи
+
+[33mcommit d2d23b4b435a6dbda9a025479bc44a949d14c2b3[m
+Author: Marcel <marcel@localhost>
+Date:   Tue Oct 28 09:03:32 2025 +0300
+
+    fix: change path front
+
+[33mcommit 9d9c9e807e87af6aee53586119d07c8d98c0e19f[m
+Merge: b4b9915 7faec56
+Author: Marcel <marcel@localhost>
+Date:   Mon Oct 27 21:31:36 2025 +0300
+
+    Тестирование деплоя
+    Merge branch 'dev'
+
+[33mcommit 7faec56600cfa69f7f864bf99a5d8fccd0a2cdb3[m
+Author: Marcel <marcel@localhost>
+Date:   Mon Oct 27 21:13:43 2025 +0300
+
+    Test
+
+[33mcommit 144393858f123ee7f6a20079060b8af9816d63ca[m
+Author: Marcel <marcel@localhost>
+Date:   Mon Oct 27 20:53:31 2025 +0300
+
+    Fix: env var
+
+[33mcommit b4b99150085436c501e161e66fc891027b19a711[m
+Merge: e20351c 3f29c90
+Author: Marcel <marcel@localhost>
+Date:   Mon Oct 27 19:38:55 2025 +0300
+
+    Fix: ci/cd
+
+[33mcommit 3f29c90fcbc05312bf16de3973c114645a1dbbd0[m
+Author: Marcel <marcel@localhost>
+Date:   Mon Oct 27 19:13:17 2025 +0300
+
+    Fix: set env variables in gitlab
+
+[33mcommit 21e77ff1a5565431e74a4e1ee32040a52c4f4857[m
+Author: Marcel <marcel@localhost>
+Date:   Mon Oct 27 18:48:12 2025 +0300
+
+    Add file .gitlab-ci after fix permission folder
+
+[33mcommit b30334eaefded9db348324d0b6709d6e9a0c4df6[m
+Author: Marcel <marcel@localhost>
+Date:   Mon Oct 27 18:41:36 2025 +0300
+
+    Add file .gitlab-ci
+
+[33mcommit e20351c2929f96ae098fbb7555fb8f185a28a511[m
+Author: Marcel <marcel@localhost>
+Date:   Mon Oct 27 18:37:40 2025 +0300
+
+    Add file .gitlab-ci
+
+[33mcommit c5659d24887b10b705cbee601f5ddbd99e975f54[m
+Author: Kuzmenko Daniil <sh0k555@yandex.ru>
+Date:   Mon Oct 27 17:47:29 2025 +0300
+
+    #636: добавил переменные окружения, убрал test-api с проекта
+
+[33mcommit 6513aa9010db18e65a358353dff754c463207645[m
+Author: Kuzmenko <kuzmenko@jfservice.ru>
+Date:   Sat Oct 25 15:33:30 2025 +0300
+
+    #634: доделал пагинацию на странице новостей, исправил верстку на главной странице
+
+[33mcommit 7500c6054f5e1a24c9c555700d7bae85bb3d1f3e[m
+Author: Kuzmenko Daniil <sh0k555@yandex.ru>
+Date:   Tue Oct 21 17:54:12 2025 +0300
+
+    #634: сделал страницу всех новостей, нужно доделать пагинацию
+
+[33mcommit 8db85973ea36e684fa41c66b6d89e37aac282451[m
+Author: Kuzmenko Daniil <sh0k555@yandex.ru>
+Date:   Fri Oct 17 16:47:18 2025 +0300
+
+    #630: добавил получение новостей, сделал блок адаптивным
+
+[33mcommit 69ee21559813809ccb19fc325e58de9b2d56265b[m
+Author: root <root@gitlab.teacherplanner.ru>
+Date:   Fri Oct 17 13:39:36 2025 +0300
+
+    Добавление иконок
+
+[33mcommit 4e21f83f077d063c35cbdec835aa14c20e5ff07f[m
+Author: Kuzmenko <kuzmenko@jfservice.ru>
+Date:   Wed Oct 15 21:37:33 2025 +0300
+
+    #631: сделал получение отзывов, добавил swiper, если отзывов больше 3, сделал адаптив
+
+[33mcommit d72332e9f880b81134f3a6273c670dcd0d959ae6[m
+Author: Kuzmenko <kuzmenko@jfservice.ru>
+Date:   Tue Oct 14 00:02:20 2025 +0300
+
+    Добавил создание отзыва, начал делать отображение отзывов
+
+[33mcommit 965223d27ccd81d114c3aa517283850b4263927f[m
+Author: Kuzmenko <kuzmenko@jfservice.ru>
+Date:   Sun Oct 12 18:27:26 2025 +0300
+
+    #632: добавил запрос на подключение демо
+
+[33mcommit e9a28db170a915e979995a4c26724dc0f9b732b0[m
+Author: Kuzmenko <kuzmenko@jfservice.ru>
+Date:   Sun Oct 12 13:45:38 2025 +0300
+
+    Поменял домен всех запросов на сервер
+
+[33mcommit dec075a2e3c688c5ffae190795822108fc3e22a3[m
+Author: Kuzmenko Daniil <sh0k555@yandex.ru>
+Date:   Wed Oct 8 17:29:01 2025 +0300
+
+    #624: изменил поля текущего занятия для мобилки
+
+[33mcommit 0344cab5c92a5a560901ea7c0ef17df24e3ef05f[m
+Author: Kuzmenko <kuzmenko@jfservice.ru>
+Date:   Wed Oct 8 01:06:42 2025 +0300
+
+    #573: поправил передачу значения даты при создании занятия
+
+[33mcommit f02451407f706f295f69b16cbc66b7d69edc474b[m
+Author: Kuzmenko Daniil <sh0k555@yandex.ru>
+Date:   Mon Oct 6 17:35:05 2025 +0300
+
+    Поправил ссылку на ответ ученика
+
+[33mcommit 42362110d564ef0f926dcd65716eaec574c86b4b[m
+Author: Kuzmenko Daniil <sh0k555@yandex.ru>
+Date:   Mon Oct 6 14:32:15 2025 +0300
+
+    Поправил скачивание файлов в кабинете ученика
+
+[33mcommit 6221034c110f1ea086637af8dce98c69999c2523[m
+Author: Kuzmenko <kuzmenko@jfservice.ru>
+Date:   Sun Oct 5 16:22:57 2025 +0300
+
+    Добавил ссылки на файлы на страницы регистрации и авторизации
+
+[33mcommit 39dbcb74f049e8356f4d1bdd5ce71e850c493b5e[m
+Author: Kuzmenko <kuzmenko@jfservice.ru>
+Date:   Sun Oct 5 15:45:12 2025 +0300
+
+    Исправил ссылки на документы
+
+[33mcommit c13be4618cc0eb6410526a644066fedbeca3d13f[m
+Merge: 8f26643 77f5aa6
+Author: Administrator <gitlab_admin_35ab1b@example.com>
+Date:   Fri Oct 3 14:32:18 2025 +0000
+
+    Merge branch 'develop' into 'main'
+    
+    Develop
+    
+    See merge request teacher-planner-group/teacherplannerfrontend!1
+
+[33mcommit 77f5aa669940f6d371051a3c58757ed56c8d9ae8[m
+Author: Kuzmenko Daniil <sh0k555@yandex.ru>
+Date:   Fri Oct 3 16:52:04 2025 +0300
+
+    Отключил переадресацию с главной, если пользователь не авторизован
+
+[33mcommit 1364a65da32a1002faf55376d644deb8d78f396a[m
+Author: Kuzmenko Daniil <sh0k555@yandex.ru>
+Date:   Fri Oct 3 13:12:15 2025 +0300
+
+    Подключил удаление расходов
+
+[33mcommit 2158e9e5995abc84de0da7fc264261a0216a0ddc[m
+Author: Kuzmenko Daniil <sh0k555@yandex.ru>
+Date:   Fri Oct 3 12:55:22 2025 +0300
+
+    Добавил обработку файлов домашнего задания
+
+[33mcommit 56fd76212772af69fcefb2c1470a7bce89d2a95d[m
+Author: Kuzmenko Daniil <sh0k555@yandex.ru>
+Date:   Fri Oct 3 11:32:52 2025 +0300
+
+    Добавил документы по ссылке
+
+[33mcommit 8f266430b06ea9911c55af8665ee4c474c3a8afd[m
+Author: root <root@gitlab.teacherplanner.ru>
+Date:   Thu Oct 2 20:26:35 2025 +0300
+
+    init

@@ -1,6 +1,7 @@
 // store/modalsStore.js
 import { defineStore } from 'pinia'
 import { checkUserAuth, getMyInfo, getStudentNotifications, getTeacherNotifications, getUserInfo } from '@/api/requests'
+import { getAccessToken } from '@/utils'
 
 export const useMyStore = defineStore('myStore', {
   state: () => ({
@@ -78,11 +79,25 @@ export const useMyStore = defineStore('myStore', {
     },
 
     async setUserAuthenticated() {
-      if(!this.isAuth || !this.user_type) {
-        const response = await checkUserAuth()
-        this.isAuth = response.authorized
-        this.user_type = response.user_type;
+      // Если авторизационный статус уже определён и есть тип пользователя — повторный запрос не нужен
+      if (this.isAuth !== null && this.user_type) {
+        return
       }
+
+      // Сначала проверяем наличие токена в cookies
+      const token = getAccessToken()
+
+      // Если токена нет — считаем пользователя неавторизованным и не шлём запрос на бэкенд
+      if (!token) {
+        this.isAuth = false
+        this.user_type = ''
+        return
+      }
+
+      // Если токен есть — подтверждаем авторизацию у бэкенда
+      const response = await checkUserAuth()
+      this.isAuth = response?.authorized ?? false
+      this.user_type = response?.user_type || ''
     }
   },
 })
