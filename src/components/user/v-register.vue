@@ -23,7 +23,7 @@
             v-model="form.username"
             type="text"
             class="custom-input"
-            id="email"
+            id="username"
             placeholder="Введите имя пользователя"
           />
         </div>
@@ -53,7 +53,7 @@
             v-model="form.password1"
             :type="passwordInputType"
             class="custom-input"
-            id="email"
+            id="password"
             placeholder="Введите пароль"
           />
           <img v-if="passwordInputType === 'password'" @click="changeInputType" src="/src/assets/images/eye-off.svg" class="password-image" alt="">

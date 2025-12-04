@@ -40,7 +40,7 @@
             :type="passwordInputType"
             class="custom-input"
             :class="{error: errorLogin}"
-            id="email"
+            id="password"
             placeholder="Введите пароль"
           />
           <img v-if="passwordInputType === 'password'" @click="changeInputType" src="/src/assets/images/eye-off.svg" class="password-image" alt="">
@@ -120,42 +120,110 @@ const changeInputType = () => {
 
 
 const submitForm = async () => {
+  console.log('🔵 [LOGIN] Начало submitForm')
+  console.log('🔵 [LOGIN] isValid:', isValid.value)
+  console.log('🔵 [LOGIN] form:', { username: form.value.username, password: '***' })
+  
   try {
-    if (isValid.value) {
-      // Здесь логика отправки email-авторизации
-      const response = await loginUser(form.value)
-      let message = ''
-      console.log(response)
-      if(response.status) {
-        if(response.data.user_type) {
-          store.user_type = response.data.user_type
-          localStorage.setItem('user_type', response.data.user_type)
-          if(response.data.user_type === 'teacher') {
-             router.push({name: 'home_teacher'})
-          } else {
-            router.push({name: 'student_cabinet'})
-          }
+    if (!isValid.value) {
+      console.log('❌ [LOGIN] Форма невалидна, выход')
+      return
+    }
+
+    console.log('🟡 [LOGIN] Вызов loginUser...')
+    const response = await loginUser(form.value)
+    console.log('🟢 [LOGIN] Ответ от loginUser получен:')
+    console.log('  - response:', response)
+    console.log('  - response.status:', response?.status)
+    console.log('  - response.data:', response?.data)
+    console.log('  - response.data?.user_type:', response?.data?.user_type)
+
+    // Проверяем успешность ответа (статус 2xx)
+    if (response && response.status >= 200 && response.status < 300) {
+      console.log('✅ [LOGIN] Статус ответа успешный (2xx)')
+      
+      // Берём тип пользователя из ответа
+      const userType = response.data?.user_type
+      console.log('🔵 [LOGIN] Определённый userType из ответа:', userType)
+
+      if (userType) {
+        console.log('✅ [LOGIN] userType найден:', userType)
+        
+        // Устанавливаем состояние авторизации СРАЗУ после успешной авторизации
+        // Не ждём проверки токена, так как он может быть в HttpOnly cookie
+        store.isAuth = true
+        store.user_type = userType
+        localStorage.setItem('user_type', userType)
+        console.log('  - Установлен store.isAuth:', store.isAuth)
+        console.log('  - Установлен store.user_type:', store.user_type)
+        console.log('  - Установлен localStorage.user_type:', localStorage.getItem('user_type'))
+        
+        // Небольшая задержка, чтобы cookie успел установиться
+        await new Promise(resolve => setTimeout(resolve, 100))
+        console.log('  - Задержка для установки cookie завершена')
+
+        if (userType === 'teacher') {
+          console.log('🟡 [LOGIN] Редирект на home_teacher...')
+          await router.push({ name: 'home_teacher' })
+          console.log('🟢 [LOGIN] Редирект на home_teacher выполнен')
+        } else if (userType === 'student') {
+          console.log('🟡 [LOGIN] Редирект на student_cabinet...')
+          await router.push({ name: 'student_cabinet' })
+          console.log('🟢 [LOGIN] Редирект на student_cabinet выполнен')
+        } else {
+          console.log('⚠️ [LOGIN] Неизвестный userType:', userType)
         }
 
+        console.log('🟡 [LOGIN] Отправка уведомления об успехе...')
         emitter.emit('notify', {
           type: 'success',
-          message: 'Вы успешно вошли в систему'
+          message: 'Вы успешно вошли в систему',
         })
+        errorLogin.value = false
+        console.log('✅ [LOGIN] Авторизация завершена успешно')
         return
       } else {
-        message = 'Произошла ошибка при авторизации, попробуйте позже'
-      }
-
-      emitter.emit('notify', {
+        console.log('❌ [LOGIN] userType не найден!')
+        console.log('  - response.data:', response.data)
+        console.log('  - store.user_type:', store.user_type)
+        console.log('  - localStorage.user_type:', localStorage.getItem('user_type'))
+        emitter.emit('notify', {
           type: 'error',
-          message: message
+          message: 'Не удалось определить тип пользователя',
         })
-    }
-  } catch(error) {
-    console.error('Ошибка при авторизации:', error)
-    errorLogin.value = true
-  }
+        errorLogin.value = true
+        return
+      }
+    } else {
+      console.log('❌ [LOGIN] Статус ответа не успешный')
+      console.log('  - response:', response)
+      console.log('  - response?.status:', response?.status)
+      console.log('  - response?.data:', response?.data)
+      
+      const errorMessage =
+        response?.data?.message ||
+        response?.data?.detail ||
+        'Неверный логин или пароль'
 
+      console.log('  - errorMessage:', errorMessage)
+      emitter.emit('notify', {
+        type: 'error',
+        message: errorMessage,
+      })
+      errorLogin.value = true
+    }
+  } catch (error) {
+    console.error('❌ [LOGIN] Ошибка в catch блоке:', error)
+    console.error('  - error.message:', error?.message)
+    console.error('  - error.response:', error?.response)
+    console.error('  - error.response?.status:', error?.response?.status)
+    console.error('  - error.response?.data:', error?.response?.data)
+    errorLogin.value = true
+    emitter.emit('notify', {
+      type: 'error',
+      message: 'Произошла ошибка при авторизации, попробуйте позже',
+    })
+  }
 }
 
 function signInWithProvider(provider) {

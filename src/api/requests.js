@@ -48,6 +48,15 @@ apiClient.interceptors.response.use(
 
 // Общая функция для выполнения запросов
 async function makeRequest(endpoint, method = 'GET', body = null, headers = null) {
+  const isLoginRequest = endpoint === '/api/login' && method === 'POST'
+  
+  if (isLoginRequest) {
+    console.log('🔵 [MAKE_REQUEST] Начало makeRequest для /api/login')
+    console.log('  - method:', method)
+    console.log('  - endpoint:', endpoint)
+    console.log('  - body:', body ? { ...body, password: '***' } : null)
+  }
+  
   try {
     const config = {
       method: method.toLowerCase(),
@@ -67,11 +76,41 @@ async function makeRequest(endpoint, method = 'GET', body = null, headers = null
       config.data = JSON.stringify(body)
     }
 
+    if (isLoginRequest) {
+      console.log('🟡 [MAKE_REQUEST] Вызов apiClient...')
+      console.log('  - config:', { ...config, data: config.data ? '***' : null })
+    }
+    
     const response = await apiClient(config)
-    return method === 'GET' ? response.data : response
+    
+    if (isLoginRequest) {
+      console.log('🟢 [MAKE_REQUEST] apiClient вернул ответ:')
+      console.log('  - response:', response)
+      console.log('  - response.status:', response?.status)
+      console.log('  - response.data:', response?.data)
+      console.log('  - response.headers:', response?.headers)
+      console.log('  - method === GET:', method === 'GET')
+      console.log('  - Будет возвращено:', method === 'GET' ? response.data : response)
+    }
+    
+    const result = method === 'GET' ? response.data : response
+    
+    if (isLoginRequest) {
+      console.log('✅ [MAKE_REQUEST] Возвращаем результат:', result)
+    }
+    
+    return result
   } catch (error) {
+    if (isLoginRequest) {
+      console.error('❌ [MAKE_REQUEST] Ошибка в makeRequest для /api/login:', error)
+    }
+    
     if (error.response) {
       const errorCode = error.response.status
+      if (isLoginRequest) {
+        console.error('  - error.response.status:', errorCode)
+        console.error('  - error.response.data:', error.response.data)
+      }
       if (errorCode >= 500) {
         /* if (import.meta.env.PROD) {
           router.push({name: 'error_500'})
@@ -81,6 +120,10 @@ async function makeRequest(endpoint, method = 'GET', body = null, headers = null
       console.error(`API Error: ${errorCode}`)
       return errorCode
     } else {
+      if (isLoginRequest) {
+        console.error('  - error.message:', error.message)
+        console.error('  - error:', error)
+      }
       /* if (import.meta.env.PROD) {
         router.push({name: 'error_500'})
         console.log('Перенаправление')
@@ -963,10 +1006,24 @@ export async function registerUser(requestBody) {
 }
 
 export async function loginUser(requestBody) {
+  console.log('🔵 [API] loginUser вызван')
+  console.log('  - requestBody:', { ...requestBody, password: '***' })
   try {
-    return await makeRequest('/api/login', 'POST', requestBody)
+    console.log('🟡 [API] Вызов makeRequest(/api/login, POST)...')
+    const response = await makeRequest('/api/login', 'POST', requestBody)
+    console.log('🟢 [API] makeRequest вернул:')
+    console.log('  - response:', response)
+    console.log('  - response.status:', response?.status)
+    console.log('  - response.data:', response?.data)
+    console.log('  - typeof response:', typeof response)
+    console.log('  - response.constructor.name:', response?.constructor?.name)
+    return response
   } catch (error) {
-    console.error('Произошла ошибка при авторизаци', error)
+    console.error('❌ [API] Ошибка в loginUser:', error)
+    console.error('  - error.message:', error?.message)
+    console.error('  - error.response:', error?.response)
+    console.error('  - error.response?.status:', error?.response?.status)
+    console.error('  - error.response?.data:', error?.response?.data)
     return error
   }
 }
