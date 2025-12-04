@@ -259,22 +259,11 @@ const router = createRouter({
 
 
 router.beforeEach(async (to, from, next) => {
-  console.log('🔵 [ROUTER] beforeEach вызван')
-  console.log('  - from:', from.name, from.path)
-  console.log('  - to:', to.name, to.path)
-  
   const store = useMyStore()
-  console.log('  - store.isAuth до setUserAuthenticated:', store.isAuth)
-  console.log('  - store.user_type до setUserAuthenticated:', store.user_type)
-  
   await store.setUserAuthenticated()
 
   const authenticated = store.isAuth
   const userType = store.user_type || localStorage.getItem('user_type')
-  
-  console.log('  - authenticated:', authenticated)
-  console.log('  - userType:', userType)
-  console.log('  - localStorage.user_type:', localStorage.getItem('user_type'))
 
   if (
     !authenticated &&
@@ -286,22 +275,16 @@ router.beforeEach(async (to, from, next) => {
     to.name !== 'register' &&
     to.name !== 'link_profile'
   ) {
-    console.log('❌ [ROUTER] Пользователь не авторизован, редирект на login')
     return next({ name: 'login' })
   } else if (authenticated && to.name === 'landing') {
-    console.log('🟡 [ROUTER] Пользователь авторизован на landing, редирект по типу')
     if (userType === 'teacher') {
-      console.log('  - Редирект на home_teacher')
       next({ name: 'home_teacher' })
     } else if (userType === 'student') {
-      console.log('  - Редирект на student_cabinet')
       next({ name: 'student_cabinet' })
     } else {
-      console.log('  - userType неизвестен, продолжаем на landing')
       next()
     }
   } else {
-    console.log('✅ [ROUTER] Навигация разрешена, продолжаем')
     // user_type может быть 'student' или 'teacher'
     // if (to.meta.isStudent && userType === 'teacher') {
     //   // запрещаем teacher заходить на student-only страницы
@@ -310,13 +293,6 @@ router.beforeEach(async (to, from, next) => {
 
     next()
   }
-})
-
-router.afterEach((to, from) => {
-  console.log('🟢 [ROUTER] afterEach - навигация завершена')
-  console.log('  - from:', from.name, from.path)
-  console.log('  - to:', to.name, to.path)
-  console.log('  - current route:', router.currentRoute.value.name, router.currentRoute.value.path)
 })
 
 export default router

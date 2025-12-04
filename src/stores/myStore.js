@@ -79,53 +79,26 @@ export const useMyStore = defineStore('myStore', {
     },
 
     async setUserAuthenticated() {
-      console.log('🔵 [STORE] setUserAuthenticated вызван')
-      console.log('  - this.isAuth:', this.isAuth)
-      console.log('  - this.user_type:', this.user_type)
-      
       // Если авторизация уже установлена (isAuth = true) и есть тип пользователя — не сбрасываем
-      // Это важно, так как токен может быть в HttpOnly cookie, недоступной через JavaScript
       if (this.isAuth === true && this.user_type) {
-        console.log('✅ [STORE] Авторизация уже установлена (isAuth=true), пропускаем проверку')
         return
       }
 
-      // Сначала проверяем наличие токена в cookies
+      // Проверяем наличие токена в cookies (включая возможный HttpOnly, который проверяется на бэкенде)
       const token = getAccessToken()
-      console.log('  - token найден:', !!token)
-      console.log('  - token (первые 20 символов):', token ? token.substring(0, 20) + '...' : null)
-      console.log('  - document.cookie:', document.cookie)
 
-      // Если токена нет в JavaScript-доступных cookies — проверяем через API
-      // Токен может быть в HttpOnly cookie, который недоступен через JavaScript
-      if (!token) {
-        console.log('⚠️ [STORE] Токен не найден в JS-доступных cookies, проверяем через API')
-        // Не сбрасываем isAuth сразу, сначала проверим через API
-        // Если isAuth уже был установлен в true, не сбрасываем его
-        if (this.isAuth === true) {
-          console.log('  - isAuth уже true, не сбрасываем')
-          return
-        }
+      // Если токена нет в JS-доступных cookies, но isAuth уже true — не трогаем состояние
+      if (!token && this.isAuth === true && this.user_type) {
+        return
       }
 
       // Проверяем авторизацию через API (токен может быть в HttpOnly cookie)
-      console.log('🟡 [STORE] Вызов checkUserAuth()...')
       try {
         const response = await checkUserAuth()
-        console.log('🟢 [STORE] checkUserAuth вернул:')
-        console.log('  - response:', response)
-        console.log('  - response?.authorized:', response?.authorized)
-        console.log('  - response?.user_type:', response?.user_type)
-        
         this.isAuth = response?.authorized ?? false
         this.user_type = response?.user_type || ''
-        
-        console.log('✅ [STORE] Установлены значения:')
-        console.log('  - this.isAuth:', this.isAuth)
-        console.log('  - this.user_type:', this.user_type)
       } catch (error) {
-        console.error('❌ [STORE] Ошибка при checkUserAuth:', error)
-        // Если isAuth уже был установлен в true, не сбрасываем его при ошибке
+        console.error('Ошибка при checkUserAuth:', error)
         if (this.isAuth !== true) {
           this.isAuth = false
           this.user_type = ''
