@@ -52,6 +52,13 @@ export const useMyStore = defineStore('myStore', {
     },
 
     async setUserInfo() {
+      // Проверяем тип пользователя - getUserInfo() нужен только для студентов
+      const userType = this.user_type || localStorage.getItem('user_type')
+      if (userType !== 'student') {
+        console.log('setUserInfo: пропущен, пользователь не студент')
+        return
+      }
+      
       if (this.userInfo || this.userInfoLoading) return
       this.userInfoLoading = true
       try {
@@ -66,9 +73,10 @@ export const useMyStore = defineStore('myStore', {
       if (this.notifications || this.notificationsLoading) return
       this.notificationsLoading = true
       try {
-        await this.setUserInfo()
         const userType = this.user_type || localStorage.getItem('user_type')
+        // setUserInfo() нужен только для студентов, для учителей он вызывает 401
         if (userType === 'student') {
+          await this.setUserInfo()
           this.notifications = await getStudentNotifications()
         } else {
           this.notifications = await getTeacherNotifications()

@@ -88,8 +88,13 @@ const switchMode = () => {
 
 const loadData = async () => {
   await myStore.setNotifications()
-  await myStore.setMyInfo()
-  await myStore.setUserInfo()
+  const userType = myStore.user_type || localStorage.getItem('user_type')
+  // Загружаем информацию в зависимости от типа пользователя
+  if (userType === 'student') {
+    await myStore.setUserInfo()
+  } else if (userType === 'teacher') {
+    await myStore.setMyInfo()
+  }
 }
 
 onMounted(() => {

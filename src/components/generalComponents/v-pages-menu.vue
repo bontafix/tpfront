@@ -283,8 +283,13 @@ const isActive = (routes) => {
 
 const loadData = async () => {
   await store.setNotifications()
-  await store.setUserInfo()
-  await store.setMyInfo()
+  const userType = store.user_type || localStorage.getItem('user_type')
+  // Загружаем информацию в зависимости от типа пользователя
+  if (userType === 'student') {
+    await store.setUserInfo()
+  } else if (userType === 'teacher') {
+    await store.setMyInfo()
+  }
 
   notifications.value = store.notifications
 }
