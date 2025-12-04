@@ -21,21 +21,27 @@ export const useLessonStore = defineStore('lesonStore', {
       if(this.$state.dayLessons[day] === null || day !== this.$state.day) {
         console.log('Деалем запрос на ', day)
         let response = null
-        if(day !== 'today') {
-          const dateOfDay = new Date()
-          const formattedDate = day === 'yesterday'
-                                ? new Date(dateOfDay.setDate(dateOfDay.getDate() - 1))
-                                : new Date(dateOfDay.setDate(dateOfDay.getDate() + 1))
+        try {
+          if(day !== 'today') {
+            const dateOfDay = new Date()
+            const formattedDate = day === 'yesterday'
+                                  ? new Date(dateOfDay.setDate(dateOfDay.getDate() - 1))
+                                  : new Date(dateOfDay.setDate(dateOfDay.getDate() + 1))
 
-          response = await getLessonsOnDay(formatDate(formattedDate))
-        } else {
-          response = await getTodayLessons()
-        }
+            response = await getLessonsOnDay(formatDate(formattedDate))
+          } else {
+            response = await getTodayLessons()
+          }
 
-
-
-        if(response.lessons) {
+          if(response && response.lessons) {
             this.$state.dayLessons[day] = response
+          } else if(response) {
+            // Если ответ есть, но нет поля lessons, создаем структуру с пустым массивом
+            this.$state.dayLessons[day] = { lessons: [] }
+          }
+        } catch (error) {
+          console.error('Ошибка при получении уроков:', error)
+          this.$state.dayLessons[day] = { lessons: [] }
         }
       }
     },

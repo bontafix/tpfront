@@ -118,7 +118,7 @@
           <div class="v-pages-menu__button" @click="changeNotificationMode">
             <img src="/src/assets/images/left-menu/notification.svg" alt="" />
             Уведомления
-            <p class="v-pages-menu__notification notifications" v-show="notifications.length > 0">{{ notifications.length }}</p>
+            <p class="v-pages-menu__notification notifications" v-show="notifications && notifications.length > 0">{{ notifications.length }}</p>
           </div>
           <a href="https://t.me/teacherplanner" target="_blank" class="v-pages-menu__button">
             <img src="/src/assets/images/left-menu/chat.svg" alt="" />
@@ -291,7 +291,7 @@ const loadData = async () => {
     await store.setMyInfo()
   }
 
-  notifications.value = store.notifications
+  notifications.value = store.notifications || []
 }
 
 const handleNotification = (data) => {

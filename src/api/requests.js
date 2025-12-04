@@ -596,7 +596,7 @@ export async function getTodayLessons() {
 
 export async function getLessonsOnDay(date) {
   try {
-    return await makeGetRequest(`/api/lessons/day?date=${date}`)
+    return await makeGetRequest(`/api/today-lessons?date=${date}`)
   } catch (error) {
     console.error('Произошла ошибка при получении уроков на день', error)
   }
@@ -604,7 +604,7 @@ export async function getLessonsOnDay(date) {
 
 export async function getMyLessons(date) {
   try {
-    return await makeGetRequest(`/api/lessons/day?date=${date}`)
+    return await makeGetRequest(`/api/today-lessons?date=${date}`)
   } catch (error) {
     console.error('Произошла ошибка при получении моих уроков', error)
   }
