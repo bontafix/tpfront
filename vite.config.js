@@ -12,13 +12,15 @@ const packageJson = JSON.parse(readFileSync(join(__dirname, 'package.json'), 'ut
 const appVersion = packageJson.version
 
 // Плагин для добавления версии к favicon ссылкам
-const faviconVersionPlugin = () => {
+const faviconVersionPlugin = (basePath = '/') => {
   return {
     name: 'favicon-version',
     transformIndexHtml(html) {
       // Добавляем версию к favicon ссылкам для обхода кэша браузера
+      // Учитываем base path в путях
+      const baseRegex = basePath === '/' ? '' : basePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
       return html.replace(
-        /(href=["']\/[^"']*favicon[^"']*\.(ico|png))(["'])/gi,
+        new RegExp(`(href=["']${baseRegex}[^"']*favicon[^"']*\\.(ico|png))(["'])`, 'gi'),
         `$1?v=${appVersion}$3`
       )
     },
@@ -26,8 +28,11 @@ const faviconVersionPlugin = () => {
 }
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [vue(), vueJsx(), faviconVersionPlugin()],
+export default defineConfig(({ mode }) => {
+  const basePath = process.env.VITE_BASE_PATH || '/'
+  
+  return {
+    plugins: [vue(), vueJsx(), faviconVersionPlugin(basePath)],
   define: {
     __APP_VERSION__: JSON.stringify(appVersion),
   },
@@ -43,22 +48,23 @@ export default defineConfig({
       },
     },
   },
-  base: '/',
-  server: {
-    port: 5173,
-    host: '0.0.0.0', // Слушаем на всех интерфейсах, чтобы можно было обращаться и через localhost, и через local.dev-teacherplanner.ru
-    strictPort: true,
-    // Настройки для работы с куками на одном домене
-    cors: true,
-    // Разрешаем использование локального домена
-    allowedHosts: [
-      'local.dev-teacherplanner.ru',
-      'dev-teacherplanner.ru',
-      'localhost',
-    ],
-  },
-  build: {
-    outDir: 'dist',
-    assetsDir: 'static',
-  },
+    base: basePath,
+    server: {
+      port: 5173,
+      host: '0.0.0.0', // Слушаем на всех интерфейсах, чтобы можно было обращаться и через localhost, и через local.dev-teacherplanner.ru
+      strictPort: true,
+      // Настройки для работы с куками на одном домене
+      cors: true,
+      // Разрешаем использование локального домена
+      allowedHosts: [
+        'local.dev-teacherplanner.ru',
+        'dev-teacherplanner.ru',
+        'localhost',
+      ],
+    },
+    build: {
+      outDir: 'dist',
+      assetsDir: 'static',
+    },
+  }
 })

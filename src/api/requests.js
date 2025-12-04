@@ -21,25 +21,33 @@ apiClient.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`
       console.log('🔑 [REQUEST] Токен добавлен в заголовок Authorization для:', config.url)
     } else {
-      // Логируем предупреждение, если токена нет
-      // Это может быть нормально, если токен в HttpOnly cookies и отправляется автоматически
-      console.warn('⚠️ [REQUEST] Токен авторизации не найден в cookies для запроса:', config.url)
-      console.warn('  - Доступные cookies:', document.cookie)
+      // Если токен не найден через JavaScript, но withCredentials: true,
+      // то токен может быть в HttpOnly cookies и будет отправлен автоматически браузером
+      // Это нормальная ситуация для безопасного хранения токенов
+      if (config.withCredentials) {
+        // console.log('ℹ️ [REQUEST] Токен не найден в доступных cookies через JavaScript, но withCredentials: true - HttpOnly cookies будут отправлены автоматически')
+        // console.log('  - URL запроса:', config.url)
+      } else {
+        // Только если withCredentials: false, это может быть проблемой
+        console.warn('⚠️ [REQUEST] Токен авторизации не найден и withCredentials: false для запроса:', config.url)
+        console.warn('  - Доступные cookies:', document.cookie)
+      }
     }
     
     // Логируем информацию о куках, которые будут отправлены (только для важных запросов)
     if (config.withCredentials && (config.url?.includes('/api/') || config.url?.includes('ws/'))) {
-      console.log('🍪 [REQUEST] withCredentials: true - куки будут отправлены автоматически')
-      console.log('  - URL запроса:', config.url)
-      console.log('  - Метод:', config.method?.toUpperCase())
+      // console.log('🍪 [REQUEST] withCredentials: true - куки будут отправлены автоматически')
+      // console.log('  - URL запроса:', config.url)
+      // console.log('  - Метод:', config.method?.toUpperCase())
       if (document.cookie) {
         const cookieCount = document.cookie.split(';').length
-        console.log(`  - Количество куков: ${cookieCount}`)
+        // console.log(`  - Количество доступных куков (не HttpOnly): ${cookieCount}`)
         // Показываем только имена куков для безопасности
         const cookieNames = document.cookie.split(';').map(c => c.trim().split('=')[0])
-        console.log('  - Имена куков:', cookieNames)
+        // console.log('  - Имена доступных куков:', cookieNames)
+        // console.log('  - ⚠️ Примечание: HttpOnly cookies не видны через document.cookie, но будут отправлены автоматически')
       } else {
-        console.log('  - ⚠️ Куки отсутствуют!')
+        // console.log('  - ⚠️ Доступные cookies отсутствуют, но HttpOnly cookies могут быть отправлены автоматически')
       }
     }
     
