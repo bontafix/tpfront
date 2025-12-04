@@ -46,6 +46,16 @@ export default defineConfig({
   base: '/',
   server: {
     port: 5173,
+    host: '0.0.0.0', // Слушаем на всех интерфейсах, чтобы можно было обращаться и через localhost, и через local.dev-teacherplanner.ru
+    strictPort: true,
+    // Настройки для работы с куками на одном домене
+    cors: true,
+    // Разрешаем использование локального домена
+    allowedHosts: [
+      'local.dev-teacherplanner.ru',
+      'dev-teacherplanner.ru',
+      'localhost',
+    ],
   },
   build: {
     outDir: 'dist',

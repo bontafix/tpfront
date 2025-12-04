@@ -317,6 +317,54 @@ export const cookieUtils = {
   // Удалить куки (для logout)
   deleteCookie(name) {
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+  },
+
+  // Получить все куки в виде объекта
+  getAllCookies() {
+    const cookies = {};
+    if (document.cookie) {
+      document.cookie.split(';').forEach(cookie => {
+        const [name, value] = cookie.trim().split('=');
+        if (name) {
+          cookies[name] = decodeURIComponent(value || '');
+        }
+      });
+    }
+    return cookies;
+  },
+
+  // Проверить токен авторизации
+  checkAuthToken() {
+    console.log('🍪 Проверка токена авторизации:');
+    console.log('  - Все куки:', document.cookie);
+    console.log('  - Все куки (объект):', this.getAllCookies());
+    
+    const possibleTokenNames = ['access_token', 'accessToken', 'token', 'auth_token', 'jwt', 'session'];
+    const foundTokens = {};
+    
+    possibleTokenNames.forEach(name => {
+      const value = this.getCookie(name);
+      if (value) {
+        foundTokens[name] = {
+          found: true,
+          length: value.length,
+          preview: value.substring(0, 30) + '...'
+        };
+      } else {
+        foundTokens[name] = { found: false };
+      }
+    });
+    
+    console.log('  - Проверка возможных имен токенов:', foundTokens);
+    
+    const token = getAccessToken();
+    console.log('  - Токен из getAccessToken():', token ? `✅ Найден (длина: ${token.length})` : '❌ Не найден');
+    
+    return {
+      allCookies: this.getAllCookies(),
+      tokenNames: foundTokens,
+      accessToken: token
+    };
   }
 };
 

@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
+import { cookieUtils, getAccessToken } from './utils'
 
 // Вывод версии приложения в консоль
 const appVersion = __APP_VERSION__
@@ -54,6 +55,27 @@ router.afterEach((to) => {
   }
 })
 // ---- КОНЕЦ КОДА МЕТРИКИ ----
+
+// Глобальная функция для проверки куков из консоли браузера
+// Использование: window.checkCookies() или просто checkCookies()
+if (typeof window !== 'undefined') {
+  window.checkCookies = () => {
+    return cookieUtils.checkAuthToken()
+  }
+  
+  window.getCookie = (name) => {
+    return cookieUtils.getCookie(name)
+  }
+  
+  window.getAllCookies = () => {
+    return cookieUtils.getAllCookies()
+  }
+  
+  console.log('%c🍪 Утилиты для проверки куков доступны:', 'color: #4CAF50; font-weight: bold;')
+  console.log('  - checkCookies() - проверить токен авторизации')
+  console.log('  - getCookie(name) - получить куку по имени')
+  console.log('  - getAllCookies() - получить все куки')
+}
 
 app.directive('click-outside', {
   beforeMount(el, binding) {

@@ -94,7 +94,8 @@ import { loginUser } from '@/api/requests'
 import { useRouter } from 'vue-router'
 import { useMyStore } from '@/stores/myStore'
 import emitter from '@/eventBus'
-import { domain } from '@/utils'
+import { resolveApiMessage } from '@/api/apiMessages'
+import { domain, getAccessToken, cookieUtils } from '@/utils'
 
 
 const router = useRouter()
@@ -161,6 +162,31 @@ const submitForm = async () => {
         // Небольшая задержка, чтобы cookie успел установиться
         await new Promise(resolve => setTimeout(resolve, 100))
         console.log('  - Задержка для установки cookie завершена')
+        
+        // Проверка куков после авторизации
+        console.log('🍪 [COOKIES] Проверка куков после авторизации:')
+        console.log('  - Все куки (document.cookie):', document.cookie)
+        const allCookies = document.cookie.split(';').map(c => c.trim())
+        console.log('  - Список всех куков:', allCookies)
+        
+        // Проверяем наличие токена в куках
+        const tokenFromCookie = getAccessToken()
+        console.log('  - Токен из getAccessToken():', tokenFromCookie ? '✅ Найден' : '❌ Не найден')
+        if (tokenFromCookie) {
+          console.log('  - Длина токена:', tokenFromCookie.length)
+          console.log('  - Первые 20 символов токена:', tokenFromCookie.substring(0, 20) + '...')
+        }
+        
+        // Проверяем конкретные имена куков, которые могут содержать токен
+        const possibleTokenNames = ['access_token', 'accessToken', 'token', 'auth_token', 'jwt', 'session']
+        possibleTokenNames.forEach(name => {
+          const cookieValue = cookieUtils.getCookie(name)
+          if (cookieValue) {
+            console.log(`  - ✅ Кука "${name}" найдена (длина: ${cookieValue.length})`)
+          } else {
+            console.log(`  - ❌ Кука "${name}" не найдена`)
+          }
+        })
 
         if (userType === 'teacher') {
           console.log('🟡 [LOGIN] Редирект на home_teacher...')
@@ -174,10 +200,15 @@ const submitForm = async () => {
           console.log('⚠️ [LOGIN] Неизвестный userType:', userType)
         }
 
+        // Сообщение об успехе: сначала берём из ответа/конфига, fallback — старый текст
+        const successMessage = resolveApiMessage('login', response, {
+          defaultSuccess: 'Вы успешно вошли в систему',
+        })
+
         console.log('🟡 [LOGIN] Отправка уведомления об успехе...')
         emitter.emit('notify', {
           type: 'success',
-          message: 'Вы успешно вошли в систему',
+          message: successMessage,
         })
         errorLogin.value = false
         console.log('✅ [LOGIN] Авторизация завершена успешно')
@@ -187,9 +218,14 @@ const submitForm = async () => {
         console.log('  - response.data:', response.data)
         console.log('  - store.user_type:', store.user_type)
         console.log('  - localStorage.user_type:', localStorage.getItem('user_type'))
+
+        const message = resolveApiMessage('login', response, {
+          defaultError: 'Не удалось определить тип пользователя',
+        })
+
         emitter.emit('notify', {
           type: 'error',
-          message: 'Не удалось определить тип пользователя',
+          message,
         })
         errorLogin.value = true
         return
@@ -200,10 +236,9 @@ const submitForm = async () => {
       console.log('  - response?.status:', response?.status)
       console.log('  - response?.data:', response?.data)
       
-      const errorMessage =
-        response?.data?.message ||
-        response?.data?.detail ||
-        'Неверный логин или пароль'
+      const errorMessage = resolveApiMessage('login', response, {
+        defaultError: 'Неверный логин или пароль',
+      })
 
       console.log('  - errorMessage:', errorMessage)
       emitter.emit('notify', {
@@ -218,10 +253,14 @@ const submitForm = async () => {
     console.error('  - error.response:', error?.response)
     console.error('  - error.response?.status:', error?.response?.status)
     console.error('  - error.response?.data:', error?.response?.data)
+    const message = resolveApiMessage('login', error, {
+      defaultError: 'Произошла ошибка при авторизации, попробуйте позже',
+    })
+
     errorLogin.value = true
     emitter.emit('notify', {
       type: 'error',
-      message: 'Произошла ошибка при авторизации, попробуйте позже',
+      message,
     })
   }
 }

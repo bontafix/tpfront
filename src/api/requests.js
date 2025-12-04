@@ -19,12 +19,30 @@ apiClient.interceptors.request.use(
     const token = getAccessToken()
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
+      console.log('🔑 [REQUEST] Токен добавлен в заголовок Authorization для:', config.url)
     } else {
       // Логируем предупреждение, если токена нет
       // Это может быть нормально, если токен в HttpOnly cookies и отправляется автоматически
-      console.warn('Токен авторизации не найден в cookies для запроса:', config.url)
-      console.warn('Доступные cookies:', document.cookie)
+      console.warn('⚠️ [REQUEST] Токен авторизации не найден в cookies для запроса:', config.url)
+      console.warn('  - Доступные cookies:', document.cookie)
     }
+    
+    // Логируем информацию о куках, которые будут отправлены (только для важных запросов)
+    if (config.withCredentials && (config.url?.includes('/api/') || config.url?.includes('ws/'))) {
+      console.log('🍪 [REQUEST] withCredentials: true - куки будут отправлены автоматически')
+      console.log('  - URL запроса:', config.url)
+      console.log('  - Метод:', config.method?.toUpperCase())
+      if (document.cookie) {
+        const cookieCount = document.cookie.split(';').length
+        console.log(`  - Количество куков: ${cookieCount}`)
+        // Показываем только имена куков для безопасности
+        const cookieNames = document.cookie.split(';').map(c => c.trim().split('=')[0])
+        console.log('  - Имена куков:', cookieNames)
+      } else {
+        console.log('  - ⚠️ Куки отсутствуют!')
+      }
+    }
+    
     return config
   },
   (error) => {
@@ -34,12 +52,28 @@ apiClient.interceptors.request.use(
 
 // Interceptor для обработки ошибок авторизации
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Логируем успешные ответы для проверки куков
+    if (response.config?.url?.includes('/api/login')) {
+      console.log('✅ [RESPONSE] Успешный ответ от /api/login')
+      console.log('  - Статус:', response.status)
+      console.log('  - Заголовки ответа (Set-Cookie):', response.headers['set-cookie'] || 'Не найдены')
+      console.log('  - Все заголовки ответа:', Object.keys(response.headers))
+      
+      // Проверяем куки после ответа
+      setTimeout(() => {
+        console.log('🍪 [RESPONSE] Куки после ответа от сервера:')
+        console.log('  - document.cookie:', document.cookie)
+      }, 50)
+    }
+    return response
+  },
   (error) => {
     if (error.response?.status === 401) {
-      console.error('401 Unauthorized - проблема с токеном авторизации')
-      console.error('URL запроса:', error.config?.url)
-      console.error('Доступные cookies:', document.cookie)
+      console.error('❌ [RESPONSE] 401 Unauthorized - проблема с токеном авторизации')
+      console.error('  - URL запроса:', error.config?.url)
+      console.error('  - Доступные cookies:', document.cookie)
+      console.error('  - Заголовки запроса:', error.config?.headers)
       // Можно добавить логику редиректа на логин или обновления токена
     }
     return Promise.reject(error)
