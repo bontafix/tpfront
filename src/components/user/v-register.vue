@@ -103,6 +103,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { registerUser } from '@/api/requests'
 import { useMyStore } from '@/stores/myStore.js'
+import { connectWebSocket, checkWebSocketStatus } from '@/ws'
 
 const route = useRoute()
 const router = useRouter()
@@ -148,6 +149,24 @@ const submitForm = async () => {
 
     await registerUser(requestBody);
     await store.setUserAuthenticated();
+    
+    // Проверяем и подключаем WebSocket после успешной регистрации
+    console.log('🔵 [REGISTER] Проверка статуса WebSocket...')
+    try {
+      const wsStatus = await checkWebSocketStatus()
+      
+      if (wsStatus?.connected) {
+        console.log('✅ [REGISTER] WebSocket уже подключен:', wsStatus)
+      } else {
+        console.log('📡 [REGISTER] Подключаюсь к WebSocket...')
+        await connectWebSocket()
+        console.log('✅ [REGISTER] WebSocket подключен')
+      }
+    } catch (wsError) {
+      console.error('⚠️ [REGISTER] Ошибка при подключении WebSocket:', wsError)
+      // Не прерываем процесс регистрации из-за ошибки WebSocket
+    }
+    
     if (store.user_type === 'teacher') {
       await router.push({name: 'home_teacher'});
     } else if (store.user_type === 'student') {

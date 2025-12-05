@@ -1089,6 +1089,8 @@ export async function getWSToken() {
   try {
     // Проверяем наличие токена перед запросом
     const token = getAccessToken()
+    console.log(token)
+    console.log(`>>>>>>>>>>>>>>>>>>> token <<<<<<<<<<<<<<<`)
     if (!token) {
       console.warn('Токен авторизации не найден перед запросом ws/token')
       console.warn('Доступные cookies:', document.cookie)

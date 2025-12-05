@@ -96,6 +96,7 @@ import { useMyStore } from '@/stores/myStore'
 import emitter from '@/eventBus'
 import { resolveApiMessage } from '@/api/apiMessages'
 import { domain, getAccessToken, cookieUtils } from '@/utils'
+import { connectWebSocket, checkWebSocketStatus } from '@/ws'
 
 
 const router = useRouter()
@@ -188,6 +189,23 @@ const submitForm = async () => {
             console.log(`  - ❌ Кука "${name}" не найдена`)
           }
         })
+
+        // Проверяем и подключаем WebSocket после успешной авторизации
+        console.log('🔵 [LOGIN] Проверка статуса WebSocket...')
+        try {
+          const wsStatus = await checkWebSocketStatus()
+          
+          if (wsStatus?.connected) {
+            console.log('✅ [LOGIN] WebSocket уже подключен:', wsStatus)
+          } else {
+            console.log('📡 [LOGIN] Подключаюсь к WebSocket...')
+            await connectWebSocket()
+            console.log('>>>>>> [LOGIN] WebSocket подключен')
+          }
+        } catch (wsError) {
+          console.error('⚠️ [LOGIN] Ошибка при подключении WebSocket:', wsError)
+          // Не прерываем процесс логина из-за ошибки WebSocket
+        }
 
         if (userType === 'teacher') {
           console.log('🟡 [LOGIN] Редирект на home_teacher...')
@@ -314,12 +332,28 @@ function signInWithProvider(provider) {
     // Проверяем, что данные являются объектом (ожидаем JSON от OAuth)
     if (typeof event.data === 'object' && event.data !== null) {
       console.log('✅ Авторизация успешна:', event.data)
+      
+      // Подключаем WebSocket после OAuth авторизации
+      checkWebSocketStatus().then(wsStatus => {
+        if (!wsStatus?.connected) {
+          connectWebSocket()
+        }
+      }).catch(err => console.error('⚠️ Ошибка WebSocket после OAuth:', err))
+      
       router.push({ name: 'home_teacher' })
     } else if (typeof event.data === 'string') {
       // Пытаемся распарсить JSON, если это строка
       try {
         const data = JSON.parse(event.data)
         console.log('✅ Авторизация успешна:', data)
+        
+        // Подключаем WebSocket после OAuth авторизации
+        checkWebSocketStatus().then(wsStatus => {
+          if (!wsStatus?.connected) {
+            connectWebSocket()
+          }
+        }).catch(err => console.error('⚠️ Ошибка WebSocket после OAuth:', err))
+        
         router.push({ name: 'home_teacher' })
       } catch (error) {
         // Игнорируем ошибки парсинга для не-JSON сообщений

@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router'
 import { onMounted } from 'vue'
 import { isUserAuth } from '@/utils'
-import { connectWebSocket } from './ws'
+import { connectWebSocket, checkWebSocketStatus } from './ws'
 import { useMyStore } from './stores/myStore'
 import vCookieModal from './components/generalComponents/v-cookie-modal.vue'
 
@@ -17,7 +17,16 @@ const userAuth = async () => {
 onMounted(async () => {
   // Подключаем WebSocket только если пользователь авторизован
   if (store.isAuth) {
-    connectWebSocket()
+    // Проверяем текущий статус подключения на сервере
+    const status = await checkWebSocketStatus()
+    
+    if (status?.connected) {
+      console.log('✅ WebSocket уже подключен:', status)
+    } else {
+      // Подключаемся только если не подключены
+      console.log('📡 Подключаюсь к WebSocket...')
+      connectWebSocket()
+    }
   }
   /* if(!isUserAuth()) {
     router.push({ name: 'login' });
