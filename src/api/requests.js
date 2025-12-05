@@ -1032,9 +1032,15 @@ export async function deleteAccount() {
 
 export async function checkUserAuth() {
   try {
-    return await makeRequest('/api/user/me', 'GET')
+    const response = await makeRequest('/api/user/me', 'GET')
+    // Если makeRequest вернул код ошибки (число), значит запрос не удался
+    if (typeof response === 'number') {
+      return { authorized: false, user_type: '' }
+    }
+    return response
   } catch (error) {
     console.error('Произошла ошибка при проверке авторизации пользователя', error)
+    return { authorized: false, user_type: '' }
   }
 }
 

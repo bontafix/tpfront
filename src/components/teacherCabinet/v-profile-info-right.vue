@@ -34,7 +34,8 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { logoutUser } from '@/api/requests'
-
+import { useMyStore } from '@/stores/myStore'
+import { cookieUtils } from '@/utils'
 
 const props = defineProps({
   email: {
@@ -46,14 +47,21 @@ const props = defineProps({
 const emit = defineEmits(['toggle-modal'])
 
 const router = useRouter()
+const store = useMyStore()
 
 const toggleModal = (modalName) => {
   emit('toggle-modal', modalName)
 }
 
 const logout = async () => {
+  // Удаляем токены из cookies перед logout
+  cookieUtils.deleteCookie('access_token')
+  cookieUtils.deleteCookie('accessToken')
+  cookieUtils.deleteCookie('token')
+  
   await logoutUser()
- /*  router.push({name: 'login'}) */
-
+  store.isAuth = false
+  store.user_type = ''
+  router.push({name: 'landing'})
 }
 </script>

@@ -111,6 +111,7 @@ import { useRouter } from 'vue-router'
 
 import { useMyStore } from '@/stores/myStore'
 import { logoutUser } from '@/api/requests'
+import { cookieUtils } from '@/utils'
 
 const props = defineProps({
   userInfo: {
@@ -140,8 +141,14 @@ const closeMenu = () => {
 }
 
 const logout = async () => {
+  // Удаляем токены из cookies перед logout
+  cookieUtils.deleteCookie('access_token')
+  cookieUtils.deleteCookie('accessToken')
+  cookieUtils.deleteCookie('token')
+  
   await logoutUser()
-  store.isAuth = null
+  store.isAuth = false
+  store.user_type = ''
   router.push({name: 'landing'})
 }
 

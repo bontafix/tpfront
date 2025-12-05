@@ -92,11 +92,26 @@ export const useMyStore = defineStore('myStore', {
         return
       }
 
+      // Если isAuth === false (явно установлено, например, после logout), не делаем запрос к API
+      // Это предотвращает лишние запросы после logout, даже если токен еще есть в cookies
+      if (this.isAuth === false) {
+        this.user_type = ''
+        return
+      }
+
       // Проверяем наличие токена в cookies (включая возможный HttpOnly, который проверяется на бэкенде)
       const token = getAccessToken()
 
       // Если токена нет в JS-доступных cookies, но isAuth уже true — не трогаем состояние
       if (!token && this.isAuth === true && this.user_type) {
+        return
+      }
+
+      // Если isAuth === null и токена нет, сразу устанавливаем false без запроса к API
+      // Это предотвращает лишние запросы при первой загрузке, если пользователь не авторизован
+      if (this.isAuth === null && !token) {
+        this.isAuth = false
+        this.user_type = ''
         return
       }
 
