@@ -155,6 +155,7 @@ const submitForm = async () => {
         store.isAuth = true
         store.user_type = userType
         localStorage.setItem('user_type', userType)
+        localStorage.setItem('isAuth', 'true')
         console.log('  - Установлен store.isAuth:', store.isAuth)
         console.log('  - Установлен store.user_type:', store.user_type)
         console.log('  - Установлен localStorage.user_type:', localStorage.getItem('user_type'))

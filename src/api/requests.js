@@ -3,7 +3,7 @@ import router from '@/router'
 import jsonOrder from 'json-order'
 import axios from 'axios'
 import emitter from '@/eventBus'
-import { getAccessToken } from '@/utils'
+import { getAccessToken, handleUnauthorized } from '@/utils'
 
 const apiClient = axios.create({
   baseURL: domain,
@@ -76,13 +76,25 @@ apiClient.interceptors.response.use(
     }
     return response
   },
-  (error) => {
+  async (error) => {
     if (error.response?.status === 401) {
+      // Проверяем, не идет ли уже процесс логаута
+      if (typeof window !== 'undefined' && window.__isHandlingUnauthorized) {
+        // Уже идет процесс логаута, просто возвращаем ошибку
+        return Promise.reject(error)
+      }
+      
       console.error('❌ [RESPONSE] 401 Unauthorized - проблема с токеном авторизации')
       console.error('  - URL запроса:', error.config?.url)
       console.error('  - Доступные cookies:', document.cookie)
       console.error('  - Заголовки запроса:', error.config?.headers)
-      // Можно добавить логику редиректа на логин или обновления токена
+      
+      // Исключаем запросы к /api/login и /api/logout, чтобы избежать бесконечного цикла
+      const url = error.config?.url || ''
+      if (!url.includes('/api/login') && !url.includes('/api/logout')) {
+        // Выполняем автоматический логаут
+        await handleUnauthorized()
+      }
     }
     return Promise.reject(error)
   },
@@ -1031,15 +1043,28 @@ export async function deleteAccount() {
 }
 
 export async function checkUserAuth() {
+  // Проверяем, не идет ли уже процесс логаута (используем глобальный флаг)
+  if (typeof window !== 'undefined' && window.__isHandlingUnauthorized) {
+    return { authorized: false, user_type: '' }
+  }
+  
   try {
     const response = await makeRequest('/api/user/me', 'GET')
     // Если makeRequest вернул код ошибки (число), значит запрос не удался
     if (typeof response === 'number') {
+      // Если это 401, возвращаем специальный код для обработки
+      if (response === 401) {
+        return 401
+      }
       return { authorized: false, user_type: '' }
     }
     return response
   } catch (error) {
     console.error('Произошла ошибка при проверке авторизации пользователя', error)
+    // Если это 401 ошибка, возвращаем код для обработки
+    if (error.response?.status === 401) {
+      return 401
+    }
     return { authorized: false, user_type: '' }
   }
 }
