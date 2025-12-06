@@ -91,7 +91,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { loginUser } from '@/api/requests'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useMyStore } from '@/stores/myStore'
 import emitter from '@/eventBus'
 import { resolveApiMessage } from '@/api/apiMessages'
@@ -101,6 +101,7 @@ import { connectWebSocket, checkWebSocketStatus } from '@/ws'
 
 
 const router = useRouter()
+const route = useRoute()
 
 const form = ref({
   username: '',
@@ -404,6 +405,16 @@ function signInWithProvider(provider) {
 
 onMounted(()=>{
   console.log(document.cookie)
+  
+  // Автозаполнение формы из query параметров после регистрации
+  if (route.query.username) {
+    form.value.username = route.query.username
+    console.log('✅ [LOGIN] Автозаполнение username:', route.query.username)
+  }
+  if (route.query.password) {
+    form.value.password = route.query.password
+    console.log('✅ [LOGIN] Автозаполнение password')
+  }
 })
 
 </script>

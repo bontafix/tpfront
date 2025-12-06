@@ -196,7 +196,7 @@ const router = createRouter({
       children: onBoardingRoutes,
     },
     {
-      path: '/home-teacher-test/',
+      path: '/home-teacher/',
       children: homeTeacherRoutes,
     },
     {
