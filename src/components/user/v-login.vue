@@ -149,9 +149,22 @@ const submitForm = async () => {
       const userType = response.data?.user_type
       console.log('🔵 [LOGIN] Определённый userType из ответа:', userType)
 
+      // Проверяем, есть ли токен в ответе API (fallback для HTTPS доменов)
+      const tokenFromResponse = response.data?.access_token || response.data?.token
+      console.log('🔵 [LOGIN] Токен в ответе API:', tokenFromResponse ? '✅ Найден' : '❌ Не найден')
+
       if (userType) {
         console.log('✅ [LOGIN] userType найден:', userType)
-        
+
+        // WORKAROUND: Если токен есть в ответе API, устанавливаем его вручную
+        // Это необходимо для HTTPS доменов, где cookies могут не устанавливаться сразу
+        if (tokenFromResponse) {
+          console.log('🔧 [LOGIN] Устанавливаем токен из ответа API в localStorage')
+          localStorage.setItem('access_token', tokenFromResponse)
+          // Также пробуем установить как обычный cookie на всякий случай
+          document.cookie = `access_token=${tokenFromResponse}; path=/; max-age=86400`
+        }
+
         // Устанавливаем состояние авторизации СРАЗУ после успешной авторизации
         // Не ждём проверки токена, так как он может быть в HttpOnly cookie
         store.isAuth = true
@@ -195,7 +208,7 @@ const submitForm = async () => {
         console.log('🔵 [LOGIN] Проверка статуса WebSocket...')
         try {
           const wsStatus = await checkWebSocketStatus()
-          
+
           if (wsStatus?.connected) {
             console.log('✅ [LOGIN] WebSocket уже подключен:', wsStatus)
           } else {
@@ -207,6 +220,24 @@ const submitForm = async () => {
           console.error('⚠️ [LOGIN] Ошибка при подключении WebSocket:', wsError)
           // Не прерываем процесс логина из-за ошибки WebSocket
         }
+
+        // ДОПОЛНИТЕЛЬНАЯ ЗАДЕРЖКА И ПРОВЕРКА ДОСТУПНОСТИ COOKIES
+        // На HTTPS доменах cookies могут устанавливаться с задержкой
+        console.log('⏳ [LOGIN] Ожидание установки cookies (500ms)...')
+        await new Promise(resolve => setTimeout(resolve, 500))
+
+        // Проверяем, что токен доступен после задержки
+        const tokenAfterDelay = getAccessToken()
+        console.log('🔍 [LOGIN] Проверка токена после задержки:', tokenAfterDelay ? '✅ Найден' : '❌ Не найден')
+
+        if (!tokenAfterDelay) {
+          console.warn('⚠️ [LOGIN] Токен не найден после задержки, но продолжаем редирект')
+        }
+
+        // Финальная проверка куков перед редиректом
+        console.log('🍪 [LOGIN] Финальная проверка куков перед редиректом:')
+        console.log('  - document.cookie:', document.cookie)
+        console.log('  - getAccessToken():', getAccessToken() ? '✅' : '❌')
 
         if (userType === 'teacher') {
           console.log('🟡 [LOGIN] Редирект на home_teacher...')

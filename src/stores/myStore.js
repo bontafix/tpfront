@@ -130,9 +130,10 @@ export const useMyStore = defineStore('myStore', {
             const response = await checkUserAuth()
             
             if (typeof response === 'number' && response === 401) {
-              // Токен недействителен - выполняем автоматический логаут
+              // Сервер вернул 401 - пользователь не авторизован
+              // НЕ делаем логаут, просто очищаем состояние
+              console.log('Пользователь не авторизован (401 от /api/user/me)')
               this.clearAuthData()
-              await handleUnauthorized()
               return
             } else if (response?.authorized === false) {
               // Авторизация не подтверждена - очищаем состояние
@@ -150,11 +151,10 @@ export const useMyStore = defineStore('myStore', {
             }
           } catch (error) {
             console.warn('Фоновая проверка авторизации не удалась:', error)
-            // Если это 401 ошибка, делаем логаут
-            if (error.response?.status === 401) {
-              this.clearAuthData()
-              await handleUnauthorized()
-            }
+            // При ошибках проверки авторизации НЕ делаем логаут
+            // Просто очищаем состояние
+            console.log('Ошибка проверки авторизации, очищаем состояние')
+            this.clearAuthData()
             return
           }
         }
@@ -176,18 +176,19 @@ export const useMyStore = defineStore('myStore', {
         // Основная проверка авторизации через API (токен может быть в HttpOnly cookie)
         try {
           const response = await checkUserAuth()
-          
+
           // Если checkUserAuth вернул код ошибки (число), значит запрос не удался
           if (typeof response === 'number' && response === 401) {
-            // Токен недействителен - выполняем автоматический логаут
+            // Сервер вернул 401 - пользователь не авторизован
+            // НЕ делаем логаут, просто очищаем состояние
+            console.log('Пользователь не авторизован (401 от /api/user/me)')
             this.clearAuthData()
-            await handleUnauthorized()
             return
           }
-          
+
           this.isAuth = response?.authorized ?? false
           this.user_type = response?.user_type || ''
-          
+
           // Сохраняем состояние в localStorage для восстановления при перезагрузке
           if (this.isAuth && this.user_type) {
             localStorage.setItem('isAuth', 'true')
@@ -197,15 +198,11 @@ export const useMyStore = defineStore('myStore', {
           }
         } catch (error) {
           console.error('Ошибка при checkUserAuth:', error)
-          
-          // Если это 401 ошибка, выполняем автоматический логаут
-          if (error.response?.status === 401 || error.response?.statusCode === 401) {
-            this.clearAuthData()
-            await handleUnauthorized()
-          } else {
-            // При других ошибках считаем пользователя неавторизованным
-            this.clearAuthData()
-          }
+
+          // При любых ошибках проверки авторизации НЕ делаем логаут
+          // Просто считаем пользователя неавторизованным
+          console.log('Ошибка проверки авторизации, считаем пользователя неавторизованным')
+          this.clearAuthData()
         }
       } finally {
         this._authCheckInProgress = false

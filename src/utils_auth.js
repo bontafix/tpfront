@@ -10,9 +10,21 @@ export function getAccessToken() {
     return decodeURIComponent(token)
   }
 
-  // Fallback на старый способ парсинга
+  // Fallback на старый способ парсинга cookies
   const match = document.cookie.match(/(^| )access_token=([^;]+)/)
-  return match ? decodeURIComponent(match[2]) : null
+  if (match) {
+    return decodeURIComponent(match[2])
+  }
+
+  // WORKAROUND: Проверяем localStorage как последний fallback
+  // Это необходимо для HTTPS доменов, где cookies могут не устанавливаться
+  const localStorageToken = localStorage.getItem('access_token')
+  if (localStorageToken) {
+    console.log('🔧 [AUTH] Используем токен из localStorage (workaround для HTTPS)')
+    return localStorageToken
+  }
+
+  return null
 }
 
 export const cookieUtils = {
@@ -195,6 +207,7 @@ export async function handleUnauthorized() {
     // Очищаем localStorage
     localStorage.removeItem('user_type')
     localStorage.removeItem('isAuth')
+    localStorage.removeItem('access_token') // WORKAROUND: очищаем токен из localStorage
 
     // Очищаем состояние store
     const { useMyStore } = await import('@/stores/myStore')

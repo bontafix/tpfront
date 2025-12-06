@@ -116,7 +116,30 @@ async function fetchWSTokenWithValidation() {
       isWsAvailable = false
       return null
     }
-    
+
+    // Проверяем, если ответ является кодом ошибки (числом)
+    if (typeof response === 'number') {
+      console.warn('Ошибка API при получении токена WebSocket:', response)
+
+      // Если ошибка авторизации, отключаем WebSocket, но не логаутим
+      if (response === 401) {
+        console.warn('WebSocket недоступен: требуется авторизация')
+        isWsAvailable = false
+
+        // Отправляем событие о недоступности WebSocket
+        window.dispatchEvent(new CustomEvent('ws-unavailable', {
+          detail: { reason: 'Ошибка авторизации WebSocket' }
+        }))
+
+        return null
+      }
+
+      // Другие ошибки - считаем WebSocket недоступным
+      console.warn('WebSocket недоступен из-за ошибки API')
+      isWsAvailable = false
+      return null
+    }
+
     if (response.error) {
       console.warn('Ошибка API при получении токена WebSocket:', response.error)
       

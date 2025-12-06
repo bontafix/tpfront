@@ -13,6 +13,7 @@ const apiClient = axios.create({
   },
 })
 
+
 // Interceptor для добавления токена авторизации в заголовки
 apiClient.interceptors.request.use(
   (config) => {
@@ -83,18 +84,26 @@ apiClient.interceptors.response.use(
         // Уже идет процесс логаута, просто возвращаем ошибку
         return Promise.reject(error)
       }
-      
-      console.error('❌ [RESPONSE] 401 Unauthorized - проблема с токеном авторизации')
-      console.error('  - URL запроса:', error.config?.url)
-      console.error('  - Доступные cookies:', document.cookie)
-      console.error('  - Заголовки запроса:', error.config?.headers)
-      
-      // Исключаем запросы к /api/login и /api/logout, чтобы избежать бесконечного цикла
+
       const url = error.config?.url || ''
-      if (!url.includes('/api/login') && !url.includes('/api/logout')) {
+
+      // Исключаем запросы к /api/login, /api/logout, /ws/token и /api/user/me, чтобы избежать бесконечного цикла
+      // WebSocket токены и запросы проверки авторизации могут быть недоступны без необходимости логаута пользователя
+      if (!url.includes('/api/login') && !url.includes('/api/logout') && !url.includes('/ws/token') && !url.includes('/api/user/me')) {
+        // Для других запросов 401 - это проблема с токеном
+        console.error('❌ [RESPONSE] 401 Unauthorized - проблема с токеном авторизации')
+        console.error('  - URL запроса:', url)
+        console.error('  - Доступные cookies:', document.cookie)
+        console.error('  - Заголовки запроса:', error.config?.headers)
+
         // Выполняем автоматический логаут
         await handleUnauthorized()
+      } else if (url.includes('/api/user/me')) {
+        // Для запросов проверки авторизации 401 - это нормальное состояние
+        console.log('ℹ️ [AUTH] Проверка авторизации: пользователь не авторизован')
+        return Promise.reject(error) // Продолжаем обработку ошибки
       }
+      // Для /api/login, /api/logout, /ws/token - просто возвращаем ошибку без логаута
     }
     return Promise.reject(error)
   },
@@ -127,6 +136,14 @@ async function makeRequest(endpoint, method = 'GET', body = null, headers = null
   } catch (error) {
     if (error.response) {
       const errorCode = error.response.status
+      const url = config.url || ''
+
+      // Для запросов проверки авторизации 401 - это нормальное состояние, не ошибка
+      if (url.includes('/api/user/me') && errorCode === 401) {
+        console.log('ℹ️ [AUTH] Проверка авторизации: пользователь не авторизован')
+        return errorCode
+      }
+
       if (errorCode >= 500) {
         /* if (import.meta.env.PROD) {
           router.push({name: 'error_500'})
@@ -1047,7 +1064,7 @@ export async function checkUserAuth() {
   if (typeof window !== 'undefined' && window.__isHandlingUnauthorized) {
     return { authorized: false, user_type: '' }
   }
-  
+
   try {
     const response = await makeRequest('/api/user/me', 'GET')
     // Если makeRequest вернул код ошибки (число), значит запрос не удался
@@ -1060,11 +1077,13 @@ export async function checkUserAuth() {
     }
     return response
   } catch (error) {
-    console.error('Произошла ошибка при проверке авторизации пользователя', error)
+    // Для запросов проверки авторизации ошибки обрабатываем тихо
     // Если это 401 ошибка, возвращаем код для обработки
     if (error.response?.status === 401) {
+      console.log('ℹ️ [AUTH] Проверка авторизации: токен недействителен или отсутствует')
       return 401
     }
+    console.warn('⚠️ [AUTH] Ошибка при проверке авторизации:', error.message)
     return { authorized: false, user_type: '' }
   }
 }
