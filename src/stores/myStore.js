@@ -1,7 +1,7 @@
 // store/modalsStore.js
 import { defineStore } from 'pinia'
 import { checkUserAuth, getMyInfo, getStudentNotifications, getTeacherNotifications, getUserInfo } from '@/api/requests'
-import { getAccessToken, handleUnauthorized } from '@/utils_auth'
+import { getAccessToken, handleLogout } from '@/utils_auth'
 
 export const useMyStore = defineStore('myStore', {
   state: () => {
@@ -223,8 +223,14 @@ export const useMyStore = defineStore('myStore', {
     
     // Метод для явного выхода пользователя
     async logout() {
-      this.clearAuthData()
-      await handleUnauthorized()
+      // Используем централизованную функцию logout
+      // Она выполняет все в правильном порядке:
+      // 1. Запрос на бэкенд (с токеном)
+      // 2. Закрытие WebSocket
+      // 3. Очистка cookies и localStorage
+      // 4. Очистка store (включая этот store)
+      // 5. Редирект на landing
+      await handleLogout()
     },
     
     // Метод для установки авторизации (может пригодиться после успешного логина)

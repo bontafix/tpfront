@@ -110,8 +110,7 @@ import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useMyStore } from '@/stores/myStore'
-import { logoutUser } from '@/api/requests'
-import { cookieUtils } from '@/utils_auth'
+import { handleLogout } from '@/utils_auth'
 
 const props = defineProps({
   userInfo: {
@@ -141,15 +140,14 @@ const closeMenu = () => {
 }
 
 const logout = async () => {
-  // Удаляем токены из cookies перед logout
-  cookieUtils.deleteCookie('access_token')
-  cookieUtils.deleteCookie('accessToken')
-  cookieUtils.deleteCookie('token')
-  
-  await logoutUser()
-  store.isAuth = false
-  store.user_type = ''
-  router.push({name: 'landing'})
+  // Используем централизованную функцию logout
+  // Она выполняет все в правильном порядке:
+  // 1. Запрос на бэкенд (с токеном)
+  // 2. Закрытие WebSocket
+  // 3. Очистка cookies и localStorage
+  // 4. Очистка store
+  // 5. Редирект на landing
+  await handleLogout()
 }
 
 const toggleDropdown = async () => {

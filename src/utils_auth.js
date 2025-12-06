@@ -159,9 +159,126 @@ export const isUserAuth = async () => {
 // Флаг для предотвращения множественных одновременных вызовов handleUnauthorized
 let isHandlingUnauthorized = false
 
+// Флаг для предотвращения множественных одновременных вызовов handleLogout
+let isHandlingLogout = false
+
 // Экспортируем функцию для проверки флага (для использования в других модулях)
 export function getIsHandlingUnauthorized() {
   return isHandlingUnauthorized
+}
+
+/**
+ * Централизованная функция для явного выхода пользователя (logout)
+ * ПРАВИЛЬНЫЙ ПОРЯДОК:
+ * 1. Сначала отправляем запрос на бэкенд с токеном
+ * 2. Закрываем WebSocket
+ * 3. Очищаем токены из cookies и localStorage
+ * 4. Очищаем состояние store
+ * 5. Перенаправляем на страницу landing
+ */
+export async function handleLogout() {
+  // Предотвращаем множественные одновременные вызовы
+  if (isHandlingLogout || (typeof window !== 'undefined' && window.__isHandlingLogout)) {
+    console.log('⚠️ [LOGOUT] handleLogout уже выполняется, пропускаем повторный вызов')
+    return
+  }
+
+  // Устанавливаем флаги СРАЗУ, чтобы предотвратить новые вызовы
+  isHandlingLogout = true
+  if (typeof window !== 'undefined') {
+    window.__isHandlingLogout = true
+  }
+
+  console.log('🔵 [LOGOUT] Начало процесса logout')
+
+  try {
+    // Импортируем динамически, чтобы избежать циклических зависимостей
+    const { logoutUser } = await import('@/api/requests')
+    const { disconnectWebSocket } = await import('@/ws')
+    const router = (await import('@/router')).default
+
+    // ШАГ 1: Отправляем запрос на бэкенд ПЕРЕД удалением токена
+    // Это важно, чтобы бэкенд мог инвалидировать сессию
+    console.log('📡 [LOGOUT] Отправка запроса на /api/logout...')
+    try {
+      await logoutUser()
+      console.log('✅ [LOGOUT] Запрос на /api/logout выполнен успешно')
+    } catch (logoutError) {
+      console.warn('⚠️ [LOGOUT] Ошибка при вызове /api/logout (продолжаем logout):', logoutError)
+      // Продолжаем logout даже если запрос не удался
+    }
+
+    // ШАГ 2: Закрываем WebSocket соединение
+    console.log('🔌 [LOGOUT] Закрытие WebSocket соединения...')
+    try {
+      disconnectWebSocket()
+      console.log('✅ [LOGOUT] WebSocket соединение закрыто')
+    } catch (wsError) {
+      console.warn('⚠️ [LOGOUT] Ошибка при закрытии WebSocket:', wsError)
+    }
+
+    // ШАГ 3: Очищаем все возможные токены из cookies
+    console.log('🍪 [LOGOUT] Очистка cookies...')
+    cookieUtils.deleteCookie('access_token')
+    cookieUtils.deleteCookie('accessToken')
+    cookieUtils.deleteCookie('token')
+    cookieUtils.deleteCookie('auth_token')
+    cookieUtils.deleteCookie('jwt')
+    cookieUtils.deleteCookie('session')
+    console.log('✅ [LOGOUT] Cookies очищены')
+
+    // ШАГ 4: Очищаем localStorage
+    console.log('💾 [LOGOUT] Очистка localStorage...')
+    localStorage.removeItem('user_type')
+    localStorage.removeItem('isAuth')
+    localStorage.removeItem('access_token') // WORKAROUND: очищаем токен из localStorage
+    console.log('✅ [LOGOUT] localStorage очищен')
+
+    // ШАГ 5: Очищаем состояние store
+    console.log('🗄️ [LOGOUT] Очистка состояния store...')
+    const { useMyStore } = await import('@/stores/myStore')
+    const store = useMyStore()
+    store.isAuth = false
+    store.user_type = ''
+    store.info = null
+    store.userInfo = null
+    store.notifications = null
+    console.log('✅ [LOGOUT] Состояние store очищено')
+
+    // ШАГ 6: Перенаправляем на страницу landing
+    console.log('🔄 [LOGOUT] Перенаправление на landing...')
+    const currentRoute = router.currentRoute.value
+    if (currentRoute.name !== 'landing' && currentRoute.name !== 'login') {
+      await router.push({ name: 'landing' }).catch((routerError) => {
+        console.warn('⚠️ [LOGOUT] Ошибка при перенаправлении на landing:', routerError)
+      })
+      console.log('✅ [LOGOUT] Перенаправление выполнено')
+    }
+
+    console.log('✅ [LOGOUT] Процесс logout завершен успешно')
+  } catch (error) {
+    console.error('❌ [LOGOUT] Ошибка при выполнении logout:', error)
+    // В любом случае пытаемся перенаправить на landing
+    try {
+      const router = (await import('@/router')).default
+      const currentRoute = router.currentRoute.value
+      if (currentRoute.name !== 'landing' && currentRoute.name !== 'login') {
+        await router.push({ name: 'landing' }).catch(() => {
+          // Игнорируем ошибки перенаправления
+        })
+      }
+    } catch (routerError) {
+      console.error('❌ [LOGOUT] Не удалось перенаправить на страницу landing:', routerError)
+    }
+  } finally {
+    // Сбрасываем флаг через небольшую задержку
+    setTimeout(() => {
+      isHandlingLogout = false
+      if (typeof window !== 'undefined') {
+        window.__isHandlingLogout = false
+      }
+    }, 1000)
+  }
 }
 
 /**
