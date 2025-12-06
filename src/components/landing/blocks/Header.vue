@@ -15,13 +15,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import router from '@/router'
-import { isUserAuth } from '@/utils_auth'
 import { useMyStore } from '@/stores/myStore'
 
-const userAuth = ref(false)
 const myStore = useMyStore()
+
+// Используем computed для реактивного отслеживания состояния авторизации
+// Теперь userAuth будет автоматически обновляться при изменении store.isAuth
+const userAuth = computed(() => myStore.isAuth === true)
 
 function pushToLogin() {
   if (userAuth.value) {
@@ -41,9 +43,9 @@ function pushToLogin() {
   }
 }
 
-onMounted(() => {
-  isUserAuth().then(authenticated => {
-    userAuth.value = authenticated
-  })
+// Проверяем состояние авторизации при монтировании компонента
+onMounted(async () => {
+  // setUserAuthenticated обновит store.isAuth, который обновит computed userAuth
+  await myStore.setUserAuthenticated()
 })
 </script>

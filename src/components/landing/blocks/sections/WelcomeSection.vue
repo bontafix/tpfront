@@ -42,15 +42,20 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import router from '@/router'
-import { isUserAuth } from '@/utils_auth'
+import { useMyStore } from '@/stores/myStore'
 
 import vPlatformRequest from '@/components/modals/landing/v-platform-request.vue'
 
 const showModal = ref(false)
 const isModalOpen = ref(false)
-const userAuth = ref(false)
+
+const myStore = useMyStore()
+
+// Используем computed для реактивного отслеживания состояния авторизации
+// Теперь userAuth будет автоматически обновляться при изменении store.isAuth
+const userAuth = computed(() => myStore.isAuth === true)
 
 function openModal() {
   showModal.value = true
@@ -72,15 +77,22 @@ watch(isModalOpen, (newValue) => {
 
 function pushToRegister() {
   if (userAuth.value) {
-    router.push({ name: 'home_teacher' })
+    // Проверяем тип пользователя для правильного редиректа
+    if (myStore.user_type === 'teacher') {
+      router.push({ name: 'home_teacher' })
+    } else if (myStore.user_type === 'student') {
+      router.push({ name: 'student_cabinet' })
+    } else {
+      router.push({ name: 'home_teacher' })
+    }
   } else {
     router.push({ name: 'register', query: { from: 'landing-welcome' } })
   }
 }
 
-onMounted(() => {
-  isUserAuth().then(authenticated => {
-    userAuth.value = authenticated
-  })
+// Проверяем состояние авторизации при монтировании компонента
+onMounted(async () => {
+  // setUserAuthenticated обновит store.isAuth, который обновит computed userAuth
+  await myStore.setUserAuthenticated()
 })
 </script>

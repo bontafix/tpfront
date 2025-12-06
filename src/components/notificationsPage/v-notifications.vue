@@ -4,12 +4,12 @@
         <div class="notifications-page-header">
           <img src="/src/assets/images/arrow-long-left.svg" alt="" @click="goBack">
           <h2 class="notifications-page-title">Уведомления</h2>
-          <div class="notifications" v-show="notifications.length > 0">
+          <div class="notifications" v-show="notifications && Array.isArray(notifications) && notifications.length > 0">
             {{ notifications.length}}
           </div>
         </div>
         <ul class="notifications-page-list">
-          <li class="notifications-page-list-item" v-for="notification in notifications" :key="notification.id">
+          <li class="notifications-page-list-item" v-for="notification in (notifications || [])" :key="notification.id">
             <div class="notification">
               <p class="notification__title">
                 <strong>{{ notification.teacher_name || notification.student_name }} : </strong>
@@ -66,24 +66,30 @@ const loadData = async () => {
   } else if (userType === 'teacher') {
     await store.setMyInfo()
   }
-  notifications.value = store.notifications
+  // Всегда устанавливаем массив, даже если store.notifications null
+  notifications.value = store.notifications || []
 }
 
 const submitNotifications = () => {
   const link = 'http://t.me/teacherplanner_bot?start='
-  const teacherId = store.info.teacher_id
-  const studentId = store.userInfo.student_id
-  if(!teacherId) {
+  const teacherId = store.info?.teacher_id
+  const studentId = store.userInfo?.student_id
+  if(!teacherId && studentId) {
     window.open(`${link}student_${studentId}`)
-  } else {
+  } else if(teacherId) {
     window.open(`${link}teacher_${teacherId}`)
+  } else {
+    console.warn('Нет данных пользователя для подключения уведомлений')
   }
 }
 
 const deleteNotification = async (notification_id) => {
   await deleteTeacherNotifications(notification_id)
 
-  notifications.value = notifications.value.filter((notification)=> notification.id != notification_id)
+  // Безопасная фильтрация - проверяем, что notifications это массив
+  if (Array.isArray(notifications.value)) {
+    notifications.value = notifications.value.filter((notification)=> notification.id != notification_id)
+  }
   console.log(notification_id, notifications.value)
 }
 

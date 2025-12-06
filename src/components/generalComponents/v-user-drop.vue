@@ -28,14 +28,14 @@
 
     <div ref="dropdownMenu" :class="['v-user-drop__menu', menuPosition]" v-if="isDropdownopen">
       <div class="v-user-drop__menu-block">
-        <router-link class="v-user-drop__menu-item" :to="{name: 'teacher_cabinet'}">
+        <router-link class="v-user-drop__menu-item" :to="{name: 'teacher_cabinet'}" v-if="userInfo">
           <span class="icon">
             <img src="../../assets/images/icons/avatar.svg" alt="" class="day-el" />
             <img src="../../assets/images/user-night.svg" alt="" class="night-el" />
           </span>
           <div class="flex flex-col gap-1">
-            <span class="text" v-if="userInfo">{{ userInfo.name || userInfo.first_name || userInfo.username || 'Имя не найдено' }}</span>
-            <span class="caption">{{ userInfo.email }}</span>
+            <span class="text">{{ userInfo.name || userInfo.first_name || userInfo.username || 'Имя не найдено' }}</span>
+            <span class="caption">{{ userInfo.email || '' }}</span>
           </div>
         </router-link>
 
@@ -115,11 +115,13 @@ import { handleLogout } from '@/utils_auth'
 const props = defineProps({
   userInfo: {
     type: Object,
-    require: true
+    required: false,  // Исправлено: было require, должно быть required
+    default: null
   },
   isStudent: {
     type: Boolean,
-    require: true
+    required: false,  // Исправлено: было require, должно быть required
+    default: false
   }
 })
 

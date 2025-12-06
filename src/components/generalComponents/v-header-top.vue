@@ -10,7 +10,7 @@
           <router-link :to="{name: 'notifications'}">
             <div class="flex gap-2">
               <img src="/src/assets/images/left-menu/notification.svg" alt="" />
-              <p class="notifications">{{ notifications.length }}</p>
+              <p class="notifications">{{ notificationsCount }}</p>
             </div>
           </router-link>
         </div>
@@ -19,7 +19,7 @@
           <router-link :to="{name: 'notifications'}" v-if="isStudent">
             <div class="v-header-top__login-notifications flex gap-2">
               <img src="/src/assets/images/left-menu/notification.svg" alt="" />
-              <p class="notifications">{{ notifications.length }}</p>
+              <p class="notifications">{{ notificationsCount }}</p>
             </div>
           </router-link>
           <div class="switcher custom-switcher">
@@ -61,7 +61,12 @@ const isNightMode = computed(() => {
 })
 
 const notifications = computed(()=> {
-  return myStore.notifications || 0
+  // Всегда возвращаем массив, даже если notifications null
+  return Array.isArray(myStore.notifications) ? myStore.notifications : []
+})
+
+const notificationsCount = computed(()=> {
+  return notifications.value.length
 })
 
 const isStudent = computed(()=>{
@@ -72,6 +77,7 @@ const isStudent = computed(()=>{
 })
 
 const currentInfo = computed(()=>{
+  // Возвращаем объект пользователя или null (безопасно для v-if в дочернем компоненте)
   return isStudent.value ? myStore.userInfo : myStore.info
 })
 

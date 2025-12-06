@@ -118,7 +118,7 @@
           <div class="v-pages-menu__button" @click="changeNotificationMode">
             <img src="/src/assets/images/left-menu/notification.svg" alt="" />
             Уведомления
-            <p class="v-pages-menu__notification notifications" v-show="notifications && notifications.length > 0">{{ notifications.length }}</p>
+            <p class="v-pages-menu__notification notifications" v-show="notifications && Array.isArray(notifications) && notifications.length > 0">{{ notifications.length }}</p>
           </div>
           <a href="https://t.me/teacherplanner" target="_blank" class="v-pages-menu__button">
             <img src="/src/assets/images/left-menu/chat.svg" alt="" />
@@ -152,13 +152,13 @@
         <div class="v-pages-menu__notifications-header">
           <img @click="changeNotificationMode" src="/src/assets/images/arrow-long-left.svg" alt="">
           <h2 class="v-pages-menu__notifications-title">Уведомления </h2>
-          <div class="notifications" v-show="notifications.length > 0">
+          <div class="notifications" v-show="notifications && Array.isArray(notifications) && notifications.length > 0">
             {{ notifications.length}}
           </div>
         </div>
 
         <ul class="v-pages-menu__notifications-list">
-          <li class="v-pages-menu__notifications-list-item" v-for="notification in notifications" :key="notification.id">
+          <li class="v-pages-menu__notifications-list-item" v-for="notification in (notifications || [])" :key="notification.id">
             <div class="notification">
               <p class="notification__title">
                 <strong>{{ notification.teacher_name }} : </strong>
@@ -260,12 +260,14 @@ const notificationMode = ref(false)
 
 const submitNotifications = () => {
   const link = 'http://t.me/teacherplanner_bot?start='
-  const teacherId = store.info.teacher_id
-  const studentId = store.userInfo.student_id
-  if(!teacherId) {
+  const teacherId = store.info?.teacher_id
+  const studentId = store.userInfo?.student_id
+  if(!teacherId && studentId) {
     window.open(`${link}student_${studentId}`)
-  } else {
+  } else if(teacherId) {
     window.open(`${link}teacher_${teacherId}`)
+  } else {
+    console.warn('Нет данных пользователя для подключения уведомлений')
   }
 }
 
@@ -331,6 +333,7 @@ onBeforeUnmount(()=>{
 })
 
 watch(()=> store.notifications, (newVal) => {
-  notifications.value = newVal
+  // Всегда устанавливаем массив, даже если newVal null
+  notifications.value = newVal || []
 })
 </script>
