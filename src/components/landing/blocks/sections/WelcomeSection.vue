@@ -44,7 +44,7 @@
 <script lang="ts" setup>
 import { ref, watch, onMounted } from 'vue'
 import router from '@/router'
-import { isUserAuth } from '@/utils'
+import { isUserAuth } from '@/utils_auth'
 
 import vPlatformRequest from '@/components/modals/landing/v-platform-request.vue'
 

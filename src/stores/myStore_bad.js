@@ -1,7 +1,7 @@
 // store/modalsStore.js
 import { defineStore } from 'pinia'
 import { checkUserAuth, getMyInfo, getStudentNotifications, getTeacherNotifications, getUserInfo } from '@/api/requests'
-import { getAccessToken, handleUnauthorized } from '@/utils'
+import { getAccessToken, handleUnauthorized } from '@/utils_auth'
 
 export const useMyStore = defineStore('myStore', {
   state: () => {

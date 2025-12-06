@@ -1,4 +1,4 @@
-// ws.js - ВЕРСИЯ БЕЗ АВТОЛОГАУТА ПРИ НЕВАЛИДНОМ ТОКЕНЕ WS
+// ws.js - ПОЛНАЯ ИСПРАВЛЕННАЯ ВЕРСИЯ
 import { getWSToken } from '@/api/requests'
 import { wsDomain } from '@/utils'
 
@@ -13,177 +13,8 @@ let isConnecting = false
 let messageQueue = []
 let isProcessingQueue = false
 let heartbeatInterval = null
-let tokenValidationTimer = null
-let isWsAvailable = false // Флаг доступности WebSocket
 
 // ==================== УТИЛИТНЫЕ ФУНКЦИИ ====================
-
-/**
- * Проверка валидности токена WebSocket (без логаута)
- */
-function validateWSToken(token) {
-  // 1. Проверка наличия токена
-  if (!token) {
-    console.warn('Токен WebSocket отсутствует')
-    return { valid: false, reason: 'Токен отсутствует' }
-  }
-  
-  // 2. Проверка типа
-  if (typeof token !== 'string') {
-    console.warn('Токен WebSocket должен быть строкой:', typeof token)
-    return { valid: false, reason: 'Некорректный тип токена' }
-  }
-  
-  // 3. Проверка длины
-  if (token.length < 10) {
-    console.warn('Токен WebSocket слишком короткий:', token.length)
-    return { valid: false, reason: 'Токен слишком короткий' }
-  }
-  
-  // 4. Проверка формата (пример для JWT)
-  try {
-    // Если токен в формате JWT (3 части разделенные точками)
-    const parts = token.split('.')
-    if (parts.length === 3) {
-      // Проверяем, что это действительно JWT
-      const header = JSON.parse(atob(parts[0]))
-      const payload = JSON.parse(atob(parts[1]))
-      
-      // Проверяем срок действия токена (если есть exp)
-      if (payload.exp) {
-        const now = Math.floor(Date.now() / 1000)
-        if (payload.exp < now) {
-          console.warn('Токен WebSocket истек')
-          return { valid: false, reason: 'Токен истек' }
-        }
-      }
-    }
-  } catch (error) {
-    // Если не JWT, проверяем минимальные требования
-    if (!/^[a-zA-Z0-9_\-]+$/.test(token)) {
-      console.warn('Токен содержит недопустимые символы')
-      return { valid: false, reason: 'Невалидный формат токена' }
-    }
-  }
-  
-  console.log('✅ Токен WebSocket валиден')
-  return { valid: true, reason: '' }
-}
-
-/**
- * Запуск периодической проверки валидности токена
- */
-function startTokenValidation() {
-  stopTokenValidation()
-  
-  tokenValidationTimer = setInterval(() => {
-    if (currentToken) {
-      const validation = validateWSToken(currentToken)
-      if (!validation.valid) {
-        console.warn(`Токен WebSocket стал невалидным: ${validation.reason}`)
-        // Отправляем событие, но не логаутим
-        window.dispatchEvent(new CustomEvent('ws-token-invalid', {
-          detail: { reason: validation.reason }
-        }))
-        
-        // При невалидном токене отключаем WebSocket
-        disconnectWebSocket()
-        isWsAvailable = false
-      }
-    }
-  }, 60000) // Проверяем каждую минуту
-}
-
-/**
- * Остановка проверки валидности токена
- */
-function stopTokenValidation() {
-  if (tokenValidationTimer) {
-    clearInterval(tokenValidationTimer)
-    tokenValidationTimer = null
-  }
-}
-
-/**
- * Получение нового токена с обработкой ошибок
- */
-async function fetchWSTokenWithValidation() {
-  try {
-    const response = await getWSToken()
-    
-    if (!response) {
-      console.error('Пустой ответ при получении токена WebSocket')
-      isWsAvailable = false
-      return null
-    }
-    
-    if (response.error) {
-      console.warn('Ошибка API при получении токена WebSocket:', response.error)
-      
-      // Если ошибка авторизации, отключаем WebSocket, но не логаутим
-      if (response.error.includes('401') || 
-          response.error.includes('Unauthorized') ||
-          response.error.includes('auth')) {
-        console.warn('WebSocket недоступен: требуется авторизация')
-        isWsAvailable = false
-        
-        // Отправляем событие о недоступности WebSocket
-        window.dispatchEvent(new CustomEvent('ws-unavailable', {
-          detail: { reason: response.error }
-        }))
-        
-        return null
-      }
-      
-      // Другие ошибки - считаем WebSocket недоступным
-      console.warn('WebSocket недоступен из-за ошибки API')
-      isWsAvailable = false
-      return null
-    }
-    
-    const token = response.ws_token
-    
-    if (!token) {
-      console.warn('Токен WebSocket не получен')
-      isWsAvailable = false
-      return null
-    }
-    
-    const validation = validateWSToken(token)
-    if (!validation.valid) {
-      console.warn('Получен невалидный токен WebSocket:', validation.reason)
-      isWsAvailable = false
-      return null
-    }
-    
-    // Если токен валиден, WebSocket доступен
-    isWsAvailable = true
-    console.log('✅ WebSocket доступен, токен получен')
-    
-    return token
-    
-  } catch (error) {
-    console.warn('Ошибка получения токена WebSocket:', error.message)
-    
-    // Если это ошибка авторизации, WebSocket недоступен
-    if (error.message.includes('401') || 
-        error.message.includes('auth') ||
-        error.message.includes('Unauthorized')) {
-      console.warn('WebSocket недоступен: ошибка авторизации')
-      isWsAvailable = false
-      
-      window.dispatchEvent(new CustomEvent('ws-unavailable', {
-        detail: { reason: 'Ошибка авторизации WebSocket' }
-      }))
-    } else {
-      // Другие ошибки - сетевые проблемы и т.д.
-      isWsAvailable = false
-      console.warn('WebSocket временно недоступен')
-    }
-    
-    return null
-  }
-}
 
 /**
  * Проверяет, является ли строка валидным JSON
@@ -208,6 +39,23 @@ function isValidJSON(str) {
   } catch {
     return false
   }
+}
+
+/**
+ * Валидация токена WebSocket
+ */
+function validateToken(token) {
+  if (!token || typeof token !== 'string') {
+    console.error('Некорректный токен:', token)
+    return false
+  }
+  
+  if (token.length < 10) {
+    console.error('Слишком короткий токен')
+    return false
+  }
+  
+  return true
 }
 
 /**
@@ -410,15 +258,43 @@ export function sendWithConfirmation(message, timeout = 5000) {
 }
 
 /**
- * Проверка статуса WebSocket соединения
+ * Проверка статуса WebSocket соединения через API
  */
-export function checkWebSocketStatus() {
-  return {
-    connected: isWebSocketConnected(),
-    status: getWebSocketStatus(),
-    wsAvailable: isWsAvailable,
-    hasToken: !!currentToken,
-    tokenValid: currentToken ? validateWSToken(currentToken).valid : false
+export async function checkWebSocketStatus() {
+  try {
+    // Преобразуем WebSocket URL в HTTP URL
+    const wsUrl = buildWebSocketUrl()
+    const apiBaseUrl = wsUrl
+      .replace(/^ws:\/\//, 'http://')
+      .replace(/^wss:\/\//, 'https://')
+      .replace(/\/ws$/, '') // Убираем /ws в конце
+    
+    const response = await fetch(`${apiBaseUrl}/status`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    
+    if (!response.ok) {
+      if (response.status === 401) {
+        console.warn('Не авторизован для проверки статуса WebSocket')
+        return null
+      }
+      console.warn('Не удалось проверить статус WebSocket:', response.status)
+      return null
+    }
+    
+    const status = await response.json()
+    return {
+      connected: status.connected || false,
+      user_id: status.user_id || null,
+      total_connections: status.total_connections || 0
+    }
+  } catch (error) {
+    console.error('Ошибка при проверке статуса WebSocket:', error)
+    return null
   }
 }
 
@@ -441,8 +317,7 @@ export async function connectWebSocket() {
   // Проверяем доступность сети
   const isNetworkAvailable = await checkNetworkConnection()
   if (!isNetworkAvailable) {
-    console.warn('Сеть недоступна для подключения WebSocket')
-    isWsAvailable = false
+    console.error('Сеть недоступна для подключения WebSocket')
     return null
   }
   
@@ -455,29 +330,24 @@ export async function connectWebSocket() {
   console.log('Начинаю подключение WebSocket...')
   
   try {
-    // Получаем токен для WebSocket с валидацией
-    const token = await fetchWSTokenWithValidation()
+    // Получаем токен для WebSocket
+    const response = await getWSToken()
     
-    // Если токен не получен или невалиден, WebSocket недоступен
-    if (!token) {
-      console.warn('WebSocket недоступен: не удалось получить валидный токен')
-      isConnecting = false
-      isWsAvailable = false
-      
-      // Отправляем событие о недоступности
-      window.dispatchEvent(new CustomEvent('ws-unavailable', {
-        detail: { reason: 'Не удалось получить валидный токен' }
-      }))
-      
-      return null
+    if (!response) {
+      throw new Error('Пустой ответ от getWSToken()')
     }
     
-    // Сохраняем токен
-    currentToken = token
-    isWsAvailable = true
+    if (response.error) {
+      throw new Error(`Ошибка API: ${response.error}`)
+    }
     
-    // Запускаем периодическую проверку токена
-    startTokenValidation()
+    const token = response.ws_token
+    
+    if (!validateToken(token)) {
+      throw new Error('Невалидный токен WebSocket')
+    }
+    
+    currentToken = token
     
     // Строим URL для подключения
     const wsUrl = buildWebSocketUrl()
@@ -491,7 +361,6 @@ export async function connectWebSocket() {
         console.error('Таймаут подключения WebSocket')
         ws.close(1006, 'Connection timeout')
         isConnecting = false
-        isWsAvailable = false
       }
     }, 10000)
     
@@ -502,7 +371,6 @@ export async function connectWebSocket() {
       
       reconnectAttempts = 0
       isConnecting = false
-      isWsAvailable = true
       
       // Отправляем токен для аутентификации
       if (currentToken) {
@@ -512,20 +380,12 @@ export async function connectWebSocket() {
           timestamp: new Date().toISOString()
         }))
       } else {
-        console.error('Токен не найден, WebSocket будет закрыт')
+        console.error('Токен не найден, требуется повторная авторизация')
         disconnectWebSocket()
-        isWsAvailable = false
-        
-        window.dispatchEvent(new CustomEvent('ws-unavailable', {
-          detail: { reason: 'Токен не найден при подключении' }
-        }))
       }
       
       // Запускаем heartbeat
       startHeartbeat()
-      
-      // Отправляем событие об успешном подключении
-      window.dispatchEvent(new CustomEvent('ws-connected'))
     }
     
     // Обработчик входящих сообщений
@@ -572,34 +432,17 @@ export async function connectWebSocket() {
             
           case 'auth_success':
             console.log('✅ Аутентификация WebSocket успешна')
-            window.dispatchEvent(new CustomEvent('ws-auth-success'))
             break
             
           case 'auth_failed':
-            console.warn('❌ Ошибка аутентификации WebSocket:', data.message)
-            // При ошибке аутентификации очищаем токен
-            currentToken = null
-            isWsAvailable = false
-            
-            window.dispatchEvent(new CustomEvent('ws-auth-failed', {
-              detail: { message: data.message }
-            }))
-            
+            console.error('❌ Ошибка аутентификации WebSocket:', data.message)
             disconnectWebSocket()
-            break
-            
-          case 'token_expired':
-            console.warn('❌ Токен WebSocket истек')
-            currentToken = null
-            isWsAvailable = false
-            
-            window.dispatchEvent(new CustomEvent('ws-token-expired'))
-            
-            disconnectWebSocket()
+            // Можно вызвать событие для перелогина
+            window.dispatchEvent(new CustomEvent('websocket-auth-failed'))
             break
             
           case 'error':
-            console.warn('Ошибка от WebSocket сервера:', data.message)
+            console.error('Ошибка от WebSocket сервера:', data.message)
             break
             
           case 'ping':
@@ -642,7 +485,7 @@ export async function connectWebSocket() {
         reconnectTimeout = null
       }
       
-      // Коды ошибок, при которых не переподключаемся
+      // Коды ошибок, при которых не нужно переподключаться
       const noReconnectCodes = [
         1000,  // Нормальное закрытие
         1008,  // Нарушение политики (например, невалидный токен)
@@ -652,27 +495,14 @@ export async function connectWebSocket() {
       ]
       
       if (noReconnectCodes.includes(event.code)) {
-        console.log('Переподключение не требуется:', event.code)
-        isWsAvailable = false
-        
-        window.dispatchEvent(new CustomEvent('ws-closed', {
-          detail: { 
-            code: event.code, 
-            reason: event.reason,
-            permanent: true 
-          }
-        }))
-        
+        console.log('Переподключение не требуется (специальный код закрытия)')
         return
       }
       
       // Проверяем, не превышен ли лимит переподключений
       if (reconnectAttempts >= maxReconnectAttempts) {
-        console.warn('Достигнут лимит переподключений')
+        console.error('Достигнут лимит переподключений')
         reconnectAttempts = 0
-        isWsAvailable = false
-        
-        window.dispatchEvent(new CustomEvent('ws-reconnect-limit'))
         return
       }
       
@@ -691,10 +521,6 @@ export async function connectWebSocket() {
       }
       
       reconnectTimeout = setTimeout(connectWebSocket, delay)
-      
-      window.dispatchEvent(new CustomEvent('ws-reconnecting', {
-        detail: { attempt: reconnectAttempts, delay }
-      }))
     }
     
     // Обработчик ошибок
@@ -702,8 +528,6 @@ export async function connectWebSocket() {
       clearTimeout(connectionTimeout)
       console.error('WebSocket ошибка:', error)
       isConnecting = false
-      isWsAvailable = false
-      
       // Соединение автоматически закроется, onclose будет вызван
     }
     
@@ -712,11 +536,12 @@ export async function connectWebSocket() {
   } catch (error) {
     console.error('Критическая ошибка подключения WebSocket:', error)
     isConnecting = false
-    isWsAvailable = false
     
-    window.dispatchEvent(new CustomEvent('ws-connection-error', {
-      detail: { error: error.message }
-    }))
+    // Обработка ошибок авторизации
+    if (error.message.includes('401') || error.message.includes('Unauthorized')) {
+      console.error('Ошибка авторизации WebSocket')
+      window.dispatchEvent(new CustomEvent('auth-required'))
+    }
     
     return null
   }
@@ -727,9 +552,6 @@ export async function connectWebSocket() {
  */
 export function disconnectWebSocket() {
   console.log('Отключаю WebSocket...')
-  
-  // Останавливаем проверку токена
-  stopTokenValidation()
   
   // Очищаем таймаут переподключения
   if (reconnectTimeout) {
@@ -762,9 +584,7 @@ export function disconnectWebSocket() {
   // Сбрасываем счетчики
   reconnectAttempts = 0
   isConnecting = false
-  // Токен не сбрасываем - он может быть нужен для REST API
-  
-  window.dispatchEvent(new CustomEvent('ws-disconnected'))
+  currentToken = null
 }
 
 /**
@@ -797,13 +617,6 @@ export function isWebSocketConnected() {
 }
 
 /**
- * Проверка, доступен ли WebSocket вообще
- */
-export function getWsAvailable() {
-  return isWsAvailable
-}
-
-/**
  * Принудительное переподключение
  */
 export async function reconnectWebSocket() {
@@ -826,19 +639,14 @@ export async function reconnectWebSocket() {
  * Получение статистики WebSocket
  */
 export function getWebSocketStats() {
-  const tokenValidation = currentToken ? validateWSToken(currentToken) : { valid: false, reason: 'Нет токена' }
-  
   return {
     status: getWebSocketStatus(),
     isConnecting: isConnecting,
-    wsAvailable: isWsAvailable,
     reconnectAttempts: reconnectAttempts,
     maxReconnectAttempts: maxReconnectAttempts,
     listenersCount: listeners.length,
     queueLength: messageQueue.length,
-    hasToken: !!currentToken,
-    tokenValid: tokenValidation.valid,
-    tokenValidationReason: tokenValidation.reason
+    hasToken: !!currentToken
   }
 }
 
@@ -850,60 +658,12 @@ export function clearMessageQueue() {
   console.log('Очередь сообщений WebSocket очищена')
 }
 
-/**
- * Явная установка токена (например, после перелогина)
- */
-export function setWSToken(token) {
-  const validation = validateWSToken(token)
-  if (!validation.valid) {
-    console.warn('Невалидный токен WebSocket:', validation.reason)
-    isWsAvailable = false
-    return false
-  }
-  
-  currentToken = token
-  startTokenValidation()
-  isWsAvailable = true
-  return true
-}
-
-/**
- * Очистка токена (при логауте)
- */
-export function clearWSToken() {
-  currentToken = null
-  stopTokenValidation()
-  disconnectWebSocket()
-  isWsAvailable = false
-  console.log('Токен WebSocket очищен')
-}
-
-/**
- * Ручная проверка доступности WebSocket
- */
-export async function checkWsAvailability() {
-  try {
-    const token = await fetchWSTokenWithValidation()
-    return {
-      available: !!token,
-      hasToken: !!currentToken,
-      tokenValid: currentToken ? validateWSToken(currentToken).valid : false
-    }
-  } catch (error) {
-    return {
-      available: false,
-      error: error.message
-    }
-  }
-}
-
 // Экспортируем геттер для отладки (только для разработки)
 if (process.env.NODE_ENV === 'development') {
   window.__wsDebug = {
     getInstance: () => ws,
     getStats: getWebSocketStats,
     reconnect: reconnectWebSocket,
-    disconnect: disconnectWebSocket,
-    validateToken: validateWSToken
+    disconnect: disconnectWebSocket
   }
 }

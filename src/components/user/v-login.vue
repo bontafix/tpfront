@@ -95,7 +95,8 @@ import { useRouter } from 'vue-router'
 import { useMyStore } from '@/stores/myStore'
 import emitter from '@/eventBus'
 import { resolveApiMessage } from '@/api/apiMessages'
-import { domain, getAccessToken, cookieUtils } from '@/utils'
+import { domain } from '@/utils'
+import { getAccessToken, cookieUtils } from '@/utils_auth'
 import { connectWebSocket, checkWebSocketStatus } from '@/ws'
 
 
@@ -305,7 +306,8 @@ function signInWithProvider(provider) {
     'http://localhost:5173',
     'https://dev.teacherplanner.ru',
     'https://api.dev-teacherplanner.ru',
-    'https://api.teacherplanner.ru'
+    'https://api.teacherplanner.ru',
+    'https://dev-teacherplanner.ru'
   ]
 
   const messageListener = (event) => {

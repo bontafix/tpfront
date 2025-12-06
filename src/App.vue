@@ -1,7 +1,7 @@
 <script setup>
 import { RouterView } from 'vue-router'
 import { onMounted } from 'vue'
-import { isUserAuth } from '@/utils'
+import { isUserAuth } from '@/utils_auth'
 import { connectWebSocket, checkWebSocketStatus } from './ws'
 import { useMyStore } from './stores/myStore'
 import vCookieModal from './components/generalComponents/v-cookie-modal.vue'

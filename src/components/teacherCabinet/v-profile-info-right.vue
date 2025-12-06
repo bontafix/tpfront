@@ -35,7 +35,7 @@
 import { useRouter } from 'vue-router'
 import { logoutUser } from '@/api/requests'
 import { useMyStore } from '@/stores/myStore'
-import { cookieUtils } from '@/utils'
+import { cookieUtils } from '@/utils_auth'
 
 const props = defineProps({
   email: {

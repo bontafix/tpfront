@@ -3,7 +3,7 @@ import router from '@/router'
 import jsonOrder from 'json-order'
 import axios from 'axios'
 import emitter from '@/eventBus'
-import { getAccessToken, handleUnauthorized } from '@/utils'
+import { getAccessToken, handleUnauthorized } from '@/utils_auth'
 
 const apiClient = axios.create({
   baseURL: domain,

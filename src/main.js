@@ -3,7 +3,7 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
-import { cookieUtils, getAccessToken } from './utils'
+import { cookieUtils } from './utils_auth'
 
 // Вывод версии приложения в консоль
 const appVersion = __APP_VERSION__

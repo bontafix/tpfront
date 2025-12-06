@@ -17,7 +17,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import router from '@/router'
-import { isUserAuth } from '@/utils'
+import { isUserAuth } from '@/utils_auth'
 import { useMyStore } from '@/stores/myStore'
 
 const userAuth = ref(false)

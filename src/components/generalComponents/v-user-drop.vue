@@ -111,7 +111,7 @@ import { useRouter } from 'vue-router'
 
 import { useMyStore } from '@/stores/myStore'
 import { logoutUser } from '@/api/requests'
-import { cookieUtils } from '@/utils'
+import { cookieUtils } from '@/utils_auth'
 
 const props = defineProps({
   userInfo: {
