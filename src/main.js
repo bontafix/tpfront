@@ -3,7 +3,7 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
-import { cookieUtils } from './utils_auth'
+import { cookieUtils, getBasePath } from './utils_auth'
 
 // Вывод версии приложения в консоль
 const appVersion = __APP_VERSION__
@@ -71,10 +71,15 @@ if (typeof window !== 'undefined') {
     return cookieUtils.getAllCookies()
   }
   
+  window.getBasePath = () => {
+    return getBasePath()
+  }
+  
   console.log('%c🍪 Утилиты для проверки куков доступны:', 'color: #4CAF50; font-weight: bold;')
   console.log('  - checkCookies() - проверить токен авторизации')
   console.log('  - getCookie(name) - получить куку по имени')
   console.log('  - getAllCookies() - получить все куки')
+  console.log('  - getBasePath() - получить базовый путь приложения')
 }
 
 app.directive('click-outside', {

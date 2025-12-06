@@ -151,32 +151,50 @@ const submitForm = async () => {
     try {
       const response = await registerUser(requestBody);
       
-      console.log('✅ [REGISTER] Регистрация успешна, перенаправление на форму входа...')
+      console.log('🔵 [REGISTER] Ответ от сервера:', response)
+      console.log('🔵 [REGISTER] Статус ответа:', response?.status)
       
-      // Показываем уведомление об успешной регистрации
-      const successMessage = resolveApiMessage('register', response, {
-        defaultSuccess: 'Регистрация успешна! Теперь войдите в систему',
-      })
-      
-      emitter.emit('notify', {
-        type: 'success',
-        message: successMessage,
-      })
-      
-      // После успешной регистрации перенаправляем на форму входа с данными для автозаполнения
-      await router.push({
-        name: 'login',
-        query: {
-          username: form.value.username,
-          password: form.value.password1
-        }
-      });
+      // Проверяем, что регистрация прошла успешно (статус 200 или 201)
+      if (response && (response.status === 200 || response.status === 201)) {
+        console.log('✅ [REGISTER] Регистрация успешна, перенаправление на форму входа...')
+        
+        // Показываем уведомление об успешной регистрации
+        const successMessage = resolveApiMessage('register', response, {
+          defaultSuccess: 'Регистрация успешна! Теперь войдите в систему',
+        })
+        
+        emitter.emit('notify', {
+          type: 'success',
+          message: successMessage,
+        })
+        
+        // После успешной регистрации перенаправляем на форму входа с данными для автозаполнения
+        await router.push({
+          name: 'login',
+          query: {
+            username: form.value.username,
+            password: form.value.password1
+          }
+        });
+      } else {
+        // Регистрация не успешна (код != 200/201)
+        console.log('❌ [REGISTER] Регистрация не успешна, код:', response?.status)
+        
+        const errorMessage = resolveApiMessage('register', response, {
+          defaultError: 'Ошибка при регистрации. Попробуйте еще раз',
+        })
+        
+        emitter.emit('notify', {
+          type: 'error',
+          message: errorMessage,
+        })
+      }
     } catch (error) {
       console.error('❌ [REGISTER] Ошибка при регистрации:', error)
       
       // Показываем сообщение об ошибке
       const errorMessage = resolveApiMessage('register', error, {
-        defaultError: 'Ошибка при регистрации. Попробуйте еще раз',
+        defaultError: 'Произошла ошибка при регистрации. Попробуйте позже',
       })
       
       emitter.emit('notify', {

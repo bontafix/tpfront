@@ -11,6 +11,13 @@ const apiClient = axios.create({
   headers: {
     'Cache-Control': 'no-store',
   },
+  // Отключаем автоматическое бросание исключений для HTTP ошибок
+  // Это убирает красные сообщения в консоли, но сохраняет все ответы
+  validateStatus: function (status) {
+    // Считаем все статусы валидными (не бросаем исключение)
+    // Обработка ошибок будет происходить в interceptor и makeRequest
+    return true
+  },
 })
 
 
@@ -61,9 +68,9 @@ apiClient.interceptors.request.use(
 
 // Interceptor для обработки ошибок авторизации
 apiClient.interceptors.response.use(
-  (response) => {
+  async (response) => {
     // Логируем успешные ответы для проверки куков
-    if (response.config?.url?.includes('/api/login')) {
+    if (response.config?.url?.includes('/api/login') && response.status >= 200 && response.status < 300) {
       console.log('✅ [RESPONSE] Успешный ответ от /api/login')
       console.log('  - Статус:', response.status)
       console.log('  - Заголовки ответа (Set-Cookie):', response.headers['set-cookie'] || 'Не найдены')
@@ -75,17 +82,16 @@ apiClient.interceptors.response.use(
         console.log('  - document.cookie:', document.cookie)
       }, 50)
     }
-    return response
-  },
-  async (error) => {
-    if (error.response?.status === 401) {
+    
+    // Обрабатываем HTTP ошибки (теперь они приходят как обычные ответы благодаря validateStatus)
+    if (response.status === 401) {
       // Проверяем, не идет ли уже процесс логаута
       if (typeof window !== 'undefined' && window.__isHandlingUnauthorized) {
-        // Уже идет процесс логаута, просто возвращаем ошибку
-        return Promise.reject(error)
+        // Уже идет процесс логаута, просто возвращаем ответ
+        return response
       }
 
-      const url = error.config?.url || ''
+      const url = response.config?.url || ''
 
       // Исключаем запросы к /api/login, /api/logout, /ws/token и /api/user/me, чтобы избежать бесконечного цикла
       // WebSocket токены и запросы проверки авторизации могут быть недоступны без необходимости логаута пользователя
@@ -94,72 +100,87 @@ apiClient.interceptors.response.use(
         console.error('❌ [RESPONSE] 401 Unauthorized - проблема с токеном авторизации')
         console.error('  - URL запроса:', url)
         console.error('  - Доступные cookies:', document.cookie)
-        console.error('  - Заголовки запроса:', error.config?.headers)
+        console.error('  - Заголовки запроса:', response.config?.headers)
 
         // Выполняем автоматический логаут
         await handleUnauthorized()
       } else if (url.includes('/api/user/me')) {
         // Для запросов проверки авторизации 401 - это нормальное состояние
         console.log('ℹ️ [AUTH] Проверка авторизации: пользователь не авторизован')
-        return Promise.reject(error) // Продолжаем обработку ошибки
       }
-      // Для /api/login, /api/logout, /ws/token - просто возвращаем ошибку без логаута
+      // Для /api/login, /api/logout, /ws/token - просто возвращаем ответ без логаута
     }
+    
+    return response
+  },
+  async (error) => {
+    // Обработка сетевых ошибок (не HTTP ошибок, а реальных сетевых проблем)
+    console.error('❌ [RESPONSE] Сетевая ошибка:', error.message)
     return Promise.reject(error)
   },
 )
 
 // Общая функция для выполнения запросов
 async function makeRequest(endpoint, method = 'GET', body = null, headers = null) {
+  const config = {
+    method: method.toLowerCase(),
+    url: endpoint,
+    withCredentials: true,
+    headers: {
+      'Cache-Control': 'no-store',
+      ...headers,
+    },
+  }
+
+  if (body && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
+    config.headers['Content-Type'] = 'application/json'
+    config.data =
+      method === 'POST' || method === 'PUT' ? jsonOrder.stringify(body) : JSON.stringify(body)
+  } else if (body && method === 'DELETE') {
+    config.data = JSON.stringify(body)
+  }
+
   try {
-    const config = {
-      method: method.toLowerCase(),
-      url: endpoint,
-      withCredentials: true,
-      headers: {
-        'Cache-Control': 'no-store',
-        ...headers,
-      },
-    }
-
-    if (body && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
-      config.headers['Content-Type'] = 'application/json'
-      config.data =
-        method === 'POST' || method === 'PUT' ? jsonOrder.stringify(body) : JSON.stringify(body)
-    } else if (body && method === 'DELETE') {
-      config.data = JSON.stringify(body)
-    }
-
     const response = await apiClient(config)
-    const result = method === 'GET' ? response.data : response
-    return result
-  } catch (error) {
-    if (error.response) {
-      const errorCode = error.response.status
-      const url = config.url || ''
-
-      // Для запросов проверки авторизации 401 - это нормальное состояние, не ошибка
-      if (url.includes('/api/user/me') && errorCode === 401) {
-        console.log('ℹ️ [AUTH] Проверка авторизации: пользователь не авторизован')
-        return errorCode
-      }
-
-      if (errorCode >= 500) {
-        /* if (import.meta.env.PROD) {
-          router.push({name: 'error_500'})
-          console.log('Перенаправление')
-        } */
-      }
-      console.error(`API Error: ${errorCode}`)
-      return errorCode
-    } else {
+    
+    // Теперь все HTTP статусы приходят как успешные ответы благодаря validateStatus
+    // Проверяем статус и обрабатываем ошибки без красных сообщений в консоли
+    const statusCode = response.status
+    const url = config.url || ''
+    
+    // Для успешных запросов (2xx)
+    if (statusCode >= 200 && statusCode < 300) {
+      const result = method === 'GET' ? response.data : response
+      return result
+    }
+    
+    // Для запросов проверки авторизации 401 - это нормальное состояние, не ошибка
+    if (url.includes('/api/user/me') && statusCode === 401) {
+      console.log('ℹ️ [AUTH] Проверка авторизации: пользователь не авторизован')
+      return statusCode
+    }
+    
+    // Для ошибок сервера (5xx)
+    if (statusCode >= 500) {
       /* if (import.meta.env.PROD) {
         router.push({name: 'error_500'})
         console.log('Перенаправление')
       } */
-      console.error(`Произошла ошибка при ${method}-запросе ${endpoint}:`, error)
-      throw error
     }
+    
+    // Для всех остальных ошибочных статусов (4xx, 5xx) возвращаем полный ответ
+    // ✅ Возвращаем полный объект ответа для resolveApiMessage
+    // Логируем информативно, но не как ошибку (без console.error)
+    console.log(`ℹ️ [API] Ответ со статусом ${statusCode} от ${endpoint}`)
+    return response
+  } catch (error) {
+    // Обрабатываем реальные сетевые ошибки (не HTTP ошибки)
+    /* if (import.meta.env.PROD) {
+      router.push({name: 'error_500'})
+      console.log('Перенаправление')
+    } */
+    console.error(`❌ [API] Сетевая ошибка при ${method}-запросе ${endpoint}:`, error.message)
+    throw error
   }
 }
 

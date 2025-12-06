@@ -1,5 +1,40 @@
 import { checkUserAuth } from '@/api/requests';
 
+/**
+ * Получить базовый путь приложения (для cookies)
+ * Учитывает VITE_BASE_PATH из переменных окружения
+ */
+export function getBasePath() {
+  try {
+    // Проверяем BASE_URL из Vite
+    const baseUrl = import.meta.env.BASE_URL || '/'
+    if (baseUrl && baseUrl !== '/') {
+      let normalized = baseUrl
+      if (!normalized.startsWith('/')) normalized = '/' + normalized
+      // Убираем слеш на конце для cookies
+      if (normalized.endsWith('/')) normalized = normalized.slice(0, -1)
+      return normalized || '/'
+    }
+  } catch {
+    // import.meta.env недоступен — пробуем извлечь из текущего URL
+  }
+
+  // Извлекаем из текущего pathname (например, /alex/some-page -> /alex)
+  if (typeof window !== 'undefined') {
+    const segments = window.location.pathname.split('/').filter(Boolean)
+    if (segments.length > 0) {
+      // Проверяем, что первый сегмент не является роутом приложения
+      // (например, не 'teacher', 'student', 'admin', 'login' и т.д.)
+      const appRoutes = ['teacher', 'student', 'admin', 'login', 'register', 'landing']
+      if (!appRoutes.includes(segments[0])) {
+        return '/' + segments[0]
+      }
+    }
+  }
+
+  return '/'
+}
+
 export function getAccessToken() {
   // Пробуем получить токен из cookies разными способами
   const token = cookieUtils.getCookie('access_token') ||
@@ -43,6 +78,27 @@ export const cookieUtils = {
     return this.getCookie(name) !== null;
   },
 
+  // Установить куки с правильным path
+  setCookie(name, value, options = {}) {
+    const {
+      maxAge = 86400, // По умолчанию 24 часа
+      path = getBasePath(), // Используем базовый путь приложения
+      secure = window.location.protocol === 'https:',
+      sameSite = 'Lax'
+    } = options;
+
+    let cookieString = `${name}=${encodeURIComponent(value)}`;
+    cookieString += `; path=${path}`;
+    if (maxAge) cookieString += `; max-age=${maxAge}`;
+    if (secure) cookieString += `; secure`;
+    if (sameSite) cookieString += `; samesite=${sameSite}`;
+
+    document.cookie = cookieString;
+    
+    console.log(`🍪 [COOKIE] Установлена cookie "${name}" с path="${path}"`);
+    return cookieString;
+  },
+
   // Удалить куки (для logout)
   deleteCookie(name) {
     // В проде фронт может жить не в корне домена (например, /alex/).
@@ -52,7 +108,14 @@ export const cookieUtils = {
     // Базовые кандидаты путей
     const paths = new Set(['/'])
 
-    // Путь из BASE_URL (Vite)
+    // Добавляем базовый путь приложения
+    const basePath = getBasePath()
+    if (basePath && basePath !== '/') {
+      paths.add(basePath)
+      paths.add(basePath + '/')
+    }
+
+    // Путь из BASE_URL (Vite) - дополнительная проверка
     try {
       const baseUrl = import.meta.env.BASE_URL || '/'
       if (baseUrl && baseUrl !== '/') {
@@ -77,6 +140,8 @@ export const cookieUtils = {
       }
     }
 
+    console.log(`🍪 [COOKIE] Удаление cookie "${name}" для путей:`, Array.from(paths))
+
     // Пытаемся удалить куку для всех собранных путей
     paths.forEach((path) => {
       document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path};`
@@ -100,6 +165,9 @@ export const cookieUtils = {
   // Проверить токен авторизации
   checkAuthToken() {
     console.log('🍪 Проверка токена авторизации:');
+    console.log('  - Базовый путь приложения (getBasePath):', getBasePath());
+    console.log('  - Текущий URL:', window.location.href);
+    console.log('  - Текущий pathname:', window.location.pathname);
     console.log('  - Все куки:', document.cookie);
     console.log('  - Все куки (объект):', this.getAllCookies());
 
@@ -125,6 +193,9 @@ export const cookieUtils = {
     console.log('  - Токен из getAccessToken():', token ? `✅ Найден (длина: ${token.length})` : '❌ Не найден');
 
     return {
+      basePath: getBasePath(),
+      currentUrl: window.location.href,
+      currentPathname: window.location.pathname,
       allCookies: this.getAllCookies(),
       tokenNames: foundTokens,
       accessToken: token

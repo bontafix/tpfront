@@ -141,6 +141,12 @@ const submitForm = async () => {
     console.log('  - response.status:', response?.status)
     console.log('  - response.data:', response?.data)
     console.log('  - response.data?.user_type:', response?.data?.user_type)
+    console.log('  - response.headers:', response?.headers)
+    console.log('  - response.headers[\'set-cookie\']:', response?.headers?.['set-cookie'])
+    
+    // Проверяем cookies сразу после ответа
+    console.log('🍪 [LOGIN] Cookies сразу после ответа от сервера:')
+    console.log('  - document.cookie:', document.cookie)
 
     // Проверяем успешность ответа (статус 2xx)
     if (response && response.status >= 200 && response.status < 300) {
@@ -153,6 +159,11 @@ const submitForm = async () => {
       // Проверяем, есть ли токен в ответе API (fallback для HTTPS доменов)
       const tokenFromResponse = response.data?.access_token || response.data?.token
       console.log('🔵 [LOGIN] Токен в ответе API:', tokenFromResponse ? '✅ Найден' : '❌ Не найден')
+      
+      // Дополнительная задержка для установки cookies от сервера
+      await new Promise(resolve => setTimeout(resolve, 200))
+      console.log('🍪 [LOGIN] Cookies через 200ms после ответа:')
+      console.log('  - document.cookie:', document.cookie)
 
       if (userType) {
         console.log('✅ [LOGIN] userType найден:', userType)
@@ -162,8 +173,12 @@ const submitForm = async () => {
         if (tokenFromResponse) {
           console.log('🔧 [LOGIN] Устанавливаем токен из ответа API в localStorage')
           localStorage.setItem('access_token', tokenFromResponse)
-          // Также пробуем установить как обычный cookie на всякий случай
-          document.cookie = `access_token=${tokenFromResponse}; path=/; max-age=86400`
+          // Также пробуем установить как обычный cookie с правильным path
+          cookieUtils.setCookie('access_token', tokenFromResponse, {
+            maxAge: 86400,
+            secure: true,
+            sameSite: 'Lax'
+          })
         }
 
         // Устанавливаем состояние авторизации СРАЗУ после успешной авторизации
