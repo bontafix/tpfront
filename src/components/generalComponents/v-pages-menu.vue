@@ -224,13 +224,6 @@
         >
           Ученики</router-link
         >
-        <router-link
-          :to="{ name: 'lessons' }"
-          class="v-pages-menu-mob__nav-link"
-          :class="{ active: isActive(['lessons']) }"
-        >
-          Занятия</router-link
-        >
         <router-link :to="{name: 'home'}" class="v-pages-menu-mob__nav-link"
           :class="{ active: isActive(['home', , 'calendar-week']) }">
           Календарь

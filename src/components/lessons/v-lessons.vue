@@ -5,6 +5,24 @@
         <div class="v-lessons__container layout">
           <div class="v-lessons__header">
             <h1 class="v-lessons__title">Занятия</h1>
+            <div class="v-lessons__header-controls">
+              <label class="indicators-toggle">
+                <input 
+                  type="checkbox" 
+                  v-model="loadIndicatorsEnabled"
+                  @change="onIndicatorsToggle"
+                  :disabled="isLoading"
+                />
+                <span class="indicators-toggle-text">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 14.6667C11.6819 14.6667 14.6667 11.6819 14.6667 8C14.6667 4.3181 11.6819 1.33333 8 1.33333C4.3181 1.33333 1.33333 4.3181 1.33333 8C1.33333 11.6819 4.3181 14.6667 8 14.6667Z" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 10.6667V8" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 5.33333H8.00667" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  Показывать индикаторы
+                </span>
+              </label>
+            </div>
             <div class="v-lessons__filters">
               <button 
                 class="v-lessons__filter-btn"
@@ -186,6 +204,9 @@ const showDetailsModal = ref(false)
 const selectedLesson = ref(null)
 const lessonsWithIndicators = ref([])
 
+// Флаг включения/выключения загрузки индикаторов
+const loadIndicatorsEnabled = ref(true)
+
 const formatDateShort = (dateStr) => {
   const date = new Date(dateStr)
   const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']
@@ -278,11 +299,24 @@ const loadLessons = async (filter) => {
       lessons.value = sortLessonsByDateTime(lessons.value)
     }
     
-    // Загружаем индикаторы для каждого занятия
-    const indicatorsStartTime = performance.now()
-    await loadIndicators()
-    const indicatorsEndTime = performance.now()
-    console.log(`🔍 Загрузка индикаторов заняла: ${(indicatorsEndTime - indicatorsStartTime).toFixed(0)}ms`)
+    // Загружаем индикаторы для каждого занятия (если включено)
+    if (loadIndicatorsEnabled.value) {
+      const indicatorsStartTime = performance.now()
+      await loadIndicators()
+      const indicatorsEndTime = performance.now()
+      console.log(`🔍 Загрузка индикаторов заняла: ${(indicatorsEndTime - indicatorsStartTime).toFixed(0)}ms`)
+    } else {
+      console.log('⚠️ Загрузка индикаторов отключена')
+      // Создаем массив без индикаторов
+      lessonsWithIndicators.value = lessons.value.map(lesson => ({
+        ...lesson,
+        hasProblems: false,
+        problemsCount: 0,
+        hasTopics: false,
+        topicsCount: 0,
+        hasHomework: false
+      }))
+    }
     
   } catch (error) {
     console.error('Ошибка загрузки занятий:', error)
@@ -374,6 +408,14 @@ const closeDetailsModal = () => {
   selectedLesson.value = null
 }
 
+const onIndicatorsToggle = () => {
+  console.log('🔄 Индикаторы', loadIndicatorsEnabled.value ? 'включены' : 'отключены')
+  // Перезагружаем текущий фильтр
+  if (lessons.value.length > 0 && !isLoading.value) {
+    loadLessons(activeFilter.value)
+  }
+}
+
 onMounted(() => {
   loadLessons('today')
   localStorage.setItem('activePage', 'lessons')
@@ -399,6 +441,12 @@ onMounted(() => {
     gap: 20px;
   }
 
+  &__header-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
   &__title {
     font-size: 32px;
     font-weight: 600;
@@ -410,6 +458,7 @@ onMounted(() => {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    width: 100%;
   }
 
   &__filter-btn {
@@ -684,6 +733,47 @@ onMounted(() => {
   }
 }
 
+.indicators-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #f3f4f6;
+  }
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--blue);
+  }
+
+  &-text {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--custom-dark-gray);
+
+    svg {
+      color: var(--blue);
+    }
+  }
+
+  input:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
 .loader-container {
   display: flex;
   justify-content: center;
@@ -720,6 +810,12 @@ onMounted(() => {
     &__header {
       flex-direction: column;
       align-items: flex-start;
+      gap: 12px;
+    }
+
+    &__header-controls {
+      width: 100%;
+      justify-content: flex-start;
     }
 
     &__title {
