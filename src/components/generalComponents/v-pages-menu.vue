@@ -49,6 +49,28 @@
           Ученики</router-link
         >
         <router-link
+          :to="{ name: 'lessons' }"
+          class="v-pages-menu__nav-link"
+          :class="{ active: isActive(['lessons']) }"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M4 19.5C4 18.837 4.26339 18.2011 4.73223 17.7322C5.20107 17.2634 5.83696 17 6.5 17H20M4 19.5C4 20.163 4.26339 20.7989 4.73223 21.2678C5.20107 21.7366 5.83696 22 6.5 22H20V2H6.5C5.83696 2 5.20107 2.26339 4.73223 2.73223C4.26339 3.20107 4 3.83696 4 4.5V19.5Z"
+              stroke="#717680"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          Занятия</router-link
+        >
+        <router-link
         :to="{name: 'home'}" class="v-pages-menu__nav-link"
         :class="{ active: isActive(['home', , 'calendar-week']) }">
           <svg
@@ -201,6 +223,13 @@
           :class="{ active: isActive(['my_students', , 'student']) }"
         >
           Ученики</router-link
+        >
+        <router-link
+          :to="{ name: 'lessons' }"
+          class="v-pages-menu-mob__nav-link"
+          :class="{ active: isActive(['lessons']) }"
+        >
+          Занятия</router-link
         >
         <router-link :to="{name: 'home'}" class="v-pages-menu-mob__nav-link"
           :class="{ active: isActive(['home', , 'calendar-week']) }">

@@ -32,6 +32,9 @@ const vChartTest = () => import('@/components/modals/v-chart-test.vue')
 const vStudents = () => import('@/components/students/v-students.vue')
 const VStudentPage = () => import('@/components/students/studentPage/v-student-page.vue')
 
+/* Занятия */
+const vLessons = () => import('@/components/lessons/v-lessons.vue')
+
 /* Финансы */
 const vFinance = () => import('@/components/finance/v-finance.vue')
 const vGroupDetails = () => import('@/components/students/v-group-details.vue')
@@ -202,6 +205,11 @@ const router = createRouter({
     {
       path: '/my-students-test/',
       children: studentsRoutes,
+    },
+    {
+      path: '/lessons/',
+      name: 'lessons',
+      component: vLessons,
     },
     {
       path: '/finance/',
