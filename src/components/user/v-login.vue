@@ -1,8 +1,9 @@
 <template>
   <div class="v-login">
     <div class="v-login__container container">
-      <h1 class="v-login__title text-title">TeacherPlanner</h1>
-      <p class="v-login__subtitle">
+      <!-- Скрываем заголовок и подзаголовок в режиме скрытого автовхода -->
+      <h1 v-if="!isHiddenAutoLogin" class="v-login__title text-title">TeacherPlanner</h1>
+      <p v-if="!isHiddenAutoLogin" class="v-login__subtitle">
         Войдите в систему или
         <router-link class="contact-link" :to="{ name: 'register' }">
           зарегистрируйтесь
@@ -20,7 +21,12 @@
         </button>
       </div>
  -->
-      <form class="v-login__form" @submit.prevent="submitForm">
+      <!-- Индикатор автоматического входа (видимый режим) -->
+      <div v-if="showAutoLoginIndicator" class="auto-login-indicator">
+        <p class="auto-login-text">Выполняется автоматический вход...</p>
+      </div>
+
+      <form v-if="!isHiddenAutoLogin" class="v-login__form" @submit.prevent="submitForm">
         <div class="v-login__form-field">
           <label class="v-login-form-field-subtitle" for="email"></label>
           <input
@@ -79,7 +85,7 @@
         </div>
       </form>
 
-      <div class="v-login__warning">
+      <div v-if="!isHiddenAutoLogin" class="v-login__warning">
         Продолжая, вы соглашаетесь с
         <a class="contact-link" href="/Пользовательское соглашение.pdf" target="_blank">Условиями использования</a> и
         <a class="contact-link" href="/Политика обработки ПДН.pdf" target="_blank">Политикой конфиденциальности.</a>
@@ -110,8 +116,22 @@ const form = ref({
 
 const errorLogin = ref(false)
 
+// Состояние для автовхода
+const isAutoLoginProcessing = ref(false)
+const autoLoginMode = ref(null) // 'true' | 'visible' | null
+
 const isValid = computed(() => {
   return form.value.username && form.value.password.length >= 8
+})
+
+// Показывать индикатор автовхода только в видимом режиме
+const showAutoLoginIndicator = computed(() => {
+  return isAutoLoginProcessing.value && autoLoginMode.value === 'visible'
+})
+
+// Скрытый автовход - прячем все элементы формы
+const isHiddenAutoLogin = computed(() => {
+  return isAutoLoginProcessing.value && autoLoginMode.value === 'true'
 })
 
 const passwordInputType = ref('password')
@@ -418,18 +438,84 @@ function signInWithProvider(provider) {
   window.addEventListener('message', messageListener, { once: true })
 }
 
-onMounted(()=>{
+onMounted(async ()=>{
   console.log(document.cookie)
   
-  // Автозаполнение формы из query параметров после регистрации
-  if (route.query.username) {
-    form.value.username = route.query.username
-    console.log('✅ [LOGIN] Автозаполнение username:', route.query.username)
+  // Получаем данные из router.state (безопасно - не попадают в URL)
+  const routerState = history.state
+  
+  // Автозаполнение формы после регистрации
+  if (routerState?.username) {
+    form.value.username = routerState.username
+    console.log('✅ [LOGIN] Автозаполнение username из router.state')
   }
-  if (route.query.password) {
+  if (routerState?.password) {
+    form.value.password = routerState.password
+    console.log('✅ [LOGIN] Автозаполнение password из router.state')
+  }
+
+  // Автоматический вход после регистрации
+  if (routerState?.autoLogin && form.value.username && form.value.password) {
+    autoLoginMode.value = routerState.autoLogin
+    isAutoLoginProcessing.value = true
+    
+    console.log('🔄 [LOGIN] Режим автовхода активирован:', autoLoginMode.value)
+    
+    // Небольшая задержка для корректного рендеринга формы
+    await new Promise(resolve => setTimeout(resolve, 100))
+    
+    try {
+      // Вызываем существующую функцию submitForm (вся логика авторизации уже там)
+      await submitForm()
+      console.log('✅ [LOGIN] Автовход выполнен')
+    } catch (error) {
+      console.error('❌ [LOGIN] Ошибка автовхода:', error)
+    } finally {
+      isAutoLoginProcessing.value = false
+    }
+  }
+  
+  // Fallback: старая логика с query параметрами (для обратной совместимости)
+  // Если данных нет в state, проверяем query (устаревший способ)
+  if (!routerState?.username && route.query.username) {
+    form.value.username = route.query.username
+    console.log('⚠️ [LOGIN] Автозаполнение username из query (устаревший метод)')
+  }
+  if (!routerState?.password && route.query.password) {
     form.value.password = route.query.password
-    console.log('✅ [LOGIN] Автозаполнение password')
+    console.log('⚠️ [LOGIN] Автозаполнение password из query (устаревший метод)')
   }
 })
 
 </script>
+
+<style scoped>
+/* Индикатор автоматического входа */
+.auto-login-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin: 20px 0;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.night__mode .auto-login-indicator {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.auto-login-text {
+  color: #666;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+  text-align: center;
+}
+
+.night__mode .auto-login-text {
+  color: rgba(255, 255, 255, 0.6);
+}
+</style>
