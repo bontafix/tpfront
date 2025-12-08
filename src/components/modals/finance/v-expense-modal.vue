@@ -24,7 +24,7 @@ import { useStudentsStore } from '@/stores/studentsStore'
 
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
 import vStyledSelect from '@/components/generalComponents/v-styled-select.vue'
-import { setExpense } from '@/api/requests'
+import { setExpense } from '@/api/teachers'
 
 const store = useStudentsStore()
 

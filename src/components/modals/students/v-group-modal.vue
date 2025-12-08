@@ -47,7 +47,7 @@ import { onMounted, ref, computed } from 'vue'
 import { useSelectedStudentsStore } from '@/stores/selectedStudentsStore'
 
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
-import { createGroup } from '@/api/requests'
+import { createGroup } from '@/api/groups'
 
 const props = defineProps({
 

@@ -16,6 +16,16 @@
         </div>
 
         <div class="v-header-top__login">
+          <!-- Информация о пользователе -->
+          <div class="v-header-top__user-info" v-if="currentInfo">
+            <div class="v-header-top__user-name">
+              {{ userName }}
+            </div>
+            <div class="v-header-top__user-type">
+              {{ userTypeLabel }}
+            </div>
+          </div>
+          
           <router-link :to="{name: 'notifications'}" v-if="isStudent">
             <div class="v-header-top__login-notifications flex gap-2">
               <img src="/src/assets/images/left-menu/notification.svg" alt="" />
@@ -81,6 +91,34 @@ const currentInfo = computed(()=>{
   return isStudent.value ? myStore.userInfo : myStore.info
 })
 
+const userName = computed(() => {
+  if (!currentInfo.value) return 'Загрузка...'
+  
+  // Для учителя
+  if (!isStudent.value && currentInfo.value) {
+    return currentInfo.value.name || currentInfo.value.first_name || currentInfo.value.username || 'Пользователь'
+  }
+  
+  // Для студента
+  if (isStudent.value && currentInfo.value) {
+    return currentInfo.value.name || currentInfo.value.first_name || currentInfo.value.username || 'Пользователь'
+  }
+  
+  return 'Пользователь'
+})
+
+const userTypeLabel = computed(() => {
+  const userType = myStore.user_type || localStorage.getItem('user_type')
+  
+  if (userType === 'teacher') {
+    return 'Учитель'
+  } else if (userType === 'student') {
+    return 'Ученик'
+  }
+  
+  return 'Пользователь'
+})
+
 const toggleModal = (modalId) => {
   console.log(modalId)
   modals.value[modalId] = !modals.value[modalId]
@@ -110,3 +148,43 @@ onMounted(() => {
     : document.body.classList.remove('night__mode')
 })
 </script>
+
+<style scoped>
+.v-header-top__user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-end;
+  padding-right: 8px;
+}
+
+.v-header-top__user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--custom-black-text);
+  line-height: 1.2;
+}
+
+.v-header-top__user-type {
+  font-size: 12px;
+  font-weight: 400;
+  color: #717680;
+  line-height: 1.2;
+}
+
+/* Стили для ночного режима */
+.night__mode .v-header-top__user-name {
+  color: var(--custom-white);
+}
+
+.night__mode .v-header-top__user-type {
+  color: #a0a0a0;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .v-header-top__user-info {
+    display: none;
+  }
+}
+</style>

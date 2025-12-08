@@ -74,7 +74,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import vReview from '@/components/modals/landing/v-review.vue'
-import { getReviews } from '@/api/requests'
+import { getReviews } from '@/api/students'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation } from 'swiper/modules'
 

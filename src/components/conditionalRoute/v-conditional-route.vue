@@ -10,7 +10,7 @@ import { onMounted } from 'vue';
 import emitter from '@/eventBus';
 import { useRouter, useRoute } from 'vue-router';
 import { useMyStore } from '@/stores/myStore';
-import { linkProfileForApi } from '@/api/requests';
+import { linkProfileForApi } from '@/api/auth';
 
 const router = useRouter()
 const route = useRoute()

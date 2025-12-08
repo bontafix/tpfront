@@ -117,7 +117,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
-import { getStudentSchedule } from '@/api/requests'
+import { getStudentSchedule } from '@/api/students'
 
 const props = defineProps({
   currentSubject: Object,

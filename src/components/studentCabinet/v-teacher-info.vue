@@ -64,7 +64,7 @@
 
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue'
-import { getTeacherInfo, getStudentBalance } from '@/api/requests'
+import { getTeacherInfo, getStudentBalance } from '@/api/students'
 
 // Глобальные кэши для данных преподавателей и балансов
 const teacherInfoCache = new Map()

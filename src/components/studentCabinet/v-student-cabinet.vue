@@ -79,7 +79,7 @@ import vAddResultModal from '../modals/students/v-add-result-modal.vue';
 import vEditHomework from '../modals/studentCabinet/v-edit-homework.vue';
 import vAnswerHomeworkModal from '../modals/studentCabinet/v-answer-homework-modal.vue';
 
-import { getStudentSubjects, getStudentSchedule, setStudentHomework } from '@/api/requests';
+import { getStudentSubjects, getStudentSchedule, setStudentHomework } from '@/api/students';
 import { useMyStore } from '@/stores/myStore';
 
 // Данные

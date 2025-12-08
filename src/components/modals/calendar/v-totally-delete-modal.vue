@@ -15,7 +15,7 @@
 import { ref } from 'vue'
 
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
-import { deleteLessonById } from '@/api/requests'
+import { deleteLessonById } from '@/api/lessons'
 
 const props = defineProps({
   lesson: {

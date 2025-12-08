@@ -154,7 +154,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { getNews } from "@/api/requests";
+import { getNews } from "@/api/lessons";
 import { useRouter } from "vue-router";
 import { domain } from "@/utils";
 

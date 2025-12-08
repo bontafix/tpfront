@@ -130,8 +130,8 @@
 
 <script setup>
 import { useLessonStore } from '@/stores/lessonsStore'
+import { createHomeworkGroup } from '@/api/groups'
 import {
-  createHomeworkGroup,
   createSubmission,
   deleteLessonProblem,
   deleteLessonTopic,
@@ -145,7 +145,7 @@ import {
   setLessonProblems,
   setLessonTopics,
   uploadFIleHomework,
-} from '@/api/requests'
+} from '@/api/lessons'
 import { nextTick, onBeforeUnmount, onMounted, computed, onUnmounted, ref } from 'vue'
 import vBase from '../v-base.vue'
 import vHomeRight from './v-home-right.vue'

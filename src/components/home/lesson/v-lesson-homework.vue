@@ -9,7 +9,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { getLessonHomeWork } from '@/api/requests'
+import { getLessonHomeWork } from '@/api/lessons'
 
 const props = defineProps({ lessonId: Number })
 const homework = ref(null)

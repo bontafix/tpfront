@@ -107,7 +107,7 @@ import { ref, computed } from 'vue'
 import { useCurrentStudentStore } from '@/stores/currentStudentStore'
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
 import vCustomTextarea from '@/components/generalComponents/v-custom-textarea.vue'
-import { setNewReviews } from '@/api/requests'
+import { setNewReviews } from '@/api/students'
 
 import '@vuepic/vue-datepicker/dist/main.css'
 

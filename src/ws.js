@@ -1,5 +1,5 @@
 // ws.js - ВЕРСИЯ БЕЗ АВТОЛОГАУТА ПРИ НЕВАЛИДНОМ ТОКЕНЕ WS
-import { getWSToken } from '@/api/requests'
+import { getWSToken } from '@/api/auth'
 import { wsDomain } from '@/utils'
 
 // Глобальные переменные

@@ -27,7 +27,7 @@ import vCustomModal from '../generalComponents/v-custom-modal.vue'
 
 import { computed, onMounted, ref } from 'vue'
 
-import { editRule, getRule } from '@/api/requests'
+import { editRule, getRule } from '@/api/lessons'
 import { sortObject, updatedStableOrder } from '@/utils'
 
 const ruleData = ref()

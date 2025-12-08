@@ -1,5 +1,5 @@
 // store/modalsStore.js
-import { getLessonsOnDay, getTodayLessons } from '@/api/requests'
+import { getLessonsOnDay, getTodayLessons } from '@/api/lessons'
 import { formatDate } from '@/utils'
 import { defineStore } from 'pinia'
 

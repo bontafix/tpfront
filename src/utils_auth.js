@@ -1,4 +1,4 @@
-import { checkUserAuth } from '@/api/requests';
+import { checkUserAuth } from '@/api/auth';
 
 /**
  * Получить базовый путь приложения (для cookies)

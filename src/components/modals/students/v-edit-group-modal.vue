@@ -57,7 +57,7 @@ import { useStudentsStore } from '@/stores/studentsStore'
 import { useSelectedStudentsStore } from '@/stores/selectedStudentsStore'
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
 import vStyledSelect from '@/components/generalComponents/v-styled-select.vue'
-import { updateGroup } from '@/api/requests'
+import { updateGroup } from '@/api/groups'
 
 const props = defineProps({
   groupData: {

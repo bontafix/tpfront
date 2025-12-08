@@ -101,7 +101,7 @@ import { useCurrentStudentStore } from '@/stores/currentStudentStore'
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
 import vStyledSelect from '@/components/generalComponents/v-styled-select.vue'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { createDemoRequest, getTypesConnect } from '@/api/requests'
+import { createDemoRequest, getTypesConnect } from '@/api/students'
 
 const currentStudentStore = useCurrentStudentStore()
 

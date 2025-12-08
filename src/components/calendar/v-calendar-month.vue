@@ -175,7 +175,7 @@ import { getDayOfWeek, daysWeek } from '@/utils'
 import { useRoute, useRouter } from 'vue-router'
 import { useIsMobile } from '@/composables/useIsMobile'
 import { ref, onMounted, computed, useTemplateRef, watch } from 'vue'
-import { getLessonsOnMonth, transferLesson } from '@/api/requests'
+import { getLessonsOnMonth, transferLesson } from '@/api/lessons'
 
 /* Переменные */
 

@@ -39,7 +39,8 @@
 import { ref, computed, readonly } from 'vue';
 
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue';
-import { changeEmail, updateStudentProfile, updateTeacherProfile } from '@/api/requests';
+import { updateStudentProfile } from '@/api/students';
+import { changeEmail, updateTeacherProfile } from '@/api/teachers';
 
 const email = ref('')
 const code = ref(null)

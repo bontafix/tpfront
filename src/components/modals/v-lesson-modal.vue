@@ -49,7 +49,10 @@ import vFormCalendarInfo from '../generalComponents/v-form-calendar-info.vue'
 
 import { onMounted, ref, computed } from 'vue'
 import { useLessonStore } from '@/stores/lessonsStore'
-import { createGroupLesson, getGroups, getMonthlyEarnings, getMyStudents, setOneTimeLesson, setStableGroupLesson, setStableLesson } from '@/api/requests'
+import { getMyStudents } from '@/api/students'
+import { createGroupLesson, getGroups } from '@/api/groups'
+import { getMonthlyEarnings } from '@/api/finance'
+import { setOneTimeLesson, setStableGroupLesson, setStableLesson } from '@/api/lessons'
 
 /* ============================================================ Переменные состояния ============================================================*/
 

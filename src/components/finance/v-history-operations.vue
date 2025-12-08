@@ -181,7 +181,7 @@ import vBase from '../v-base.vue'
 import { useFinanceStore } from '@/stores/financeStore'
 import { isLastDayOfMonth } from 'date-fns'
 import { formatDate, getStatusClass } from '@/utils'
-import { cancelOperation, deleteExpenditure } from '@/api/requests'
+import { cancelOperation, deleteExpenditure } from '@/api/teachers'
 
 const financeStore = useFinanceStore()
 

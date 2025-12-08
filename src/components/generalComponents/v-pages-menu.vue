@@ -262,7 +262,7 @@ import { addMessageListener, removeMessageListener } from '@/ws'
 
 import vTrialModal from '../modals/v-trial-modal.vue'
 import vLessonModal from '../modals/v-lesson-modal.vue'
-import { deleteStudentNotifications, deleteTeacherNotifications, getTeacherNotifications } from '@/api/requests'
+import { deleteStudentNotifications, deleteTeacherNotifications, getTeacherNotifications } from '@/api/notifications'
 import { formatDate } from '@/utils'
 
 const modals = ref({

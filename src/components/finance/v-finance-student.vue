@@ -163,7 +163,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import vCompareChart from './v-compare-chart.vue'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import vStyledSelect from '../generalComponents/v-styled-select.vue'
-import { getStudentEarning } from '@/api/requests'
+import { getStudentEarning } from '@/api/finance'
 
 const store = useStudentsStore()
 

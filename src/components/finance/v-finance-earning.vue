@@ -97,7 +97,7 @@ import {
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import vStyledSelect from '../generalComponents/v-styled-select.vue'
 import { useChartColors } from '@/composables/useChartColors'
-import { getDailyEarnings, getEarningsForYear, getMonthlyEarnings, getWeeklyEarnings } from '@/api/requests'
+import { getDailyEarnings, getEarningsForYear, getMonthlyEarnings, getWeeklyEarnings } from '@/api/finance'
 import { formatDate } from '@/utils'
 
 ChartJS.register(

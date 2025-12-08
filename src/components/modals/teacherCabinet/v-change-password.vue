@@ -139,7 +139,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
-import { changePassword } from '@/api/requests'
+import { changePassword } from '@/api/auth'
 
 const props = defineProps({
   secondaryMode: {

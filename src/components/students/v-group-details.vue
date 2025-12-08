@@ -85,7 +85,7 @@ import vBase from '../v-base.vue'
 import vStudentsTable from './v-students-table.vue'
 import VEditGroupModal from '../modals/students/v-edit-group-modal.vue'
 import vAdditionalyTaskModal from '../modals/students/v-additionaly-task-modal.vue'
-import { createHomeworkGroup, getGroupStudents } from '@/api/requests'
+import { createHomeworkGroup, getGroupStudents } from '@/api/groups'
 import { useRoute, useRouter } from 'vue-router'
 
 import emitter from '@/eventBus'

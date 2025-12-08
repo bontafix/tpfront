@@ -101,7 +101,7 @@ import vCustomTextarea from '@/components/generalComponents/v-custom-textarea.vu
 import '@vuepic/vue-datepicker/dist/main.css'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import { routeLocationKey } from 'vue-router'
-import { deleteResultById, setResult, updateResultById } from '@/api/requests'
+import { deleteResultById, setResult, updateResultById } from '@/api/students'
 
 const currentStudentStore = useCurrentStudentStore()
 const customModal = ref(null)

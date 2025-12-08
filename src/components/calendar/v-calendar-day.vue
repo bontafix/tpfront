@@ -107,7 +107,7 @@ import { DayPilot, DayPilotCalendar } from '@daypilot/daypilot-lite-vue'
 import vModalsContainer from '../generalComponents/v-modals-container.vue'
 
 import { ref, onMounted, computed, useTemplateRef, onUnmounted, watch, nextTick } from 'vue'
-import { getLessonsOnDay } from '@/api/requests'
+import { getLessonsOnDay } from '@/api/lessons'
 import { useRoute, useRouter } from 'vue-router'
 import { formatDate, transformDate } from '@/utils'
 

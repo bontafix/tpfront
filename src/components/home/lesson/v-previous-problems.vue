@@ -11,7 +11,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { getPreviousProblems } from '@/api/requests'
+import { getPreviousProblems } from '@/api/lessons'
 
 const props = defineProps({ lessonId: Number })
 const problems = ref([])

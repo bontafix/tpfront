@@ -18,7 +18,7 @@
 </template>
 <script setup>
 import { onMounted, ref } from 'vue'
-import { deleteTeacherTask, getTeacherTasks, setTeacherTasks } from '@/api/requests'
+import { deleteTeacherTask, getTeacherTasks, setTeacherTasks } from '@/api/teachers'
 
 import vHomeRightSecBase from './v-home-right-sec-base.vue'
 import vAddField from '../generalComponents/v-add-field.vue'

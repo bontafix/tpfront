@@ -65,7 +65,7 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import { useMyStore } from '@/stores/myStore';
 import vStyledSelect from '../generalComponents/v-styled-select.vue';
-import { updateTeacherProfile } from '@/api/requests';
+import { updateTeacherProfile } from '@/api/teachers';
 
 import { useStudentsStore } from '@/stores/studentsStore';
 

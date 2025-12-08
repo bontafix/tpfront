@@ -16,7 +16,7 @@
 </template>
 <script setup>
 import { onMounted, ref, watch } from 'vue'
-import { deleteStudentAnswer } from '@/api/requests'
+import { deleteStudentAnswer } from '@/api/students'
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
 import vFilesHandler from '@/components/generalComponents/v-files-handler.vue'
 

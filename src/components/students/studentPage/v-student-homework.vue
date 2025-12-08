@@ -62,7 +62,8 @@ import vHomework from '@/components/generalComponents/v-homework.vue'
 import vHomeworkStat from '@/components/generalComponents/v-homework-stat.vue'
 
 import { useRoute } from 'vue-router'
-import { createSubmission, deleteLessonHomework, getAllStudentHomework } from '@/api/requests'
+import { getAllStudentHomework } from '@/api/students'
+import { createSubmission, deleteLessonHomework } from '@/api/lessons'
 
 const emit = defineEmits(['toggle-modal'])
 

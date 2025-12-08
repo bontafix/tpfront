@@ -178,7 +178,7 @@ import { ref, onMounted, useTemplateRef, computed, watch } from 'vue'
 
 import { useLessonStore } from '@/stores/lessonsStore'
 import { useIsMobile } from '@/composables/useIsMobile'
-import { getLessonsOnWeek, transferLesson } from '@/api/requests'
+import { getLessonsOnWeek, transferLesson } from '@/api/lessons'
 import { DayPilot, DayPilotCalendar } from '@daypilot/daypilot-lite-vue'
 import {
   formatDate,

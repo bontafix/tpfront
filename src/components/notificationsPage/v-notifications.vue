@@ -41,7 +41,7 @@ import { useRouter } from 'vue-router';
 
 import { formatDate } from '@/utils.js'
 import { useMyStore } from '@/stores/myStore';
-import { getTeacherNotifications, getStudentNotifications, deleteTeacherNotifications } from '@/api/requests';
+import { getTeacherNotifications, getStudentNotifications, deleteTeacherNotifications } from '@/api/notifications';
 
 const store = useMyStore()
 

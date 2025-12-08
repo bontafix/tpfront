@@ -25,7 +25,7 @@ import { ref, computed, watch, nextTick  } from 'vue'
 
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
 
-import { toggleStudentArchive } from '@/api/requests'
+import { toggleStudentArchive } from '@/api/students'
 import { useStudentsStore } from '@/stores/studentsStore'
 import { useSelectedStudentsStore } from '@/stores/selectedStudentsStore'
 

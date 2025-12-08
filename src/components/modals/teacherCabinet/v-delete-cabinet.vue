@@ -18,7 +18,7 @@
   </v-custom-modal>
 </template>
 <script setup>
-import { deleteAccount } from '@/api/requests';
+import { deleteAccount } from '@/api/auth';
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue';
 
 const submitForm = async () => {

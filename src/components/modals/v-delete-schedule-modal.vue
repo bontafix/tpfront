@@ -16,7 +16,7 @@
   </v-custom-modal>
 </template>
 <script setup>
-import { deleteRuleLessons } from '@/api/requests';
+import { deleteRuleLessons } from '@/api/lessons';
 
 import vCustomModal from '../generalComponents/v-custom-modal.vue';
 

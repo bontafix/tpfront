@@ -4,7 +4,7 @@ import { formatDate } from '@/utils'
 import {
   getStudentResults,
   getAllGradesStudent
-} from '@/api/requests'
+} from '@/api/students'
 
 // Функция для построения датасета
 export function buildChartDataset(label, data, color, spanGaps = false, parsing = true) {

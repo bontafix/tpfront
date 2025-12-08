@@ -31,7 +31,7 @@
 import { onMounted, ref } from 'vue'
 import vBase from '../v-base.vue'
 import vStudentCard from './v-student-card.vue'
-import { getArchivedStudents, toggleStudentArchive } from '@/api/requests'
+import { getArchivedStudents, toggleStudentArchive } from '@/api/students'
 
 const isLoading = ref(false)
 

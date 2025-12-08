@@ -1,7 +1,8 @@
 // store/modalsStore.js
 import { defineStore } from 'pinia'
 import { useRoute } from 'vue-router'
-import { getAllStudents, getGroups, getMyStudents, getStudentAnalytics, getTypesConnect, getTimeZones } from '@/api/requests'
+import { getMyStudents, getStudentAnalytics, getTypesConnect, getTimeZones } from '@/api/students'
+import { getGroups } from '@/api/groups'
 
 const route = useRoute()
 

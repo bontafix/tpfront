@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { getNews } from '@/api/requests'
+import { getNews } from '@/api/lessons'
 import { ref, onMounted } from 'vue'
 
 const blogs = ref([])

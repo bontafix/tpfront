@@ -28,7 +28,7 @@
 <script setup>
 import { ref } from 'vue'
 
-import { deleteLessonById, cancelLesson } from '@/api/requests'
+import { deleteLessonById, cancelLesson } from '@/api/lessons'
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
 
 import { onMounted } from 'vue'

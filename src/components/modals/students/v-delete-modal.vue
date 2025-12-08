@@ -26,7 +26,8 @@ import { ref, computed, watch, onUnmounted } from 'vue'
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
 
 import { useSelectedStudentsStore } from '@/stores/selectedStudentsStore'
-import { deleteGroup, deleteStudentProfile } from '@/api/requests'
+import { deleteGroup } from '@/api/groups'
+import { deleteStudentProfile } from '@/api/students'
 
 const props = defineProps({
   group: Object,

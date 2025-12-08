@@ -62,7 +62,7 @@ import 'vue3-timepicker/dist/VueTimepicker.css'
 
 import { formatDay, changeTime } from '@/utils'
 import { ref, onMounted } from 'vue'
-import { transferLesson } from '@/api/requests'
+import { transferLesson } from '@/api/lessons'
 
 /* ============================================================ Переменные состояния ============================================================ */
 

@@ -51,7 +51,7 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import Blog from './blog.vue'
-import { getNews } from '@/api/requests'
+import { getNews } from '@/api/lessons'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()

@@ -55,32 +55,36 @@
         </div> -->
         <div class="v-login__form-field password-field">
           <label class="v-login-form-field-subtitle" for="password">Пароль *</label>
-          <input
-            v-model="form.password1"
-            :type="passwordInputType"
-            class="custom-input"
-            :class="{ 'error': errors.password1 && touched.password1 }"
-            id="password"
-            placeholder="Введите пароль (минимум 8 символов)"
-            @blur="touched.password1 = true"
-          />
-          <img v-if="passwordInputType === 'password'" @click="changeInputType" src="/src/assets/images/eye-off.svg" class="password-image" alt="">
-          <img v-else @click="changeInputType" class="password-image" src="/src/assets/images/eye.svg" alt="">
+          <div class="password-input-wrapper">
+            <input
+              v-model="form.password1"
+              :type="passwordInputType"
+              class="custom-input"
+              :class="{ 'error': errors.password1 && touched.password1 }"
+              id="password"
+              placeholder="Введите пароль (минимум 8 символов)"
+              @blur="touched.password1 = true"
+            />
+            <img v-if="passwordInputType === 'password'" @click="changeInputType" src="/src/assets/images/eye-off.svg" class="password-image" alt="">
+            <img v-else @click="changeInputType" class="password-image" src="/src/assets/images/eye.svg" alt="">
+          </div>
           <span v-if="errors.password1 && touched.password1" class="error-message">{{ errors.password1 }}</span>
         </div>
         <div v-if="requirePasswordConfirmation" class="v-login__form-field password-field">
           <label class="v-login-form-field-subtitle" for="password2">Подтвердите пароль *</label>
-          <input
-            v-model="form.password2"
-            :type="password2InputType"
-            class="custom-input"
-            :class="{ 'error': errors.password2 && touched.password2 }"
-            id="password2"
-            placeholder="Повторите пароль"
-            @blur="touched.password2 = true"
-          />
-          <img v-if="password2InputType === 'password'" @click="changePassword2InputType" src="/src/assets/images/eye-off.svg" class="password-image" alt="">
-          <img v-else @click="changePassword2InputType" class="password-image" src="/src/assets/images/eye.svg" alt="">
+          <div class="password-input-wrapper">
+            <input
+              v-model="form.password2"
+              :type="password2InputType"
+              class="custom-input"
+              :class="{ 'error': errors.password2 && touched.password2 }"
+              id="password2"
+              placeholder="Повторите пароль"
+              @blur="touched.password2 = true"
+            />
+            <img v-if="password2InputType === 'password'" @click="changePassword2InputType" src="/src/assets/images/eye-off.svg" class="password-image" alt="">
+            <img v-else @click="changePassword2InputType" class="password-image" src="/src/assets/images/eye.svg" alt="">
+          </div>
           <span v-if="errors.password2 && touched.password2" class="error-message">{{ errors.password2 }}</span>
         </div>
         <div class="v-login__form-checkbox mb-5">
@@ -125,7 +129,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { registerUser } from '@/api/requests'
+import { registerUser } from '@/api/auth'
 import { useMyStore } from '@/stores/myStore.js'
 import emitter from '@/eventBus'
 import { resolveApiMessage } from '@/api/apiMessages'
@@ -142,7 +146,7 @@ const AUTO_LOGIN_MODE = 'true' // 'true' | 'visible' | false
 // Флаг для переключения режима работы формы
 // true - требуется подтверждение пароля (два поля)
 // false - без подтверждения пароля (одно поле)
-const requirePasswordConfirmation = ref(false)
+const requirePasswordConfirmation = ref(true)
 
 const form = ref({
   email: '',
@@ -393,6 +397,14 @@ onMounted(() => {
   position: relative;
 }
 
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-input-wrapper .custom-input {
+  padding-right: 45px;
+}
+
 .password-image {
   position: absolute;
   right: 15px;
@@ -401,6 +413,5 @@ onMounted(() => {
   cursor: pointer;
   width: 20px;
   height: 20px;
-  margin-top: 12px;
 }
 </style>

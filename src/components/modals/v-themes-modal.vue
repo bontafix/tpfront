@@ -42,7 +42,7 @@ import { ref, computed, watch } from 'vue'
 
 import vAddField from '../generalComponents/v-add-field.vue'
 import vCustomModal from '../generalComponents/v-custom-modal.vue'
-import { setTopic, deleteLessonTopic } from '@/api/requests'
+import { setTopic, deleteLessonTopic } from '@/api/lessons'
 
 const props = defineProps({
   lessonId: {

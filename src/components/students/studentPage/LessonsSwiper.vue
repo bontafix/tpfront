@@ -105,7 +105,8 @@
 
 <script setup>
 import { ref, nextTick, onMounted, watch } from 'vue'
-import { getStudentFutureLessons, getStudentLastLessons, getLessonProblems, getLessonTopics } from '@/api/requests'
+import { getStudentFutureLessons, getStudentLastLessons } from '@/api/students'
+import { getLessonProblems, getLessonTopics } from '@/api/lessons'
 import { formatDate, getHomeworkClass } from '@/utils'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation } from 'swiper/modules'

@@ -194,7 +194,7 @@ import { ref, onMounted, useTemplateRef } from 'vue'
 import vBase from '../v-base.vue'
 import vModalsContainer from '../generalComponents/v-modals-container.vue'
 import vLessonDetailsModal from '../modals/v-lesson-details-modal.vue'
-import { getTodayLessons, getLessonsOnWeek, getLessonsOnMonth, getLessonsOnDay } from '@/api/requests'
+import { getTodayLessons, getLessonsOnWeek, getLessonsOnMonth, getLessonsOnDay } from '@/api/lessons'
 
 const activeFilter = ref('today')
 const lessons = ref([])

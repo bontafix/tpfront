@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getStudentAnalytics, getStudentById } from '@/api/requests'
+import { getStudentAnalytics, getStudentById } from '@/api/students'
 
 export const useCurrentStudentStore = defineStore('currentStudent', {
   state: () => ({

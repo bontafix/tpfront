@@ -96,7 +96,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { loginUser } from '@/api/requests'
+import { loginUser } from '@/api/auth'
 import { useRouter, useRoute } from 'vue-router'
 import { useMyStore } from '@/stores/myStore'
 import emitter from '@/eventBus'

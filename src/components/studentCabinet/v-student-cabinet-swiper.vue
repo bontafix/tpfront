@@ -138,11 +138,10 @@ import { ref, nextTick, onMounted, watch, computed } from 'vue'
 import {
   getStudentFutureLessons,
   getStudentLastLessons,
-  getLessonProblems,
-  getLessonTopics,
   getStudentLessons,
   getStudnetSource,
-} from '@/api/requests'
+} from '@/api/students'
+import { getLessonProblems, getLessonTopics } from '@/api/lessons'
 import { formatDate, domain, domainDownload } from '@/utils'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation } from 'swiper/modules'

@@ -62,7 +62,7 @@ import vFormCalendarInfo from '../generalComponents/v-form-calendar-info.vue'
 
 import { ref } from 'vue'
 import { useLessonStore } from '@/stores/lessonsStore'
-import { setOneTimeLesson, setTrialLesson } from '@/api/requests'
+import { setOneTimeLesson, setTrialLesson } from '@/api/lessons'
 
 const store = useLessonStore()
 const customModal = ref(null)

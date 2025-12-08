@@ -10,7 +10,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { getLessonTopics } from '@/api/requests'
+import { getLessonTopics } from '@/api/lessons'
 
 const props = defineProps({ lessonId: Number, status: String })
 const themes = ref([])

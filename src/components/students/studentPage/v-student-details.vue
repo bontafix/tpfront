@@ -99,7 +99,7 @@ import { useStudentsStore } from '@/stores/studentsStore'
 import VStyledSelect from '@/components/generalComponents/v-styled-select.vue'
 
 
-import { updateStudentProfile } from '@/api/requests'
+import { updateStudentProfile } from '@/api/students'
 import { formatTimeRate } from '@/utils'
 
 const store = useStudentsStore()

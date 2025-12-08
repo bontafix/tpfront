@@ -31,7 +31,7 @@ import { useStudentsStore } from '@/stores/studentsStore'
 
 import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
 import vStyledSelect from '@/components/generalComponents/v-styled-select.vue'
-import { setIncome } from '@/api/requests'
+import { setIncome } from '@/api/teachers'
 
 const studentsStore = useStudentsStore()
 

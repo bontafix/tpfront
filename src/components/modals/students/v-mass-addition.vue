@@ -38,7 +38,7 @@ import vCustomModal from '@/components/generalComponents/v-custom-modal.vue'
 import vFilesHandler from '@/components/generalComponents/v-files-handler.vue'
 
 import { formatFileSize } from '@/utils'
-import { importStudents } from '@/api/requests'
+import { importStudents } from '@/api/students'
 
 const rawFiles = ref([])
 

@@ -123,7 +123,9 @@
 <script setup>
 import { useRoute } from 'vue-router'
 import { ref, computed, onMounted, readonly } from 'vue'
-import { getStudentById, setPayment, getLessonTopics, manualGrade, setLessonHomeWork } from '@/api/requests'
+import { getStudentById, manualGrade } from '@/api/students'
+import { setPayment } from '@/api/teachers'
+import { getLessonTopics, setLessonHomeWork } from '@/api/lessons'
 import { useCurrentStudentStore } from '@/stores/currentStudentStore'
 
 import vBase from '@/components/v-base.vue'

@@ -87,7 +87,7 @@ import VCalendarMonth from './v-calendar-month.vue'
 
 import vTrialModal from '../modals/v-trial-modal.vue'
 import vLessonModal from '../modals/v-lesson-modal.vue'
-import { getWSToken } from '@/api/requests'
+import { getWSToken } from '@/api/auth'
 
 const modals = ref({
   lesson: false,

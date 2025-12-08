@@ -20,7 +20,7 @@
 </template>
 <script setup>
 import { onMounted, computed, ref } from 'vue'
-import { getEarningsForDay } from '@/api/requests'
+import { getEarningsForDay } from '@/api/finance'
 
 import vHomeRightSecBase from './v-home-right-sec-base.vue'
 

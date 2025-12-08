@@ -29,7 +29,7 @@ import Footer from '../landing/blocks/Footer.vue'
 import LeftContainer from './components/leftContainer.vue'
 import RightContainer from './components/rightContainer.vue'
 import { ref, onMounted } from 'vue'
-import { getNewsById } from '@/api/requests'
+import { getNewsById } from '@/api/lessons'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()

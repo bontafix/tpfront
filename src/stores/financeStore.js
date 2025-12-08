@@ -1,5 +1,7 @@
 // store/modalsStore.js
-import { getStudentEarning, getStudentsEarnings, getStudnetGoals, getStudnetSource, getTeacherExpenses, getTeacherIncome, getTeacherOperations } from '@/api/requests'
+import { getStudentsEarnings, getStudentEarning } from '@/api/finance'
+import { getStudnetGoals, getStudnetSource } from '@/api/students'
+import { getTeacherExpenses, getTeacherIncome, getTeacherOperations } from '@/api/teachers'
 import { defineStore } from 'pinia'
 
 export const useFinanceStore = defineStore('financeStore', {

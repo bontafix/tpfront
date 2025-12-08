@@ -80,7 +80,7 @@ import { onMounted, ref } from 'vue';
 import '@vuepic/vue-datepicker/dist/main.css';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import { useFinanceStore } from '@/stores/financeStore';
-import { getEarningsForPeriod, getStudentsEarnings } from '@/api/requests';
+import { getEarningsForPeriod, getStudentsEarnings } from '@/api/finance';
 import { prettyPrice, formatDateRange, getCurrentMonthDates, getStatusClass } from '@/utils';
 
 const financeStore = useFinanceStore()

@@ -56,7 +56,7 @@
 </template>
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
-import { getTodayLessons } from '@/api/requests'
+import { getTodayLessons } from '@/api/lessons'
 import { useLessonStore } from '@/stores/lessonsStore'
 
 import vHomeRightSecBase from './v-home-right-sec-base.vue'
